@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Using VSCode :: Parallel Programming</title>
-    <link rel="canonical" href="https://feelpp.github.io/parallel-programming/parallel-programming/vscode.html">
+    <title>Antora environment :: Feel++ Template Project</title>
+    <link rel="canonical" href="https://feelpp.github.io/feelpp-project/feelpp-project/antora.html">
     <meta name="generator" content="Antora 3.1.3">
     <link rel="stylesheet" href="../_/css/site.css">
 <link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
@@ -98,7 +98,7 @@ MathJax.Hub.Config({
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark navbar-template-project" style="border-top: 4px solid #9E9E9E">
         <div class="navbar-brand">
             <div class="navbar-item feelpp-logo">
-                <a href="https://feelpp.github.io/parallel-programming">Parallel Programming</a>
+                <a href="https://feelpp.github.io/feelpp-project">Feel++ Template Project</a>
             </div>
             <button class="navbar-burger" data-target="topbar-nav">
                 <span></span>
@@ -126,7 +126,7 @@ MathJax.Hub.Config({
 </header>
 <div class="body">
 <a href="#" class="menu-expand-toggle"></a>
-<div class="nav-container" data-component="parallel-programming" data-version="">
+<div class="nav-container" data-component="feelpp-project" data-version="">
   <aside class="nav">
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
@@ -140,15 +140,15 @@ MathJax.Hub.Config({
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <span class="nav-text">Parallel Programming Environment</span>
+    <span class="nav-text">Feel++ Template Project Environment</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="cmake.html">cmake environment</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="antora.html">antora environment</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="2">
+  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="vscode.html">vscode integration</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -191,13 +191,13 @@ MathJax.Hub.Config({
   <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Template Project</a></li>
-    <li>Parallel Programming Environment</li>
-    <li><a href="vscode.html">vscode integration</a></li>
+    <li>Feel++ Template Project Environment</li>
+    <li><a href="antora.html">antora environment</a></li>
   </ul>
 </nav>
 
   
-    <div class="edit-this-page"><a href="https://github.com/feelpp/parallel-programming/edit/master/docs/modules/ROOT/pages/vscode.adoc">Edit this Page</a></div>
+    <div class="edit-this-page"><a href="https://github.com/feelpp/parallel-programming/edit/master/docs/modules/ROOT/pages/antora.adoc">Edit this Page</a></div>
   
   <div class="page-downloads">
   <span class="label">Download as</span>
@@ -217,34 +217,38 @@ MathJax.Hub.Config({
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Using VSCode</h1>
+<h1 class="page">Antora environment</h1>
 <div class="paragraph">
-<p>The project is configured to integrate VSCode using Docker Container.</p>
+<p>Antora is our static website generator.
+We use it to generate the documentation of the project
+It is part of the documentation of docs.feelpp.org[Feel++ docs] website.</p>
+</div>
+<div class="listingblock">
+<div class="title">To generate the documentation</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell"> $ npm install <i class="conum" data-value="1"></i><b>(1)</b>
+ $ npm run antora <i class="conum" data-value="2"></i><b>(2)</b>
+ $ npm run start <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Install the dependencies</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Generate the documentation</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Serve the documentation, the url is provided in the console</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
-<p>The Docker image can be set from <code>feelpp/feelpp</code> or <code>feelpp/feelpp-toolboxes</code>, simply edit <code>.devcontainer/Dockerfile</code> and choose the image you want.</p>
-</div>
-<div class="paragraph">
-<p><code>ssh-keyscan</code> is used on <code>github.com</code> to register the public key of github in $HOME/.ssh/known_hosts and avoid having git auth issues the first time we log into the container and push/pull to/from github.</p>
-</div>
-<div class="paragraph">
-<p>The following extensions are installed in Docker:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>cpptools</p>
-</li>
-<li>
-<p>cmaketools</p>
-</li>
-<li>
-<p>cmake</p>
-</li>
-<li>
-<p>asciidoctor-vscode</p>
-</li>
-</ul>
+<p>Unresolved include directive in modules/ROOT/pages/antora.adoc - include::antora-ui::partial$antora.adoc[]</p>
 </div>
 </article>
   </div>

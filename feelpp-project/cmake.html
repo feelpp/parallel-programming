@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Overview of Parallel Programming :: Parallel Programming</title>
-    <link rel="canonical" href="https://feelpp.github.io/parallel-programming/parallel-programming/overview.html">
+    <title>Cmake environment :: Feel++ Template Project</title>
+    <link rel="canonical" href="https://feelpp.github.io/feelpp-project/feelpp-project/cmake.html">
     <meta name="generator" content="Antora 3.1.3">
     <link rel="stylesheet" href="../_/css/site.css">
 <link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
@@ -98,7 +98,7 @@ MathJax.Hub.Config({
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark navbar-template-project" style="border-top: 4px solid #9E9E9E">
         <div class="navbar-brand">
             <div class="navbar-item feelpp-logo">
-                <a href="https://feelpp.github.io/parallel-programming">Parallel Programming</a>
+                <a href="https://feelpp.github.io/feelpp-project">Feel++ Template Project</a>
             </div>
             <button class="navbar-burger" data-target="topbar-nav">
                 <span></span>
@@ -126,7 +126,7 @@ MathJax.Hub.Config({
 </header>
 <div class="body">
 <a href="#" class="menu-expand-toggle"></a>
-<div class="nav-container" data-component="parallel-programming" data-version="">
+<div class="nav-container" data-component="feelpp-project" data-version="">
   <aside class="nav">
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
@@ -140,9 +140,9 @@ MathJax.Hub.Config({
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <span class="nav-text">Parallel Programming Environment</span>
+    <span class="nav-text">Feel++ Template Project Environment</span>
 <ul class="nav-list">
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="cmake.html">cmake environment</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -191,12 +191,13 @@ MathJax.Hub.Config({
   <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Template Project</a></li>
-    <li><a href="overview.html">Overview of Parallel Programming</a></li>
+    <li>Feel++ Template Project Environment</li>
+    <li><a href="cmake.html">cmake environment</a></li>
   </ul>
 </nav>
 
   
-    <div class="edit-this-page"><a href="https://github.com/feelpp/parallel-programming/edit/master/docs/modules/ROOT/pages/overview.adoc">Edit this Page</a></div>
+    <div class="edit-this-page"><a href="https://github.com/feelpp/parallel-programming/edit/master/docs/modules/ROOT/pages/cmake.adoc">Edit this Page</a></div>
   
   <div class="page-downloads">
   <span class="label">Download as</span>
@@ -216,68 +217,27 @@ MathJax.Hub.Config({
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Overview of Parallel Programming</h1>
-<div class="sect1">
-<h2 id="_organisation"><a class="anchor" href="#_organisation"></a>1. Organisation</h2>
+<h1 class="page">Cmake environment</h1>
+<div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>The directory structure of the project is as follows:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>.
-├── docs
-│   ├── antora
-│   └── modules
-└── src
-    └── cases
-
-5 directories</pre>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>The <code>docs</code> directory contains the documentation of the project and uses antora to generate the documentation.</p>
-</li>
-<li>
-<p>The <code>src</code> directory contains initially some C++ and Python Feel++ source code of the project to help you get started.</p>
-</li>
-</ul>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>Feel++ is a C++ library for the numerical simulation of partial differential equations. It is designed to be easy to use and to extend.
-{feelpp }is a free software distributed under the terms of the GNU General Public License version 3.
-The documentation is available <a href="https://docs.feelpp.org">&gt; here</a>.</p>
-</div>
-</td>
-</tr>
-</table>
+<p>The CMakeLists.txt is setup with Feel++.
+A sample Feel++ application is available in <code>src</code>.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_how_to_build_the_project"><a class="anchor" href="#_how_to_build_the_project"></a>2. How to build the project</h2>
+<h2 id="_building"><a class="anchor" href="#_building"></a>1. Building</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You need first to follow the <a href="quickstart.html" class="xref page">quickstart</a> to get the Feel++ environment.
-The installation procedure uses <a href="cmake.html" class="xref page">Cmake</a> for the C++ programs and create a bundle of this project.
-The steps are as follows:</p>
+<p>The CMakeLists.txt is configured to build the application in <code>src</code>.
+The following commands can be used to build the application:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ cmake --preset default <i class="conum" data-value="1"></i><b>(1)</b>
-$ cmake --build --preset default <i class="conum" data-value="2"></i><b>(2)</b>
-$ cmake --build --preset default -t install <i class="conum" data-value="3"></i><b>(3)</b>
-$ ctest --preset default <i class="conum" data-value="4"></i><b>(4)</b>
-$ cmake --build --preset default -t package <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"> $ cmake --preset default <i class="conum" data-value="1"></i><b>(1)</b>
+ $ cmake --build --preset default <i class="conum" data-value="2"></i><b>(2)</b>
+ $ cmake --build --preset default -t install <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -294,23 +254,43 @@ $ cmake --build --preset default -t package <i class="conum" data-value="5"></i>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
 <td>Install the project</td>
 </tr>
-<tr>
-<td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>Run the tests</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>Package the project</td>
-</tr>
 </table>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_how_to_start_documenting_your_work"><a class="anchor" href="#_how_to_start_documenting_your_work"></a>3. How to start documenting your work</h2>
+<h2 id="_packaging"><a class="anchor" href="#_packaging"></a>2. Packaging</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The documentation is written in Asciidoc and uses Antora to generate the documentation. Please check the project <a href="antora.html" class="xref page">Antora</a> page to get started.</p>
+<p>CPack is configured and allows to generate a binary and source package.
+Use the following commands to generate the binary package:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ cmake --build --preset default -t package</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Use the following commands to generate the source package:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ cmake --build --preset default -t package_source</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_testing"><a class="anchor" href="#_testing"></a>3. Testing</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>CTest is configured.
+Use the following command to run the tests:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ cmake --build --preset default -t test</pre>
+</div>
 </div>
 </div>
 </div>

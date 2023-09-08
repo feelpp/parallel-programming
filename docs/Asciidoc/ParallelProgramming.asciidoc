@@ -1,0 +1,3649 @@
+*Parallel Programming _*
+
+
+*MPI, OpenMP,…GPU, GPGPU*
+
+
+*1. CPU, GPU, GPGPU Architecture*
+
+1.1 CPU
+
+1.2 GPU (Graphics Processing Unit is a graphics (co-)processor)
+
+1.3 GPGPU (General-Purpose Graphics Processing Unit)
+
+1.4 Architecture of a GPU versus CPU
+
+1.5 AMD ROCm Platform, CUDA
+
+
+1.5.1 AMD ROC platform
+
+1.5.2 CUDA Platform
+
+1.5.3 What is the difference between CUDA and ROCm for GPGPU applications?
+
+1.6 GPGPU Evolution
+
+1.7 TPU (Tensor Processing Unit) form Google
+
+
+*2. Programming interface for parallel computing*
+
+2.1 MPI (Message Passing Interface)
+
+2.2 OpenMP (Open Multi-Processing)
+
+2.3 Hybrid MPI & OpenMP
+
+
+*3.Star PU*
+
+
+*4.Specx*
+
+4.1 Specx Workflow
+
+
+4.1.1 Runtime Interface
+
+4.1.2 Data dependency interface
+
+4.1.3 Task visualization interface
+
+
+
+
+=== 1. CPU, GPU, GPGPU Architecture
+
+CPU, GPU, and GPGPU architectures are all types of computer processing
+architectures, but they differ in their design and operation.
+
+
+CPU: A central processor (CPU) is a processing unit that is designed to
+perform various computing tasks including data processing, mathematical
+and logical calculations, communication between different components of
+a computer system, etc. Modern CPUs usually have multiple cores to
+process multiple tasks simultaneously.
+
+GPU: A graphics processing unit (GPU) is an architecture designed to
+accelerate the processing of images and graphics. GPUs have thousands of
+cores that allow them to process millions of pixels simultaneously,
+making them an ideal choice for video games, 3D modeling, and other
+graphics-intensive applications.
+
+GPGPU: A General Processing Architecture (GPGPU) is a type of GPU that
+is designed to be used for purposes other than graphics processing.
+GPGPUs are used to perform computations of an intensive nature using the
+hundreds or thousands of cores available on the graphics card. They are
+particularly effective for parallel computing, machine learning, and
+other computationally intensive areas.
+
+
+In conclusion, the main difference between the three architectures CPU,
+GPU and GPGPU lies in their design and operation. While CPUs are
+designed for general computer processing, GPUs are designed for
+specialized graphics processing, and GPGPUs are a modified version of
+GPUs intended to be used for specialized computer processing other than
+graphics processing.
+
+==== 1.1 CPU
+
+The CPU basically consists of three parts:
+
+- [.underline]#The *control unit *#which searches for instructions in
+memory, decodes them and coordinates the rest of the processor to
+execute them. A basic control unit basically consists of an instruction
+register and a "decoder/sequencer" unit
+
+- [.underline]#The *Arithmetic and Logic Unit* ( _ALU_ )# executes the
+arithmetic and logic instructions requested by the control unit.
+Instructions can relate to one or more operands. The execution speed is
+optimal when the operands are located in the registers rather than in
+the memory external to the processor.
+
+- [.underline]#Registers# are memory cells internal to the CPU
+*[.underline]#.#* They are few in number but very quick to access. They
+are used to store variables, the intermediate results of operations
+(arithmetic or logical) or processor control information.
+
+
+image:Data/media/image1.png[image,width=322,height=220]
+
+The register structure varies from processor to processor. This is why
+each type of CPU has its own instruction set. Their basic functions are nevertheless similar and all processors have roughly the same categories of registers:
+
+
+* The *accumulator* is primarily intended to hold the data that needs to
+be processed by the ALU.
+
+
+* General registers* are used to store temporary data and intermediate
+
+
+* Address registers* are used to construct particular data addresses.
+These are, for example, the base and index registers which allow, among
+other things, to organize the data in memory like indexed tables.
+
+* The *instruction register* contains the code of the instruction which is processed by the decoder/sequencer.
+
+* The *ordinal counter* contains the address of the next instruction to be executed. In principle, this register never stops counting. It generates the addresses of the instructions to be executed one after the other. Some instructions sometimes require changing the contents of the ordinal counter to make a sequence break, ie a jump elsewhere in the program.
+
+* The *status register,* sometimes called *the condition register,*
+contains indicators called _flags_ whose values (0 or 1) vary according
+to the results of the arithmetic and logical operations. These states
+are used by conditional jump instructions.
+
+The *stack pointer* or _stack pointer_ manages certain data in memory by
+organizing them in the form of stacks.
+
+
+*CPU working principle*
+
+The content of the program counter is deposited on the addressing bus in
+order to search there for a machine code instruction. The control bus
+produces a read signal and the memory, which is selected by the address,
+sends the instruction code back to the processor via the data bus. Once
+the instruction lands in the instruction register, the processor's
+control unit decodes it and produces the appropriate sequence of
+internal and external signals that coordinate its execution. An
+instruction comprises a series of elementary tasks. They are clocked by
+clock cycles.
+
+All the tasks that constitute an instruction are executed one after the
+other. The execution of an instruction therefore lasts several cycles.
+As it is not always possible to increase the frequency, the only way to
+increase the number of instructions processed in a given time is to seek
+to execute several of them simultaneously. This is achieved by splitting
+processor resources, data and/or processes. This is called the
+parallelization.
+
+
+
+
+*The different architectures of the processor*
+
+There is a classification of the *different CPU architectures.* Five in
+number, they are used by programmers depending on the desired results:
+
+* {blank}
++
+
+CISC: very complex addressing;
+
+* {blank}
++
+
+RISC: simpler addressing and instructions performed on a single cycle;
+
+* {blank}
++
+
+VLIW: long, but simpler instructions;
+
+* {blank}
++
+
+vectorial: contrary to the processing in number, the instructions are
+vectorial;
+
+* {blank}
++
+
+dataflow: data is active unlike other architectures.
+
+
+To further improve the *performance of this processor,* developers can
+add so-called SIMD Supplemental Instruction Sets.
+
+*1. 2 GPU (Graphics Processing Unit is a graphics (co-)processor)*
+
+Graphics Processing Unit is a graphics (co-)processor capable of very
+efficiently performing calculations on images (2D, 3D, videos, etc.).
+The raw computing power offered is higher due to the large number of
+processors present on these cards. This is why it is not uncommon to
+obtain large acceleration factors between CPU and GPU for the same
+application.
+
+Explicit code targeting GPUs: CUDA, HIP, SYCL, Kokkos, RAJA,...
+
+image:Data/media/image2.png[image,width=488,height=342]
+
+_Fig: illustrates the main hardware architecture differences between
+CPUs and GPUs. The transistor counts associated with various functions
+are represented abstractly by the relative sizes of the various shaded
+areas. In the figure, the green corresponds to the calculation; gold is
+instruction processing; purple is the L1 cache; blue is top level cache
+and orange is memory (DRAM, which really should be thousands of times
+larger than caches)._
+
+GPUs were originally designed to render graphics. They work great for
+shading, texturing, and rendering the thousands of independent polygons
+that make up a 3D object. CPUs, on the other hand, are meant to control
+the logical flow of any general-purpose program, where a lot of digit
+manipulation may (or may not) be involved. Due to these very different
+roles, GPUs are characterized by having many more processing units and
+higher overall memory bandwidth, while CPUs offer more sophisticated
+instruction processing and faster clock speed.
+
+[width="100%",cols="23%,44%,33%",]
+|===
+| |*CPU: Latency-oriented design* |*GPU: Throughput Oriented Design*
+
+|*Clock* |High clock frequency |Moderate clock frequency
+
+|*Caches* a|
+Large sizes
+
+Converts high latency accesses in memory to low latency accesses in
+cache
+
+a|
+Small caches
+
+To maximize memory throughput
+
+|*Control* a|
+Sophisticated control system
+
+Branch prediction to reduce latency due to branching +
+Data loading to reduce latency due to data access
+
+a|
+Single controlled
+
+No branch prediction
+
+No data loading
+
+|*Powerful Arithmetic Logic Unit (ALU)* |Reduced operation latency
+|Numerous, high latency but heavily pipelined for high throughput
+
+|*Other aspects* a|
+Lots of space devoted to caching and control logic. Multi-level caches
+used to avoid latency
+
+Limited number of registers due to fewer active threads
+
+Control logic to reorganize execution, provide ILP, and minimize
+pipeline hangs
+
+|Requires a very large number of threads for latency to be tolerable
+
+|*Beneficial aspects for applications* a|
+CPUs for sequential games where latency is critical.
+
+CPUs can be 10+X faster than GPUs for sequential code.
+
+a|
+GPUs for parallel parts where throughput is critical.
+
+GPUs can be 10+X faster than GPUs for parallel code.
+
+|===
+
+*1.3 GPGPU ( General-Purpose Graphics Processing Unit)*
+
+image:Data/media/image4.png[image,width=642,height=331]
+
+A *General-Purpose Graphics Processing Unit* (GPGPU) is a graphics
+processing unit (GPU) that is programmed for purposes beyond graphics
+processing, such as performing computations typically conducted by a
+Central Processing Unit (CPU).
+
+_GPGPU_ is short for general-purpose computing on graphics processing
+units. Graphics processors or GPUs today are capable of much more than
+calculating pixels in video games. For this, Nvidia has been developing
+for four years a hardware interface and a programming language derived
+from C, CUDA ( *C* ompute *Unified Device Architecture* ). This
+technology, known as *GPGPU* ( *General* - *P* urpose computation on *G*
+raphic *P* rocessing *Units* ) exploits the computing power of GPUs for
+the processing of massively parallel tasks. Unlike the CPU, a GPU is not
+suited for fast processing of tasks that run sequentially. On the other
+hand, it is very suitable for processing parallelizable algorithms.
+
+•Array of independent "cores" called calculation units
+
+• High bandwidth, banked L2 caches and main memory
+
+− Banks allow several parallel accesses
+
+− 100s of GB/s
+
+• Memory and caches are generally inconsistent
+
+Compute units are based on SIMD hardware
+
+− Both AMD and NVIDIA have 16-element wide SIMDs
+
+• Large registry files are used for fast context switching
+
+− No save/restore state
+
+− Data is persistent throughout the execution of the thread
+
+• Both providers have a combination of automatic L1 cache and
+user-managed scratchpad
+
+• Scratchpad is heavily loaded and has very high bandwidth
+(~terabytes/second)
+
+Work items are automatically grouped into hardware threads called
+"wavefronts" (AMD) or "warps" (NVIDIA)
+
+− Single instruction stream executed on SIMD hardware
+
+− 64 work items in a wavefront, 32 in a string
+
+• The instruction is issued multiple times on the 16-channel SIMD unit
+
+• Control flow is managed by masking the SIMD channel
+
+NVIDIA coined "Single Instruction Multiple Threads" (SIMT) to refer to
+multiple (software) threads sharing a stream of instructions
+
+• Work items run in sequence on SIMD hardware
+
+− Multiple software threads are executed on a single hardware thread
+
+− Divergence between managed threads using predication
+
+• Accuracy is transparent to the OpenCL model
+
+• Performance is highly dependent on understanding work items to SIMD
+mapping
+
+
+*1.4 Architecture of a GPU versus CPU*
+
+Such an architecture is said to be "throughput-oriented". The latest
+from the Santa-Clara firm, codenamed “Fermi” has 512 cores.
+
+image:Data/media/image5.png[image,width=530,height=241]
+
+_CPU architecture vs. GPUs_
+
+Traditional microprocessors (CPUs) are essentially "low latency
+oriented". The goal is to minimize the execution time of a single
+sequence of a program by reducing latency as much as possible. This
+design takes the traditional assumption that parallelism in the
+operations that the processor must perform is very rare.
+
+Throughput-oriented processors assume that their workload requires
+significant parallelism. The idea is not to execute the operations as
+quickly as possible sequentially, but to execute billions of operations
+simultaneously in a given time, the execution time of one of these
+operations is ultimately almost irrelevant. In a video game, for
+example, performance is measured in FPS (Frames Per Seconds). To do
+this, an image, with all the pixels, must be displayed every 30
+milliseconds (approximately). It doesn't matter how long a single pixel
+is displayed.
+
+This type of processor has small independent calculation units which
+execute the instructions in the order in which they appear in the
+program, there is ultimately little dynamic control over the execution.
+Thea term *SIMD* is used for these processors (**S**ingle **I**nstruction **M**ultiple **Da**ta).
+
+Each PU (Processing Unit) does not necessarily correspond to a
+processor, they are calculation units. In this mode, the same
+instruction is applied simultaneously to several data.
+
+Less control logic means more space on the chip dedicated to the
+calculation. However, this also comes at a cost. A SIMD execution gets a
+performance peak when parallel tasks follow the same branch of
+execution, which deteriorates when the tasks branch off. Indeed, the
+calculation units assigned to a branch will have to wait for the
+execution of the calculation units of the previous branch. This results
+in hardware underutilization and increased execution time. The
+efficiency of the SIMD architecture depends on the uniformity of the
+workload.
+
+However, due to the large number of computational units, it may not be
+very important to have some threads blocked if others can continue their
+execution. Long-latency operations performed on one thread are "hidden"
+by others ready to execute another set of instructions.
+
+For a quad or octo-core CPU, the creation of threads and their
+scheduling has a cost. For a GPU, the relative latency "covers" these 2
+steps, making them negligible. However, memory transfers have greater
+implications for a GPU than a CPU because of the need to move data
+between CPU memory and GPU memory.
+
+(See:
+https://blog.octo.com/la-technologie-gpgpu-1ere-partie-le-cote-obscur-de-la-geforce/
+)
+
+*SIMD (Single Instruction Multiple Data)*
+
+SIMD is a computer technique that allows several data elements to be
+exploited at the same time.
+
+*What is SIMD used for?*
+
+SIMD can be used in a wide range of applications, such as 3D graphics,
+signal processing, data mining, and many other processing-intensive
+tasks. In the realm of 3D graphics, SIMD can be used to process large
+amounts of data in parallel, making graphics rendering faster and
+smoother. In signal processing, SIMD can be used to process multiple
+signals at the same time, thereby increasing the efficiency of signal
+processing. In data mining, SIMD can be used to process large volumes of
+data in parallel, which makes data mining faster and more efficient.
+
+SIMD is also commonly used in encryption and data compression
+algorithms. These algorithms often require the processing of large
+amounts of data, and SIMD can be used to speed up the process. SIMD can
+also be used to process large amounts of data in parallel in machine
+learning algorithms such as artificial neural networks.
+
+*Benefits of using SIMD*
+
+SIMD has several advantages over other forms of parallelization. First,
+SIMD is more efficient than traditional software parallelization
+techniques, such as threading. This is because SIMD takes advantage of
+the capabilities of modern processors and is optimized for parallelism.
+This means that SIMD can process multiple pieces of data in parallel at
+the same time, which greatly improves program performance.
+
+In addition, SIMD allows more efficient use of memory. Since the same
+instruction is applied to multiple pieces of data in parallel, the
+amount of memory required to store data is reduced. This can help
+improve performance by reducing the amount of memory required to store
+data items.
+
+Finally, SIMD is more flexible than other forms of parallelization. This
+is because SIMD allows the same instruction to be applied to multiple
+data items in parallel, allowing the programmer to customize the code
+according to application requirements.
+
+*1.5 AMD ROCm Platform, CUDA*
+
+*1.5.1 AMD ROC platform*
+
+ROCm™ is a collection of drivers , development tools, and APIs that
+enable GPU programming from low-level kernel to end-user applications
+*.* ROCm is powered by AMD's Heterogeneous Computing Interface for
+Portability , an OSS C++ GPU programming environment and its
+corresponding runtime environment *.* HIP enables ROCm developers to
+build portable applications across different platforms by deploying code
+on a range of platforms , from dedicated gaming GPUs to exascale HPC
+clusters *.*
+
+ROCm supports programming models such as OpenMP and OpenCL , and
+includes all necessary compilers , debuggers and OSS libraries *.* ROCm
+is fully integrated with ML frameworks such as PyTorch and TensorFlow
+*.* ROCm can be deployed in several ways , including through the use of
+containers such as Docker , Spack, and your own build from source *.*
+
+ROCm is designed to help develop , test, and deploy GPU-accelerated HPC
+, AI , scientific computing , CAD, and other applications in a free ,
+open-source , integrated, and secure software ecosystem *.*
+
+*CUDA Platform*
+
+CUDA® is a parallel computing platform and programming model developed
+by NVIDIA for general computing on graphics processing units (GPUs).
+With CUDA, developers can dramatically speed up computing applications
+by harnessing the power of GPUs.
+
+The CUDA architecture is based on a three-level hierarchy of cores,
+threads, and blocks. Cores are the basic unit of computation while
+threads are the individual pieces of work that the cores work on. Blocks
+are collections of threads that are grouped together and can be run
+together. This architecture enables efficient use of GPU resources and
+makes it possible to run multiple applications at once.
+
+The NVIDIA CUDA-X platform, which is built on CUDA®, brings together a
+collection of libraries, tools, and technologies that deliver
+significantly higher performance than competing solutions in multiple
+application areas ranging from artificial intelligence to high
+performance computing.
+
+[width="100%",cols="50%,50%",]
+|===
+|*GPUs* |
+
+|*CUDA ( Compute Unified Device Architecture)* |*HIP
+("Heterogeneous-Compute Interface for Portability")*
+
+a|
+Has been the de facto standard for native GPU code for years
+
+Huge set of optimized libraries available
+
+Custom syntax (extension of C++) supported only by CUDA compilers
+
+Support for NVIDIA devices only
+
+a|
+AMD's effort to offer a common programming interface that works on both
+CUDA and ROCm devices
+
+Standard C++ syntax, uses the nvcc/hcc compiler in the background
+
+Almost an individual CUDA clone from the user's perspective
+
+The ecosystem is new and growing rapidly
+
+|===
+
+*1.5.3 What is the difference between CUDA and ROCm for GPGPU
+applications?*
+
+NVIDIA's CUDA and AMD's ROCm provide frameworks to take advantage of the
+respective GPU platforms.
+
+Graphics processing units (GPUs) are traditionally designed to handle
+graphics computing tasks, such as image and video processing and
+rendering, 2D and 3D graphics, vectorization, etc. General purpose
+computing on GPUs became more practical and popular after 2001, with the
+advent of programmable shaders and floating point support on graphics
+processors.
+
+Notably, it involved problems with matrices and vectors, including two-,
+three-, or four-dimensional vectors. These were easily translated to
+GPU, which acts with native speed and support on these types. A
+milestone for general purpose GPUs (GPGPUs) was the year 2003, when a
+pair of research groups independently discovered GPU-based approaches
+for solving general linear algebra problems on working GPUs faster than
+on CPUs.
+
+*1.6 GPGPU Evolution*
+
+Early efforts to use GPUs as general-purpose processors required
+reframing computational problems in terms of graphics primitives, which
+were supported by two major APIs for graphics processors: OpenGL and
+DirectX.
+
+These were soon followed by NVIDIA's CUDA, which allowed programmers to
+abandon underlying graphics concepts for more common high-performance
+computing concepts, such as OpenCL and other high-end frameworks. This
+meant that modern GPGPU pipelines could take advantage of the speed of a
+GPU without requiring a complete and explicit conversion of the data to
+a graphical form.
+
+NVIDIA describes CUDA as a parallel computing platform and application
+programming interface (API) that allows software to use specific GPUs
+for general-purpose processing. CUDA is a software layer that provides
+direct access to the GPU's virtual instruction set and parallel
+computing elements for running compute cores.
+
+Not to be outdone, AMD launched its own general-purpose computing
+platform in 2016, dubbed the Radeon Open Compute Ecosystem (ROCm). ROCm
+is primarily intended for discrete professional GPUs, such as AMD's
+Radeon Pro line. However, official support is more extensive and extends
+to consumer products, including gaming GPUs.
+
+Unlike CUDA, the ROCm software stack can take advantage of multiple
+areas, such as general-purpose GPGPU, high-performance computing (HPC),
+and heterogeneous computing. It also offers several programming models,
+such as HIP (GPU kernel-based programming), OpenMP/Message Passing
+Interface (MPI), and OpenCL. These also support microarchitectures,
+including RDNA and CDNA, for a myriad of applications ranging from AI
+and edge computing to IoT/IIoT.
+
+*NVIDIA's CUDA*
+
+Most of NVIDIA's Tesla and RTX series cards come with a series of CUDA
+cores designed to perform multiple calculations at the same time. These
+cores are similar to CPU cores, but they are integrated into the GPU and
+can process data in parallel. There can be thousands of these cores
+embedded in the GPU, making for incredibly efficient parallel systems
+capable of offloading CPU-centric tasks directly to the GPU.
+
+Parallel computing is described as the process of breaking down larger
+problems into smaller, independent parts that can be executed
+simultaneously by multiple processors communicating through shared
+memory. These are then combined at the end as part of an overall
+algorithm. The primary purpose of parallel computing is to increase
+available computing power to speed up application processing and problem
+solving.
+
+To this end, the CUDA architecture is designed to work with programming
+languages such as C, C++ and Fortran, allowing parallel programmers to
+more easily utilize GPU resources. This contrasts with previous APIs
+such as Direct3D and OpenGL, which required advanced graphics
+programming skills. CUDA-powered GPUs also support programming
+frameworks such as OpenMP, OpenACC, OpenCL, and HIP by compiling this
+code on CUDA.
+
+As with most APIs, software development kits (SDKs), and software
+stacks, NVIDIA provides libraries, compiler directives, and extensions
+for the popular programming languages mentioned earlier, making
+programming easier and more effective. These include cuSPARCE, NVRTC
+runtime compilation, GameWorks Physx, MIG multi-instance GPU support,
+cuBLAS and many more.
+
+A good portion of these software stacks are designed to handle AI-based
+applications, including machine learning and deep learning, computer
+vision, conversational AI, and recommender systems.
+
+Computer vision applications use deep learning to acquire knowledge from
+digital images and videos. Conversational AI applications help computers
+understand and communicate through natural language. Recommender systems
+use a user's images, language, and interests to deliver meaningful and
+relevant search results and services.
+
+GPU-accelerated deep learning frameworks provide a level of flexibility
+to design and train custom neural networks and provide interfaces for
+commonly used programming languages. All major deep learning frameworks,
+such as TensorFlow, PyTorch, and others, are already GPU-accelerated, so
+data scientists and researchers can upgrade without GPU programming.
+
+Current use of the CUDA architecture that goes beyond AI includes
+bioinformatics, distributed computing, simulations, molecular dynamics,
+medical analytics (CTI, MRI and other scanning imaging applications ),
+encryption, etc.
+
+*AMD's ROCm Software Stack*
+
+AMD's ROCm software stack is similar to the CUDA platform, except it's
+open source and uses the company's GPUs to speed up computational tasks.
+The latest Radeon Pro W6000 and RX6000 series cards are equipped with
+compute cores, ray accelerators (ray tracing) and stream processors that
+take advantage of RDNA architecture for parallel processing, including
+GPGPU, HPC, HIP (CUDA-like programming model), MPI and OpenCL.
+
+Since the ROCm ecosystem is composed of open technologies, including
+frameworks (TensorFlow/PyTorch), libraries (MIOpen/Blas/RCCL),
+programming models (HIP), interconnects (OCD), and support upstream
+Linux kernel load, the platform is regularly optimized. for performance
+and efficiency across a wide range of programming languages.
+
+AMD's ROCm is designed to scale, meaning it supports multi-GPU computing
+in and out of server-node communication via Remote Direct Memory Access
+(RDMA), which offers the ability to directly access host memory without
+CPU intervention. Thus, the more RAM the system has, the greater the
+processing loads that can be handled by ROCm.
+
+ROCm also simplifies the stack when the driver directly integrates
+support for RDMA peer synchronization, making application development
+easier. Additionally, it includes ROCr System Runtime, which is language
+independent and leverages the HAS (Heterogeneous System Architecture)
+Runtime API, providing a foundation for running programming languages
+such as HIP and OpenMP.
+
+As with CUDA, ROCm is an ideal solution for AI applications, as some
+deep learning frameworks already support a ROCm backend (e.g.
+TensorFlow, PyTorch, MXNet, ONNX, CuPy, etc.). According to AMD, any
+CPU/GPU vendor can take advantage of ROCm, as it is not a proprietary
+technology. This means that code written in CUDA or another platform can
+be ported to vendor-neutral HIP format, and from there users can compile
+code for the ROCm platform.
+
+The company offers a series of libraries, add-ons and extensions to
+deepen the functionality of ROCm, including a solution (HCC) for the C++
+programming language that allows users to integrate CPU and GPU in a
+single file.
+
+The feature set for ROCm is extensive and incorporates multi-GPU support
+for coarse-grained virtual memory, the ability to handle concurrency and
+preemption, HSA and atomic signals, DMA and queues in user mode. It also
+offers standardized loader and code object formats, dynamic and offline
+compilation support, P2P multi-GPU operation with RDMA support, event
+tracking and collection API, as well as APIs and system management
+tools. On top of that, there is a growing third-party ecosystem that
+bundles custom ROCm distributions for a given application across a host
+of Linux flavors.
+
+To further enhance the capability of exascale systems, AMD also
+announced the availability of its open source platform, AMD ROCm, which
+enables researchers to harness the power of AMD Instinct accelerators
+and drive scientific discovery. Built on the foundation of portability,
+the ROCm platform is capable of supporting environments from multiple
+vendors and accelerator architectures.
+
+And with ROCm5.0, AMD extends its open platform powering the best HPC
+and AI applications with AMD Instinct MI200 series accelerators,
+increasing ROCm accessibility for developers and delivering
+industry-leading performance on workloads keys. And with AMD Infinity
+Hub, researchers, data scientists, and end users can easily find,
+download, and install containerized HPC applications and ML frameworks
+optimized and supported on AMD Instinct and ROCm.
+
+The hub currently offers a range of containers supporting Radeon
+Instinct™ MI50, AMD Instinct™ MI100, or AMD Instinct MI200 accelerators,
+including several applications such as Chroma, CP2k, LAMMPS, NAMD,
+OpenMM, etc., as well as frameworks Popular TensorFlow and PyTorch MLs.
+New containers are continually being added to the hub.
+
+
+
+
+=== AMD Fusion System Architecture 
+=== Moves to Unify CPUs and GPUs
+
+image:Data/media/image6.png[image,width=511,height=287]
+
+
+*1.7 TPU (Tensor Processing Unit) form Google*
+
+A Tensor Processing Unit (TPU) is a specialized hardware processor
+developed by Google to accelerate machine learning. Unlike traditional
+CPUs or GPUs, TPUs are specifically designed to handle tensor
+operations, which account for most of the computations in deep learning
+models. This makes them incredibly efficient at those tasks and provides
+an enormous speedup compared to CPUs and GPUs. In this article, we’ll
+explore what a TPU is, how it works, and why they are so beneficial for
+machine learning applications.
+
+*What Are Tensor Processing Units (TPU)?*
+
+Tensor Processing Unit (TPU) is an application-specific integrated
+circuit (ASIC) designed specifically for machine learning. In addition,
+TPUs offer improved energy efficiency, allowing businesses to reduce
+their electricity bills while still achieving the same results as
+processors with greater energy consumption**.** This makes them an
+attractive option for companies looking to use AI in their products or
+services**.** With the help of TPUs, businesses can develop and deploy
+faster, more efficient models that are better suited to their needs**.**
+TPUs offer a range of advantages over CPUs and GPUs**.** For instance,
+they provide up to 30x faster performsance than traditional processors
+and up to 15x better energy efficiency**.** This makes them ideal for
+companies looking to develop complex models in a fraction of the
+time**.** Finally, TPUs are more affordable than other specialized
+hardware solutions, making them an attractive option for businesses of
+all sizes**.**
+
+Tensor Processing Units are Google's ASIC for machine learning. TPUs are
+specifically used for deep learning to solve complex matrix and vector
+operations. TPUs are streamlined to solve matrix and vector operations
+at ultra-high speeds but must be paired with a CPU to give and execute
+instructions.
+
+
+image:Data/media/image22.png[image,width=544,height=419]
+
+
+*Applications for TPUs*
+
+TPUs can be used in various deep learning applications such as fraud
+detection, computer vision, natural language processing, self-driving
+cars, vocal AI, agriculture, virtual assistants, stock trading,
+e-commerce, and various social predictions.s
+
+*_When to Use TPUss_*
+
+Since TPUs are high specialized hardware for deep learning, it loses a
+lot of other functions you would typically expect from a general-purpose
+processor like a CPU. With this in mind, there are specific scenarios
+where using TPUs will yield the best result when training AI. The best
+time to use a TPU is for operations where models rely heavily on matrix
+computations, like recommendation systems for search engines. TPUs also
+yield great results for models where the AI analyzes massive amounts of
+data points that will take multiple weeks or months to complete. AI
+engineers use TPUs for instances without custom TensorFlow models and
+have to start from scratch.
+
+*_When Not to Use TPUs_*
+
+As stated earlier, the optimization of TPUs causes these types of
+processors to only work on specific workload operations. Therefore,
+there are instances where opting to use a traditional CPU and GPU will
+yield faster results. These instances include:
+
+* Rapid prototyping with maximum flexibility
+* Models limited by the available data points
+* Models that are simple and can be trained quickly
+* Models too onerous to change
+* Models reliant on custom TensorFlow operations written in C++
+
+[width="100%",cols="14%,86%",]
+|===
+|*TPU Versions and Specifications* |
+
+|TPUv1 |The first publicly announced TPU. Designed as an 8-bit matrix
+multiplication engine and is limited to solving only integers.
+
+|TPUv2: |Since engineers noted that TPUv1 was limited in bandwidth. This
+version now has double the memory bandwidth with 16GB of RAM. This
+version can now solve floating points making it useful for training and
+inferencing.
+
+|TPUv3 |Released in 2018, TPUv3 has twice the processors and is deployed
+with four times as many chips as TPUv2. The upgrades allow this version
+to have eight times the performance over previous versions.
+
+|TPUv4 |This is the latest version of TPU announced on May 18, 2021.
+Google's CEO announced that this version would have more than twice the
+performance of TPU v3.
+
+|Edge TPU |This TPU version is meant for smaller operations optimized to
+use less power than other versions of TPU in overall operation. Although
+only using two watts of power, Edge TPU can solve up to four
+terra-operations per second. Edge TPU is only found on small handheld
+devices like Google's Pixel 4 smartphone.
+|===
+
+[width="100%",cols="26%,74%",]
+|===
+|*Benefits of the TPU Architecture* |
+
+|High Performance: |The TPU architecture is designed to maximize
+performance, ensuring that the processor can execute operations at
+extremely high speeds.
+
+|Low Power Consumption: |Compared to CPUs and GPUs, the TPU architecture
+requires significantly less power consumption, making it ideal for
+applications in which energy efficiency is a priority.
+
+|Cost Savings: |The TPU architecture is designed to be affordable,
+making it an attractive solution for businesses that are looking to
+reduce their hardware costs.
+
+|Scalability |The TPU architecture is highly scalable and can
+accommodate a wide range of workloads, from small applications to
+large-scale projects.
+
+|Flexibility |The TPU architecture is flexible and can be adapted to
+meet the needs of different applications, making it suitable for a range
+of use cases.
+
+|Efficient Training |The TPU architecture enables efficient training of
+deep learning models, allowing businesses to quickly iterate and improve
+their AI solutions.
+
+|Security |The TPU architecture is highly secure, making it an ideal
+solution for mission-critical applications that require high levels of
+security.
+
+|Enhanced Reliability |The TPU architecture has enhanced reliability,
+providing businesses with the assurance that their hardware will perform
+as expected in any environment.
+
+|Easy to Deploy |The TPU architecture is designed for easy deployment,
+allowing businesses to quickly set up and deploy their hardware
+solutions.
+
+|Open Source Support |The TPU architecture is backed by an open-source
+community that provides support and assistance when needed, making it
+easier for businesses to get the most out of their hardware investments.
+
+|Improved Efficiency |The TPU architecture is designed to optimize
+efficiency, allowing businesses to get the most out of their hardware
+resources and reducing the cost of running AI applications.
+
+|End-to-End Solutions: |The TPU architecture provides a complete
+end-to-end solution for all types of AI projects, allowing businesses to
+focus on their development and operations instead of worrying about
+hardware compatibility.
+
+|Cross-Platform Support |The TPU architecture is designed to work across
+multiple platforms, making it easier for businesses to deploy their AI
+solutions in any environment.
+
+|Future Ready |The TPU architecture is designed with the future in mind,
+providing businesses with a solution that will remain up-to-date and
+ready to take on next-generation AI applications.
+
+|Industry Standard |The TPU architecture is becoming an industry
+standard for AI applications, giving businesses the confidence that
+their hardware investments are future-proofed.
+|===
+
+*Applications of the TPU*
+
+Tensor Processing Units (TPUs) are specialized ASIC chips designed to
+accelerate the performance of machine learning algorithms. They can be
+used in a variety of applications, ranging from cloud computing and edge
+computing to machine learning. TPUs provide an efficient way to process
+data, making them suitable for a range of tasks such as image
+recognition, language processing, and speech recognition. By leveraging
+the power of TPUs, organizations can reduce costs and optimize their
+operations.
+
+*Cloud Computing:* TPUs are used in cloud computing to provide better
+performance for workloads that require a lot of data processing. This
+allows businesses to process large amounts of data quickly and
+accurately at a lower cost than ever before. With the help of TPUs,
+businesses can make more informed decisions faster and improve their
+operational efficiency.
+
+*Edge Computing:* TPUs are also used in edge computing applications,
+which involve processing data at or near the source. This helps to
+reduce latency and improve performance for tasks such as streaming audio
+or video, autonomous driving, robotic navigation, and predictive
+analytics. Edge computing also facilitates faster and more reliable
+communication between devices in an IoT network.
+
+*Machine Learning:* TPUs are used to accelerate machine learning models
+and algorithms. They can be used to develop novel architectures that are
+optimized for tasks such as natural language processing, image
+recognition, and speech recognition. By leveraging the power of TPUs,
+organizations can develop more complex models and algorithms faster.
+This will enable them to achieve better results with their
+machine-learning applications.
+
+
+
+
+
+=== 2. Programming interface for parallel computing
+
+*MPI, OpenMP two complementary parallelization models.*
+
+– MPI is a multi-process model whose mode of communication between the
+processes is *explicit* (communication management is the responsibility
+of the user). MPI is generally used on multiprocessor machines with
+distributed memory. MPI is a library for passing messages between
+processes without sharing.
+
+– OpenMP is a multitasking model whose mode of communication between
+tasks is *implicit* (the management of communications is the
+responsibility of the compiler). OpenMP is used on shared-memory
+multiprocessor machines. It focuses on shared memory paradigms. It is a
+language extension for expressing data-parallel operations (usually
+parallelized arrays over loops).
+
+Note: on a cluster of independent shared-memory multiprocessor machines
+(nodes), the implementation of a two-level parallelization (MPI, OpenMP)
+in the same program can be a major advantage for the parallel
+performance of the code.
+
+image:Data/media/image7.png[image,width=581,height=336]
+
+
+
+[width="100%",cols="50%,50%",]
+|===
+|*MPI vs. OpenMP* |
+|*MPI pos* |*OpenMP pos*
+a|
+Portable to a distributed and shared memory machine.
+
+Scale beyond a node
+
+No data placement issues
+
+a|
+Easy to implement parallelism
+
+Implicit communications
+
+Low latency, high bandwidth
+
+Dynamic Load Balancing
+
+|*MPI negative* |*OpenMP negative*
+a|
+Explicit communication
+
+High latency, low bandwidth
+
+Difficult load balancing
+
+a|
+Only on nodes or shared memory machines
+
+Scale on Node
+
+Data placement problem
+
+|===
+
+*2.1 MPI (Message Passing Interface)*
+
+*Point-to-point communications*
+
+*General notions*
+
+The transmitter and the receiver are identified by their rank in the
+communicator. The entity passed between two processes is called a
+message . +
+A message is characterized by its envelope . This consists of:
+
+• the rank of the sending process; +
+• the rank of the receiving process; +
+• the label ( _tag_ ) of the message; +
+• the communicator who defines the process group and the communication
+context.
+
+The data exchanged is typed (integers, reals, etc. or personal derived
+types).
+
+In each case, there are several transfer modes , using different
+protocols.
+    
+    int MPI_Send( *const void* *message, *int* length, MPI_Datatype
+    type_message, *int* rank_dest, *int* label, MPI_Comm comm)
+    
+    int MPI_Recv ( *void* *message, *int* length, MPI_Datatype
+    type_message, *int* rank_source, *int* label, MPI_Comm comm, MPI_Status
+    *status)
+
+Note this operation is blocking.
+
+*Simultaneous send and receive operation*
+
+    int MPI_Sendrecv ( *const void* *message_sent, *int*
+    length_message_sent, +
+    MPI_Datatype type_message_sent, *int* rank_dest, *int*
+    label_message_sent, *void* *message_received , *int*
+    length_message_received, +
+    MPI_Datatype type_message_received, *int* rank_source, *int*
+    label_message_received, MPI_Comm comm, MPI_Status *status)
+
+*Simultaneous send and receive operation*
+    
+    int MPI_Sendrecv_replace ( void * message, int length, MPI_Datatype
+    type_message, int rank_dest, int label_message_sent, int* rank_source,
+    int label_message_recu, MPI_Comm comm, MPI_Status *status)
+
+*Collective communications*
+
+*General notions*
+
+Collective communications allow a series of point-to-point
+communications to be made in a single operation.
+
+A collective communication always concerns all the processes of the
+indicated communicator .
+
+For each of the processes, the call ends when the latter's participation
+in the collective operation is completed, in the sense of point-to-point
+communications (thus when the memory zone concerned can be modified).
+
+The management of labels in these communications is transparent and at
+the expense of the system. They are therefore never explicitly defined
+during the call to these subroutines. One of the advantages of this is
+that collective communications never interfere with point-to-point
+communications.
+
+*Types of collective communications*
+
+There are three types of subroutines: +
+*1.* the one that ensures global synchronizations: MPI_Barrier() .
+
+*2.* those that only transfer data:
+
+• global data broadcasting: MPI_Bcast(); +
+• selective diffusion of data: MPI_Scatter(); +
+• distributed data collection: MPI_Gather(); +
+• collection by all distributed data processes: MPI_Allgather(); •
+selective collection and dissemination, by all processes, of distributed
+data: MPI_Alltoall() .
+
+*3.* those who, in addition to managing communications, perform
+operations on the transferred data:
+
+* {blank}
++
+
+reduction operations (sum, product, maximum, minimum, etc.), whether of
+a predefined type or of a personal type: MPI_Reduce();
+
+* {blank}
++
+
+reduction operations with distribution of the result (equivalent to an
+MPI_Reduce() followed by an MPI_Bcast()): MPI_Allreduce().
+
+
+*Global synchronization*
+
+    int MPI_Barrier ( MPI_Comm comm)
+
+*General distribution*
+
+    int MPI_Bcast( void *message, int length, MPI_Datatype,
+    type_message, *int* rank_source, MPI_Comm comm)
+
+*Selective dissemination*
+
+    int MPI_Scatter ( const void *message_to_be restarted, int
+    length_message_sent, MPI_Datatype type_message_sent, void
+    *message_received, int length_message_recu, MPI_Datatype type_message_recu, int
+    rank_source, MPI_Comm comm)
+
+*Collection*
+
+    int MPI_Gather ( const void *message_sent, int
+    length_message_sent, MPI_Datatype type_message_sent, void
+    *message_received, int length_message_received, MPI_Datatype
+    type_message_received, *int* rank_dest, MPI_Comm comm)
+
+*General collection*
+
+    int MPI_Allgather ( const void *message_sent, int
+    length_message_sent, MPI_Datatype type_message_sent, void
+    *message_received, int length_message_received, MPI_Datatype
+    type_message_received, MPI_Comm comm)
+
+*"Variable" collection*
+
+    int MPI_Gatherv ( const void *message_sent, int
+    length_message_sent, MPI_Datatype type_message_sent, void
+    *message_received, const int *nb_elts_recus, const int *deplts,
+    MPI_Datatype type_message_recu, *int* rang_dest, MPI_Comm comm)
+
+*Selective collections and distributions*
+
+    int MPI_Alltoall ( const void *message_sent, int
+    length_message_sent, MPI_Datatype type_message_sent, void
+    *message_received, int length_message_received, MPI_Datatype
+    type_message_received, MPI_Comm comm)
+
+*Distributed reductions*
+
+    int MPI_Reduce ( const void *message_sent, void *message_received,
+    int length, MPI_Datatype type_message, MPI_Op operation, int rank_dest,*
+    MPI_Comm comm)
+
+*Distributed reductions with distribution of the result*
+
+    int MPI_Allreduce ( const void *message_sent, void *message_received, *int* length, MPI_Datatype, type_message, MPI_Op operation, MPI_Comm comm)
+
+
+
+*Communication models*
+
+*Point-to-point sending modes*
+
+    _Blocking and Non-blocking mode_
+    
+    Standard sending MPI_Send() MPI_Isend()
+    
+    Synchronous send MPI_Ssend() MPI_Issend()
+    
+    _Buffered_ send MPI_Bsend() MPI_Ibsend()
+    
+    Receive MPI_Recv() MPI_Irecv()
+
+
+*_Blocking calls_*
+
+A call is blocking if the memory space used for communication can be
+reused immediately after the call exits.
+
+The data sent can be modified after the blocking call.
+
+The received data can be read after the blocking call.
+
+
+*Synchronous sends*
+
+A synchronous send involves synchronization between the processes
+involved. A shipment can only begin when its receipt is posted. There
+can only be communication if both processes are willing to communicate.
+
+*int* MPI_Ssend( *const void* * values, *int* size, MPI_Datatype
+message_type, *int* dest, *int* label, MPI_Comm comm)
+
+
+*Benefits*
+
+Consume few resources (no _buffer_ ) +
+Fast if the receiver is ready (no copying into a _buffer_ ) Recognition
+of reception thanks to synchronization
+
+*Disadvantages*
+
+Waiting time if the receiver is not there/not ready Risks of deadlock
+
+
+**_Buffered +
+_**sends A buffered send involves the copying of data into an
+intermediate memory space. There is then no coupling between the two
+communication processes. The output of this type of sending therefore
+does not mean that the reception has taken place.
+
+Buffers must be managed manually (with calls to MPI_Buffer_attach( _)_
+and MPI_Buffer_detach()). They must be allocated taking into account the
+memory overhead of the messages (by adding the MPI_BSEND_OVERHEAD
+constant for each message instance).
+
+    int MPI_Buffer_attach ( void *buf, int size_buf) 
+    int MPI_Buffer_detach ( void *buf, int size_buf) 
+    int MPI_Bsend( const void *values, int size, MPI_Datatype type_message, int dest, int label, MPI_Comm comm)
+
+
+*Advantages of buffered mode*
+
+No need to wait for the receiver (recopy in a _buffer_ ) No risk of
+blocking ( _deadlocks_ )
+
+*Disadvantages of buffered mode*
+
+Consume more resources (memory occupation by _buffers_ with risk of
+saturation)
+
+Send buffers must be managed manually (often difficult to choose an
+appropriate size _)_
+
+A bit slower than synchronous sends if the receiver is ready
+
+No knowledge of the reception (send-receive decoupling)
+
+Risk of wasting memory space if the _buffers_ are too oversized
+
+The application crashes if the _buffers_ are too small
+
+There are also often hidden _buffers_ managed by the MPI implementation
+on the sender and/or receiver side (and consuming memory resources)
+
+*Standard shipments*
+
+MPI_Send() subroutine . In most implementations, this mode switches from
+buffered _(_ eager _)_ to synchronous mode as message sizes grow.
+
+    int MPI_Send( const void *values, int size, MPI_Datatype type_message, int dest, int label, MPI_Comm comm)
+
+
+*Benefits of standard mode*
+
+=> Often the most efficient (choice of the most suitable mode by the
+manufacturer)
+
+*Disadvantages of standard mode*
+
+=> Little control over the mode actually used (often accessible via
+environment variables)
+
+Risk of _deadlock_ depending on the real mode +
+Behavior may vary depending on the architecture and the size of the
+problem
+
+*Non-blocking calls*
+
+non-blocking call returns control very quickly, but does not allow the
+immediate reuse of the memory space used in the call. It is necessary to
+ensure that the communication is indeed terminated (with MPI_Wait() for
+example) before using it again.
+
+    int MPI_Isend( const void *values, int size, MPI_Datatype
+    message_type, int dest, int label, MPI_Comm comm, MPI_Request *req)
+    
+    int MPI_Issend ( const void* values, int size, MPI_Datatype
+    message_type, int dest, int label, MPI_Comm comm, MPI_Request *req)
+    
+    int MPI_Ibsend( const void* values, int size, MPI_Datatype
+    message_type, int dest, int label, MPI_Comm comm, MPI_Request *req)
+    
+    int MPI_Irecv( void *values, int size, MPI_Datatype type_message,
+    int* source, int label, MPI_Comm comm, MPI_Request *req)
+
+
+*Benefits of non-blocking calls*
+
+Ability to hide all or part of the communication costs (if the
+architecture allows it)
+
+No risk of _deadlock_
+
+*Disadvantages of non-blocking calls*
+
+Higher additional costs (several calls for a single send or receive,
+request management)
+
+Higher complexity and more complicated maintenance
+
+Risk of loss of performance on the calculation cores (for example
+differentiated management between the zone close to the border of a
+domain and the interior zone resulting in less good use of memory
+caches)
+
+Limited to point-to-point communications (has been extended to
+collectives in MPI 3.0)
+
+*interfaces*
+
+MPI_Wait() waits for the end of a communication. MPI_Test() is the
+non-blocking version.
+
+    int MPI_Wait ( MPI_Request *req, MPI_Status *status) 
+    int MPI_Test( MPI_Request *req, int *flag, MPI_Status *status)
+
+MPI_Waitall() waits for all communications to end. MPI_Testall() is the
+non-blocking version.
+
+    int MPI_Waitall ( int size, MPI_Request reqs[], MPI_Status statuses[]) 
+    int* MPI_Testall ( int size, MPI_Request reqs[], int *flag, MPI_Status statuses[])
+
+MPI_Waitany waits for the end of one communication among several.
+
+    int MPI_Waitany ( int size, MPI_Request reqs[], int *index,MPI_Status *status)
+
+MPI_Testany is the non-blocking version. 
+
+    int* MPI_Testany( int size, MPI_Request reqs[], int *index, int *flag, MPI_Status *status)
+
+MPI_Waitsome is waiting for the end of one or more communications.
+
+    int MPI_Waitsome( int size, MPI_Request reqs[], int *endcount,int *indexes, MPI_Status *status)
+
+MPI_Testsome is the non-blocking version.
+
+    int MPI_Testsome( int size, MPI_Request reqs[], int *endcount,int *indexes, MPI_Status *status)
+
+*Memory-to-memory communications (RMA)*
+
+Memory-to-memory communications (or RMA for _Remote Memory Access_ or
+_one-sided communications_ ) consist of accessing the memory of a remote
+process in write or read mode without the latter having to manage this
+access explicitly. The target process therefore does not intervene
+during the transfer.
+
+*RMA - General Approach*
+
+Creation of a memory window with MPI_Win_create() to authorize RMA
+transfers in this area.
+
+Remote read or write access by calling MPI_Put(), MPI_Get(),
+MPI_Accumulate(), , MPI_Get_accumulate() and MPI_Compare_and_swap()
+
+Freeing the memory window with M PI_Win_free() .
+
+*RMA - Synchronization Methods*
+
+To ensure correct operation, it is mandatory to carry out certain
+synchronizations. 3 methods are available:
+
+Active target communication with global synchronization (
+MPI_Win_fence() );
+
+Communication with active target with pair synchronization
+(MPI_Win_start() and MPI_Win_complete() for the origin process;
+MPI_Win-post() and MPI_Win_wait() for the target process);
+
+Passive target communication without target intervention (MPI_Win_lock()
+and MPI_Win_unlock()).
+
+*Benefits of RMAs*
+
+Allows you to implement certain algorithms more efficiently.
+
+More efficient than point-to-point communications on some machines (use
+of specialized hardware such as DMA engine, coprocessor, specialized
+memory, etc.).
+
+Ability for the implementation to group multiple operations.
+
+*Disadvantages of RMAs*
+
+Synchronization management is tricky.
+
+Complexity and high risk of error.
+
+For passive target synchronizations, obligation to allocate memory with
+MPI_Alloc_mem() which does not respect the Fortran standard (use of Cray
+pointers not supported by some compilers).
+
+Less efficient than point-to-point communications on some machines.
+
+*Derived data types*
+
+In the communications, the data exchanged are typed: MPI_INTEGER,
+MPI_REAL, MPI_COMPLEX, etc .
+
+More complex data structures can be created using subroutines such as
+MPI_Type_contiguous(), MPI_Type_vector(), MPI_Type_Indexed() , or
+MPI_Type_create_struct()
+
+The derived types notably allow the exchange of non-contiguous or
+non-homogeneous data in memory and to limit the number of calls to the
+communications subroutines.
+
+*MPI keywords*
+
+[width="100%",cols="50%,50%",]
+|===
+a|
+*1 environment*
+
+• MPI Init: Initialization of the MPI environment
+
+• MPI Comm rank: Rank of the process
+
+• MPI Comm size: Number of processes
+
+• MPI Finalize: Deactivation of the MPI environment 
+
+• MPI Abort:Stopping of an MPI program
+
+• MPI Wtime: Time taking
+
+*2 Point-to-point communications*
+
+• MPI Send: Send message
+
+• MPI Isend: Non-blocking message sending
+
+• MPI Recv: Message received
+
+• MPI Irecv: Non-blocking message reception
+
+• MPI Sendrecv and MPI Sendrecv replace: Sending and receiving messages
+
+• MPI Wait: Waiting for the end of a non-blocking communication
+
+• MPI Wait all: Wait for the end of all non-blocking communications
+
+*3 Collective communications*
+
+• MPI Bcast: General broadcast
+
+• MPI Scatter: Selective spread
+
+• MPI Gather and MPI Allgather: Collecting
+
+• MPI Alltoall: Collection and distribution
+
+• MPI Reduce and MPI Allreduce: Reduction 
+
+• MPI Barrier: Global synchronization
+
+*4 Derived Types*
+
+• MPI Contiguous type: Contiguous types
+
+• MPI Type vector and MPI Type create hvector: Types with a con-standing
+
+• MPI Type indexed: Variable pitch types
+
+• MPI Type create subarray: Sub-array types
+
+• MPI Type create struct: H and erogenous types
+
+• MPI Type commit: Type commit
+
+• MPI Type get extent: Recover the extent
+
+• MPI Type create resized: Change of scope
+
+• MPI Type size: Size of a type
+
+• MPI Type free: Release of a type
+
+a|
+*5 Communicator*
+
+• MPI Comm split: Partitioning of a communicator
+
+• MPI Dims create: Distribution of processes
+
+• MPI Cart create: Creation of a Cart ́esian topology
+
+• MPI Cart rank: Rank of a process in the Cart ́esian topology
+
+• MPI Cart coordinates: Coordinates of a process in the Cart ́esian
+topology
+
+• MPI Cart shift: Rank of the neighbors in the Cart ́esian topology
+
+• MPI Comm free: Release of a communicator
+
+*6 MPI-IO*
+
+• MPI File open: Opening a file
+
+• MPI File set view: Changing the view • MPI File close: Closing a file
+
+*6.1 Explicit addresses*
+
+• MPI File read at: Reading
+
+• MPI File read at all: Collective reading
+
+• MPI File write at: Writing
+
+*6.2 Individual pointers*
+
+• MPI File read: Reading
+
+• MPI File read all: collective reading
+
+• MPI File write: Writing
+
+• MPI File write all: collective writing
+
+• MPI File seek: Pointer positioning
+
+*6.3 Shared pointers*
+
+• MPI File read shared: Read
+
+• MPI File read ordered: Collective reading
+
+• MPI File seek shared: Pointer positioning
+
+*7.0 Symbolic constants*
+
+• MPI COMM WORLD, MPI SUCCESS
+
+• MPI STATUS IGNORE, MPI PROC NULL
+
+• MPI INTEGER, MPI REAL, MPI DOUBLE PRECISION
+
+• MPI ORDER FORTRAN, MPI ORDER C
+
+• MPI MODE CREATE,MPI MODE RONLY,MPI MODE WRONLY
+
+|===
+
+*2.2 OpenMP (Open Multi-Processing)*
+
+OpenMP ( Open Multi-Processing ) is a programming interface for parallel
+computing on shared memory architecture.
+
+It allows you to manage:
+
+* {blank}
++
+
+the creation of light processes,
+
+* {blank}
++
+
+the sharing of work between these lightweight processes,
+
+* {blank}
++
+
+synchronizations (explicit or implicit) between all light processes,
+
+* {blank}
++
+
+the status of the variables (private or shared).
+
+*General concepts*
+
+An OpenMP program is executed by a single process.
+
+● This process activates lightweight processes (threads) at the entrance
+to a parallel region. +
+● Each thread performs a task consisting of a set of instructions. +
+● During the execution of a task, a variable can be read and/or modified
+in memory.
+
+
+– It can be defined in the stack (local memory space) of a lightweight
+process; we then speak of a private variable
+
+– It can be defined in a shared memory space
+
+
+● An OpenMP program is an alternation of sequential regions and parallel
+regions. +
+● A sequential region is always executed by the master task, the one
+whose rank is 0. +
+● A parallel region can be executed by several tasks at the same time. +
+● The tasks can share the work contained in the parallel region.
+
+● Work sharing essentially consists of:
+
+
+– execute a loop by distributing the iterations between the tasks; +
+– execute several sections of code but only one per task; +
+– execute several occurrences of the same procedure by different tasks
+(orphaning)
+
+
+● It is sometimes necessary to introduce a synchronization between the
+concurrent tasks to avoid, for example, that these modify in any order
+the value of the same shared variable (case of reduction operations).
+
+●Generally, tasks are assigned to processors by the operating system.
+Different cases can occur:
+
+
+– at best, at each instant, there is one task per processor with as many
+tasks as there are dedicated processors for the duration of the work; +
+– at worst, all tasks are processed sequentially by one and only one
+processor; +
+– in reality, for reasons essentially of operation on a machine whose
+processors are not dedicated, the situation is generally intermediate.
+
+
+● To overcome these problems, it is possible to build the OpenMP runtime
+on a library of mixed threads and thus control the scheduling of tasks.
+
+*Construction of a parallel region*
+
+* In a parallel region, by default, the status of variables is shared.
+* Within a single parallel region, all concurrent tasks execute the same
+code.
+* There is an implicit synchronization barrier at the end of the
+parallel region.
+* “Branching” (eg GOTO, CYCLE, etc.) into or out of a parallel region or
+any other OpenMP construct is prohibited.
+* It is possible, thanks to the DEFAULT clause, to change the default
+status of variables in a parallel region.
+* If a variable has a private status (PRIVATE), it is in the stack of
+each task. Its value is then undefined at the entry of a parallel region
+(in the example opposite, the variable a equals 0 at the entry of the
+parallel region)
+* However, thanks to the FIRSTPRIVATE clause, it is possible to force
+the initialization of this private variable to the last value it had
+before entering the parallel region.
+
+*Extent of a parallel region*
+
+* The scope of an OpenMP construct represents the scope of its influence
+in the program. +
+The influence (or scope) of a parallel region extends both to the code
+contained lexically in this region (static scope), and to the code of
+the called subroutines. The union of the two represents “dynamic
+extent”.
+* In a subroutine called in a parallel region, the local and automatic
+variables are implicitly private to each of the tasks (they are defined
+in the stack of each task).
+* In a procedure, all the variables passed by argument (dummy
+parameters) by reference, inherit the status defined in the lexical
+scope (static) of the region.
+
+*Case of static variables*
+
+* A variable is static if its location in memory is defined at
+declaration by the compiler
+* Using the THREADPRIVATE directive allows you to privatize a static
+instance and make it persistent from one parallel region to another. (
+omp_get_thread_num(); )
+* If, in addition, the COPYIN clause is specified then the value of
+static instances is passed to all tasks.
+
+*Case of dynamic allocation*
+
+* The dynamic memory allocation/deallocation operation can be performed
+inside a parallel region.
+* If the operation relates to a private variable, it will be local to
+each task.
+* If the operation concerns a shared variable, then it is more prudent
+that only one task (e.g. the master task) takes care of this operation
+
+*Complements*
+
+The construction of a parallel region admits two other clauses:
+
+– REDUCTION: for reduction operations with implicit synchronization
+between tasks; +
+– NUM_THREADS: it allows to specify the desired number of tasks at the
+entrance of a parallel region in the same way as the OMP_SET_NUM_THREADS
+subroutine would do.
+
+From one parallel region to another, the number of concurrent tasks can
+be varied if desired. To do this, simply use the OMP_SET_DYNAMIC
+subroutine or set the OMP_DYNAMIC environment variable to true. It is
+possible to nest (nesting) parallel regions, but this only has an effect
+if this mode has been activated by calling the OMP_SET_NESTED subroutine
+or by setting the OMP_NESTED environment variable.
+
+    *Examples*
+    
+    #include <omp.h>
+    
+    int main() 
+    { 
+    int row;
+    
+    #pragma omp parallel private(rank) num_threads(3) 
+    { 
+    rank=omp_get_thread_num(); 
+    printf("My rank in region 1: %d \n",rank);
+    
+    #pragma omp parallel private(rank) num_threads(2) 
+    { 
+    rank=omp_get_thread_num(); 
+    printf(" My rank in region 2: %d \n",rank); 
+    }
+    
+    }
+    return 0; 
+    }
+    
+    My rank in region 1: 0 
+    My rank in region 2: 1 
+    My rank in region 2: 0 
+    My rank in region 1: 2 
+    My rank in region 2: 1 
+    My rank in region 2: 0 
+    My rank in region 1: 1 
+    My rank in region 2: 0 
+    My rank in region 2: 1
+
+*Work sharing*
+
+* In principle, building a parallel region and using a few OpenMP
+functions alone is enough to parallelize a piece of code.
+* But, in this case, it is up to the programmer to distribute the work
+as well as the data and to ensure the synchronization of the tasks.
+* Fortunately, OpenMP offers three directives (DO, SECTIONS and
+WORKSHARE) which easily allow fairly fine control over the distribution
+of work and data as well as synchronization within a parallel region.
+* In addition, there are other OpenMP constructs that allow the
+exclusion of all but one task to execute a piece of code located in a
+parallel region.
+
+*Parallel loop*
+
+* It is a parallelism by distribution of the iterations of a loop.
+* The parallelized loop is the one immediately following the DO
+directive.
+* "Infinite" and do while loops are not parallelizable with OpenMP.
+* The mode of distribution of iterations can be specified in the
+SCHEDULE clause.
+* Choosing the distribution mode provides more control over balancing
+the workload between tasks.
+* Loop indices are private integer variables.
+* By default, a global synchronization is performed at the end of the
+END DO construction unless the +
+NOWAIT clause has been specified.
+
+*SCHEDULE clause*
+
+* STATIC dispatching consists of dividing the iterations into packets of
+a given size (except perhaps for the last one). A set of packets is then
+assigned cyclically to each of the tasks, following the order of the
+tasks up to the total number of packets. We could have deferred the
+choice of the mode of distribution of the iterations using the
+OMP_SCHEDULE environment variable. The choice of the distribution mode
+of the iterations of a loop can be a major asset for balancing the
+workload on a machine whose processors are not dedicated. Caution, for
+vector or scalar performance reasons, avoid parallelizing loops
+referring to the first dimension of a multi-dimensional array.
+* DYNAMIC: iterations are divided into packets of given size. As soon as
+a task exhausts its iterations, another packet is assigned to it.
+* GUIDED: the iterations are divided into packets whose size decreases
+exponentially. All the packets have a size greater than or equal to a
+given value except for the last whose size may be less. As soon as a
+task completes its iterations, another iteration package is assigned to
+it.
+
+*Case of an ordered execution*
+
+* It is sometimes useful (debugging cases) to execute a loop in an
+orderly fashion.
+* The order of the iterations will then be identical to that
+corresponding to a sequential execution.
+* A reduction is an associative operation applied to a shared variable.
+* The operation can be:
+* arithmetic: +, --, *; +
+logic: .AND., .OR., .EQV., .NEQV. ; +
+an intrinsic function: MAX, MIN, IAND, IOR, IEOR.
+* Each task calculates a partial result independently of the others.
+They then sync to update the final result.
+
+*Parallel sections*
+
+* A section is a portion of code executed by one and only one task.
+* Multiple portions of code can be defined by the user using the SECTION
+directive within a SECTIONS construct.
+* The goal is to be able to distribute the execution of several
+independent portions of code on the different tasks.
+* The NOWAIT clause is allowed at the end of the END SECTIONS construct
+to remove the implicit synchronization barrier.
+* All SECTION directives must appear within the lexical scope of the
+SECTIONS construct.
+* The clauses allowed in the SECTIONS directive are those we already
+know:
+* PRIVATE; FIRSTPRIVATE; LASTPRIVATE; REDUCTION.
+* The PARALLEL SECTIONS directive is a merger of the PARALLEL and
+SECTIONS directives with the union of their respective clauses.
+
+*Exclusive execution*
+
+Sometimes you want to exclude all tasks except one to execute certain
+portions of code included in a parallel region.
+
+To do this, OpenMP offers two directives SINGLE and MASTER.
+
+Although the aim is the same, the behavior induced by these two
+constructions remains quite different.
+
+Parallel sections
+
+* A section is a portion of code executed by one and only one task.
+* Multiple portions of code can be defined by the user using the SECTION
+directive within a SECTIONS construct.
+* The goal is to be able to distribute the execution of several
+independent portions of code on the different tasks.
+* The NOWAIT clause is allowed at the end of the END SECTIONS construct
+to remove the implicit synchronization barrier.
+
+*Exclusive execution*
+
+* Sometimes you want to exclude all tasks except one to execute certain
+portions of code included in a parallel region.
+* To do this, OpenMP offers two directives SINGLE and MASTER.
+* Although the aim is the same, the behavior induced by these two
+constructions remains quite different.
+
+*SINGLE construction*
+
+* The SINGLE construction allows a portion of code to be executed by one
+and only one task without being able to specify which one.
+* In general, it is the task which arrives first on the SINGLE
+construction but it is not specified in the standard.
+* All the tasks not executing the SINGLE region wait, at the end of the
+END SINGLE construction, for the termination of the one responsible for
+it, unless they have specified the NOWAIT clause.
+
+*MASTER building*
+
+* The MASTER construction allows a portion of code to be executed by the
+master task alone.
+* This construction does not admit any clauses.
+* There is no synchronization barrier either at the beginning (MASTER)
+or at the end of construction (END MASTER).
+
+*Synchronizations*
+
+Synchronization becomes necessary in the following situations:
+
+
+{empty}1. to ensure that all concurrent tasks have reached the same
+level of instruction in the program (global barrier);
+
+{empty}2. to order the execution of all the concurrent tasks when these
+must execute the same portion of code affecting one or more shared
+variables whose consistency (in reading or in writing) in memory must be
+guaranteed (mutual exclusion).
+
+{empty}3. to synchronize at least two concurrent tasks among the set
+(lock mechanism).
+
+
+As we have already indicated, the absence of a NOWAIT clause means that
+a global synchronization barrier is implicitly applied at the end of the
+\openmp construction. But it is possible to explicitly impose a global
+synchronization barrier thanks to the BARRIER directive.
+
+The mutual exclusion mechanism (one task at a time) is found, for
+example, in reduction operations (REDUCTION clause) or in the ordered
+execution of a loop (DO ORDERED directive). For the same purpose, this
+mechanism is also implemented in the ATOMIC and CRITICAL directives.
+
+Finer synchronizations can be achieved either by setting up lock
+mechanisms (this requires calling subroutines from the OpenMP library),
+or by using the FLUSH directive.
+
+*Barrier*
+
+* The BARRIER directive synchronizes all concurrent tasks in a parallel
+region.
+* Each of the tasks waits until all the others have arrived at this
+synchronization point to continue the execution of the program together.
+* Atomic Update
+* The ATOMIC directive ensures that a shared variable is read and
+modified in memory by only one task at a time.
+* Its effect is local to the statement immediately following the
+directive.
+
+*Critical regions*
+
+* A critical region can be seen as a generalization of the ATOMIC
+directive although the underlying mechanisms are distinct.
+* The tasks execute this region in a non-deterministic order but one at
+a time.
+* A critical region is defined using the CRITICAL directive and applies
+to a portion of code terminated by END CRITICAL.
+* Its scope is dynamic.
+* For performance reasons, it is not recommended to emulate an atomic
+instruction by a critical region.
+
+*FLUSH directive*
+
+* It is useful in a parallel region to refresh the value of a shared
+variable in global memory.
+* It is all the more useful when the memory of a machine is
+hierarchical.
+* It can be used to implement a synchronization point mechanism between
+tasks.
+
+*Rules of good performance*
+
+* Minimize the number of parallel regions in the code.
+* Adapt the number of tasks requested to the size of the problem to be
+treated in order to minimize the additional costs of task management by
+the system.
+* As much as possible, parallelize the outermost loop.
+* Use the SCHEDULE(RUNTIME) clause to be able to dynamically change the
+scheduling and the size of the iteration packets in a loop.
+* The SINGLE directive and the NOWAIT clause can make it possible to
+reduce the rendering time at the cost, most often, of an explicit
+synchronization.
+* The ATOMIC directive and the REDUCTION clause are more restrictive but
+more powerful than the CRITICAL directive.
+* Use the IF clause to implement conditional parallelization (eg on a
+vector architecture, only parallelize a loop if its length is long
+enough).
+* Inter-task conflicts (of memory bank on a vector machine or of cache
+faults on a scalar machine), can significantly degrade performance.
+
+*OpenMP keywords*
+
+[width="100%",cols="100%",]
+|===
+a|
+== Directive (atomic, barrier, critical, flush, ordered, ….)
+
+a|
+An OpenMP executable directive applies to the succeeding structured
+block or an OpenMP Construct. A “structured block” is a single statement
+or a compound statement with a single entry at the top and a single exit
+at the bottom.
+
+    
+    The *parallel* construction forms To team of threads and starts parallel
+    execution.
+    
+    *#pragma comp parallel* _[clause[ [_ *,* _]clause] ...] new-line
+    structured-block_
+    
+    _clause_ : *if(* _scalar- expression_ *)*
+    
+    *num_threads(* _integer-expression_ *) default(shared*  *none)
+    private(* _list_ *) firstprivate(* _list_ *)*
+    
+    *shared(* _list_ *) copyin(* _list_ *) reduce(* _operator_ *:* _list_
+    *)s*
+
+
+a|
+*loop* construction specifies that the iterations of loops will be
+distributed among and executed by the encountering team of threads.
+
+
+    *#pragma comp for* _[clause[[_ *,* _] clause] ... ] new-line for-loops_
+    
+    _clause_ : *private(* _list_ *)*
+    
+    *firstprivate(* _list_ *) lastprivate(* _list_ *) reduce(* _operator_
+    *:* _list_ *) schedule(* _kind[, chunk_size]_ *) collapse(* _n_ *)*
+    *ordered nowait*
+
+
+
+
+a|
+*sections* construct contains a set of structured blocks that are to be
+distributed among and executed by the meeting team of threads.
+
+
+    *#pragma comp sections* _[clause[[_ *,* _] clause] ...] new line_
+    
+    *{*
+    
+    _[_ *#pragma comp section* _new-line] structured-block_
+    
+    _[_ *#pragma comp section* _new-line structured-block ]_
+    
+    _clause_ : *private(* _list_ *)*
+    
+    *firstprivate(* _list_ *) 
+    lastprivate(* _list_ *) reduce(* _operator_
+    *:* _list_ *) nowait*
+
+a|
+*single* construction specifies that the associated structured block is
+executed by only one of the threads in the team (not necessarily the
+master thread), in the context of its implicit task.
+
+    
+    *#pragma comp single* _[clause[[_ *,* _] clause] ...] new-line
+    structured-block_
+    
+    _clause_ : *private(* _list_ *)*
+    
+    *firstprivate(* _list_ *) copyprivate(* _list_ *) nowait*
+
+a|
+The combined parallel worksharing constructs are a shortcut for
+specifying a parallel construct containing one worksharing construct and
+no other statements. Allowed clauses are the union of the clauses
+allowed for the *parallel* and worksharing constructs.
+
+
+    *#pragma comp parallel for* _[clause[[_ *,* _] clause] ...] new-line
+    for-loop_
+    
+    *#pragma comp parallel sections* _[clause[ [_ *,* _]clause] ...]
+    new-line_
+    
+    *{*
+    _[_ *#pragma comp section* _new-line] structured-block_
+    
+    _[_ *#pragma comp section* _new-line structured-block ]_
+    
+    _..._
+    *#pragma comp task* _[clause[ [_ *,* _]clause] ...] new-line
+    structured-block_
+    _clause_ : *if(* _scalar- expression_ *)*
+    
+    === untied
+    
+    
+    *default(shared  none) private(* _list_ *) firstprivate(* _list_ *)
+    shared(* _list_ *)*
+    
+    *Master* construction specifies To structured block that is executed by
+    the Master thread of the team. There is no implied barriers either on
+    entry to, or exit from, the master construct.
+    
+    
+    *#pragma comp Master* _new-line structured-block_
+
+a|
+*critical* construct restricts execution of the associated structured
+block to a single thread at a time.
+
+
+*#pragma comp critical* _[_ *(* _name_ *)* _] new-line structured-block_
+
+    The *barriers* construction specifies year explicit barriers did the
+    point did which the construct appears.
+    
+    *#pragma comp barriers* _new- line_
+    
+    The *taskwait* construction specifies To wait we the completion of child
+    tasks generated since the beginning of the current task.
+    
+    *#pragma comp you asked* _new line_
+
+a|
+*atomic* construction ensures that To specific storage lease is updated
+atomically, rather than exposing it to the possibility of multiple,
+simultaneous writing threads.
+
+
+    *#pragma comp atomic* _new-line expression-stmt_
+    
+    _stmt-expression_ : one of the following forms:
+    
+    _x binop_ *=* _expr x_ *++*
+    
+    *++* _x x_ *- -*
+    
+    *--x* ___
+
+
+a|
+*flush* construction execute the OpenMP flush operation, which makes a
+thread's temporary view of memory consist with memories, and enforces an
+order on the memory operations of the variables.
+
+
+    *#pragma comp flush* _[_ *(* _list_ *)* _] new- line_
+
+
+a|
+The *ordered* construct specifies a structured block in a loop region
+that will be executed in the order of the loop iterations. This
+sequentializes and orders the code within an ordered region while
+allowing code outside the region to run in parallel.
+
+
+    *#pragma comp ordered* _new-line structured-block_
+    
+    
+    a|
+    *threadprivate* guideline specifies that variables are replicated, with
+    each thread having its own copy.
+    
+    
+    *#pragma comp threadprivate* _( list) new- line_
+
+|===
+
+
+[width="100%",cols="27%,73%",]
+|===
+a|
+=== Parallel Execution
+a|
+
+
+
+
+
+|A Simple Parallel Loop a|
+The loop iteration variable is private by default, so it is not
+necessary to specify it explicitly in a private clause
+
+    void simple(int n, float *a, float *b)
+    {
+    int i;
+    *#pragma omp parallel for*
+    for (i=1; i<n; i++) /* i is private by default */
+    b[i] = (a[i] + a[i-1]) / 2.0;
+    }
+    
+_    |The Parallel Construct a|
+    The parallel construct can be used in coarse-grain parallel programs._
+    
+    void subdomain(float *x, int istart, int ipoints)
+    {
+    int i;
+    for (i = 0; i < ipoints; i++)
+    x[istart+i] = 123.456;
+    }
+    
+    void sub(float *x, int npoints)
+    {
+    int iam, nt, ipoints, istart;
+    *#pragma omp parallel default(shared) private(iam,nt,ipoints,istart)*
+    {
+    iam = omp_get_thread_num();
+    nt = omp_get_num_threads();
+    ipoints = npoints / nt; /* size of partition */
+    istart = iam * ipoints; /* starting array index */
+    if (iam == nt-1) /* last thread may do more */
+    ipoints = npoints - istart;
+    subdomain(x, istart, ipoints);
+    }
+    }
+    
+    main()
+    {
+    float array[10000]
+    sub(array, 10000)
+    return 0;
+    }
+
+|Controlling the Number of threads on Multiple Nesting Levels |The
+OMP_NUM_THREADS environment variable to control the number of threads on
+multiple nesting levels
+
+|Interaction Between the num_threads Clause and omp_set_dynamic a|
+The call to the omp_set_dynamic routine with argument 0 in C/C++,
+disables the dynamic adjustment of the number of threads in OpenMP
+implementations that support it.
+    
+    #include <omp.h>
+    
+    int main()
+    {
+    omp_set_dynamic(0);
+    *#pragma omp parallel num_threads(10)*
+    {
+    /* do work here */
+    }
+    return 0;
+    }
+
+|The nowait Clause a|
+If there are multiple independent loops within a parallel region, you
+can use the nowait clause to avoid the implied barrier at the end of the
+loop construct
+    
+    #include <math.h>
+    
+    void nowait_example(int n, int m, float *a, float *b, float *y, float *z)
+    {
+    int i;
+    *#pragma omp parallel*
+    {
+    *#pragma omp for nowait*
+    for (i=1; i<n; i++)
+    b[i] = (a[i] + a[i-1]) / 2.0;
+    *#pragma omp for nowait*
+    for (i=0; i<m; i++)
+    y[i] = sqrt(z[i]);
+    }
+    }
+
+|The collapse Clause a|
+The collapse clause is used since it is implicitly private. The collapse
+clause associates one or more loops with the directive on which it
+appears for the purpose of identifying the portion of the depth of the
+canonical loop nest to which to apply the semantics of the directive.
+The argument n speciﬁes the number of loops of the associated loop nest
+to which to apply those semantics. On all directives on which the
+collapse clause may appear, the eﬀect is as if a value of one was
+speciﬁed for n if the collapse clause is not speciﬁed.
+
+    void bar(float *a, int i, int j, int k);
+    
+    int kl, ku, ks, jl, ju, js, il, iu,is;
+    
+    void sub(float *a)
+    {
+    int i, j, k;
+    *#pragma omp for collapse(2) private(i, k, j)*
+    for (k=kl; k<=ku; k+=ks)
+    for (j=jl; j<=ju; j+=js)
+    for (i=il; i<=iu; i+=is)
+    bar(a,i,j,k);
+    }
+
+|Linear Clause in Loop Constructs a|
+The linear clause in a loop construct to allow the proper
+parallelization of a loop that contains an induction variable (_j_). At
+the end of the execution of the loop construct, the original variable
+_j_ is updated with the value _N/2_ from the last iteration of the loop.
+
+    #include <stdio.h>
+    
+    #define N 100
+    
+    int main(void)
+    {
+    float a[N], b[N/2];
+    int i, j;
+    for(i = 0;i<N;i++)
+    a[i] = i+1;
+    j=0
+    *#pragma omp parallel*
+    *#pragma omp for linear(j:1)*
+    for(i=0;i<N;i+=2){
+    b[j]= a[i] * 2.0f;
+    j++;
+    }
+    
+    printf"%d %f %f\n", j, b[0], b[j-1] );
+    /* print out: 50 2.0 198.0 */
+    return 0;
+    }
+
+|The firstprivate Clause and the sections Construct a|
+The firstprivate clause is used to initialize the private copy of
+section_count of each thread. The problem is that the section constructs
+modify section_count, which breaks the independence of the section
+constructs. When different threads execute each section, both sections
+will print the value 1. When the same thread executes the two sections,
+one section will print the value 1 and the other will print the value 2.
+Since the order of execution of the two sections in this case is
+unspecified, it is unspecified which section prints which value.
+
+    #include <stdio.h>
+    
+    #define NT 4
+    
+    int main( ) {
+    
+    int section_count = 0;
+    
+    *omp_set_dynamic(0);*
+    *omp_set_num_threads(NT);*
+    *#pragma omp parallel*
+    *#pragma omp sections firstprivate( section_count )*
+    {
+    
+    *#pragma omp section*
+    {
+    section_count++;
+    /* may print the number one or two */
+    printf( "section_count %d\n", section_count );
+    
+    }
+    
+    *#pragma omp section*
+    {
+    section_count++;
+    /* may print the number one or two */
+    printf( "section_count %d\n", section_count );
+    }
+    
+    }
+    
+    return 0;
+    }
+
+|The single Construct a|
+Only one thread prints each of the progress messages. All other threads
+will skip the single region and stop at the barrier at the end of the
+single construct until all threads in the team have reached the barrier.
+If other threads can proceed without waiting for the thread executing
+the single region, a nowait clause can be specified, as is done in the
+third single construct in this example. The user must not make any
+assumptions as to which thread will execute a single region.
+
+    #include <stdio.h>
+    
+    void work1() {}
+    
+    void work2() {}
+    
+    void single_example()
+    
+    
+    *#pragma omp parallel*
+    {
+    *#pragma omp single*
+    printf("Beginning work1.\n");
+    work1();
+    *#pragma omp single*
+    printf("Finishing work1.\n");
+    *#pragma omp single nowait*
+    printf("Finished work1 and beginning work2.\n");
+    work2();
+    }
+    }
+    
+    
+    
+    
+    |The master Construct a|
+    #include <stdio.h>
+    
+    extern float average(float,float,float);
+    void master_example( float* x, float* xold, int n, float tol )
+    {
+    int c, i, toobig;
+    float error, y;
+    c = 0;
+    
+    #*pragma omp parallel*
+    {
+    do {
+    *#pragma omp for private(i)*
+    for( i = 1; i < n-1; ++i ){
+    xold[i] = x[i];
+    }
+    
+    *#pragma omp single*
+    {
+    toobig = 0;
+    }
+    
+    *#pragma omp for private(i,y,error) reduction(+:toobig)*
+    for(i=1; i<n-1;++i){
+    y = x[i];
+    x[i] = average( xold[i-1], x[i], xold[i+1] );
+    error = y - x[i];
+    if( error > tol or error < -tol ) ++toobig;
+    }
+    
+    *#pragma omp master*
+    {
+    ++c;
+    printf( "iteration %d, toobig=%d\n", c, toobig );
+    }
+    } while( toobig > 0 );
+    }
+    }
+
+
+
+|Parrallel Random Access Iterator Loop a|
+    #include <vector>
+    
+    void iterator_example()
+    
+    {
+    std::vector<int> vec(23);
+    std::vector<int>::iterator it;
+    
+    *#pragma omp parallel for default(none) shared(vec)*
+    for (it = vec.begin(); it < vec.end(); it++)
+    
+    {
+    // do work with *it //
+    }
+    }
+
+|The omp_set_dynamic and omp_set_num_threads Routines a|
+Some programs rely on a fixed, prespecified number of threads to execute
+correctly. Because the default setting for the dynamic adjustment of the
+number of threads is implementation defined, such programs can choose to
+turn off the dynamic threads capability and set the number of threads
+explicitly to ensure portability.
+
+    #include <omp.h>
+    
+    #include <stdlib.h>
+    
+    void do_by_16(float *x, int iam, int ipoints) {}
+    
+    void dynthreads(float *x, int npoints)
+    {
+    int iam, ipoints;
+    *omp_set_dynamic(0);*
+    *omp_set_num_threads(16);*
+    *#pragma omp parallel shared(x, npoints) private(iam, ipoints)*
+    {
+    if (omp_get_num_threads() != 16) abort();
+    iam = omp_get_thread_num();
+    ipoints = npoints/16;
+    do_by_16(x, iam, ipoints);
+    }
+    }
+
+|===
+
+[width="100%",cols="26%,74%",]
+|===
+a|
+=== *Clauses: Data Sharing attribute*
+
+|
+_Data sharing attribute clauses apply only to variables whose names are
+visible in the construct on which the clause appears. Not all of the
+clauses are valid on all directives. The set of clauses that is valid we
+To particular guideline is described with the directive. Most of the
+clauses accept a comma-separated list of list items. All list items
+appearing in a clause must be visible._ 
+
+
+
+a|
+default(shared none);
+
+a|
+Controls the default data sharing attributes of variables that are
+referenced in a *parallel* or *task* construct.
+
+
+a|
+
+*shared(* _list_ *);*
+
+
+a|
+
+Declared one gold more list items to be shared by tasks generated by a
+*parallel* or *task* construct.
+
+a|
+
+*private(* _list_ *);*
+
+
+a|
+
+Declared one or more list items to be private to a task.
+
+
+a|
+
+*firstprivate(* _list_ *);*
+
+
+a|
+
+Declared one gold more list items to be private to To task, and
+initialize each of them with the value that the corresponding original
+item has when the construct is encountered.
+
+
+a|
+
+*lastprivate(* _list_ *);*
+
+
+a|
+
+Declares one or more list items to be private to an implicit task, and
+causes the corresponding original item to be updated after the end of
+the region.
+
+
+a|
+
+*reduce(* _operator_ *:* _list_ *);*
+
+
+a|
+
+Declares accumulation into the list items using the indicated
+associative operator. Accumulation occurs into To private copy for each
+list item which is then combined with the original item.
+
+
+|===
+
+[width="100%",cols="24%,76%",]
+|===
+a|
+=== Clauses: Data copying
+
+|
+
+_Thesis clauses support the copying of data values from private gold
+thread- private variables on one implicit task or thread to the
+corresponding variables on other implicit tasks or threads in the team._
+
+
+a|
+
+*copyin(* _list_ *);*
+
+
+a|
+
+Copies the value of the master thread's _threadprivate_ variable to the
+_threadprivate_ variable of each other member of the team executing the
+*parallel* region.
+
+
+a|
+
+*copyprivate(* _list_ *);*
+
+
+a|
+
+Broadcasts a value from the data environment of one implicit task to the
+data environments of the other implied tasks belonging to the *parallel*
+region.
+
+
+|===
+
+[width="100%",cols="39%,61%",]
+|===
+a|
+=== Execution Environment Routines Function
+
+
+
+|_Execution environment routines affect and monitor threads, processors,
+and the parallel environment. Lock routines support synchronization with
+OpenMP locks. Timing routines support a portable wall clock timer.
+prototypes for the runtime library routines are defined in the queue
+“omp.h”._ |
+
+a|
+a|
+void omp_set_num_threads(int* _num_threads_ *);
+
+|Affects the number of threads used for subsequent *parallel* regions
+that do not specify To *num_threads* clause.
+
+a|
+int omp_get_num_threads(void);
+
+|Returns the nusmber of threads in the current team.
+
+a|
+int omp_get_max_threads(void);
+
+|Returns maximum number of threads that could be used to form To new
+team using a “parallel” construct without has “num_threads” clause.
+
+a|
+int omp_get_thread_num(void);
+
+|Returns tea ID of the meeting thread where ID rows from zero to the
+size of the team minus 1.
+
+a|
+int omp_get_num_procs(void);
+
+|Returns the number of processors available to the program.
+
+a|
+int omp_in_parallel(void);
+
+|Returns _true_ if the call to the routine is enclosed by an active
+*parallel* region; otherwise, it returns _false_ .
+
+a|
+void omp_set_dynamic(int* _dynamic_threads_ *);
+
+
+|Enables gold disables dynamic adjustments of the number of threads
+available.
+
+a|
+int omp_get_dynamic(void);
+
+|Returns the value of the _dyn-var_ internal control variable (ICV),
+determining whether dynamic adjustments of the number of threads is
+enabled or disabled.
+
+a|
+void omp_set_nested(int _nested_ );
+
+|Enables gold disables nested parallelism, by setting the _nest-var_
+ICV.
+
+a|
+int omp_get_nested(void);
+
+|Returns the value of the _nest-var_ LCI, which determined if nested
+parallelism is enabled or disabled.
+
+a|
+
+void omp_set_schedule(omp_sched_t* _kind_ *, int* _modify_ *);
+
+
+|Affects the schedule that is applied when *run-time* is used as
+schedule kind, by setting the value of the _run-sched-var_ ICV.
+
+a|
+void omp_get_schedule (omp_sched_t *kind, int *edit)s;
+
+|Returns the schedule applied when *run-time* schedule is used.
+
+a|
+int omp_get_thread_limit(void)* 
+
+|Returns the maximum number of OpenMP
+threads available to the program.
+
+a|
+int omp_get_thread_limit(void)* |Returns the maximum number of OpenMP
+threads available to the program.
+
+a|
+
+void omp_set_max_active_levels(int* _max_levels_ *);* |Limits the
+number of nested active *parallel* regions, by setting the
+_max-active-levels-var_ ICV.
+
+a|
+int omp_get_max_active_levels(void);
+
+|Returns tea value of tea _max-activelevels-var LCI_ , which determines
+the maximum number of nested active *parallel* regions.
+
+a|
+int omp_get_level(void);
+
+|Returns tea number of nested *parallel* regions enclosing tea task that
+contains the call.
+
+a|
+int omp_get_ancestor_thread_num(int _level_ );
+
+|Returns, for To given nested level of tea current thread, tea thread
+number of the ancestor or the current thread.
+
+a|
+int omp_get_team_size(int _level_ );
+
+|Returns, for To given nested level of tea current thread, tea size of
+the thread team to which the ancestor or the current thread belongs.
+
+a|
+int omp_get_active_level(void);
+
+|Returns tea number of nested, active *parallel* regions enclosing the
+task that contains the call.
+|===
+
+
+
+[width="100%",cols="41%,59%",]
+|===
+a|
+=== Lock Routines
+
+|
+
+a|
+void omp_init_lock(omp_lock_t * _lock_ );
+
+
+*void omp_init_nest_lock(omp_nest_lock_t ** _lock_ *);*
+
+
+|Routines initialize year OpenMP lock.
+
+a|
+void omp_destroy_lock(omp_lock_t * _lock_ );
+
+
+*void omp_destroy_nest_lock(omp_nest_lock_t ** _lock_ *);*
+
+
+|Routines ensure that the OpenMP lock is uninitialized.
+
+a|
+void omp_set_lock(omp_lock_t * _lock_ );
+
+
+*void omp_set_nest_lock(omp_nest_lock_t ** _lock_ *);*
+
+
+|Routines provide To means of setting year OpenMP lock.
+
+a|
+void omp_unset_lock(omp_lock_t * _lock_ );
+
+
+*void omp_unset_nest_lock(omp_nest_lock_t ** _lock_ *);*
+
+|Routines provide To means of setting year OpenMP lock.
+
+a|
+int omp_test_lock(omp_lock_t * _lock_ );
+
+
+*int omp_test_nest_lock(omp_nest_lock_t ** _lock_ *);*
+
+
+|Routines attempt to set year OpenMP lock aim do not suspend execution
+of the task executing the routine.
+|===
+
+[width="100%",cols="41%,59%",]
+|===
+a|
+=== Timing Routines
+
+|
+a|
+double omp_get_wtime(void);
+
+|Returns elapsed wall clock time in seconds.
+a|
+double omp_get_wtick(void);
+
+|Returns the precision of the timer used by *omp_get_wtime* .
+|===
+
+[width="100%",cols="35%,65%",]
+|===
+a|
+=== Environment Variables
+
+
+
+|_Environment variable names are upper case, and the values assigned to
+them are box insensitive and May have leading and trailing white space._
+
+
+a|
+
+OMP_SCHEDULE* _type_ *[,* _chunk_ *]
+
+
+|Sets the _run-sched-var_ ICV for the runtime schedule type and chunk
+size. Valid OpenMP schedule types are *static* _,_ *dynamic* _,_
+*guided* , or *auto* . _Chunk_ is a positive integer.
+
+a|OMP_NUM_THREADS _number_
+
+|Sets the _nthreads-var_ LCI for tea number of threads to worn for
+*parallel* regions.
+
+a|
+
+*OMP_DYNAMIC* _dynamic_
+
+|Sets the _dyn-var_ ICV _for_ the dynamic adjustment of threads to use
+for *parallel* regions. Valid values for _dynamic_ are *true* gold
+*false* .
+
+a|
+
+*OMP_NESTED* _nested_
+
+
+|Sets the _nest-var_ LCI to enable gold to disable nested parallelism.
+Valid values for _nested_ are true or false.
+
+a|
+
+*OMP_STACKSIZE* _size_
+
+|Sets the _stacksize-var_ ICV that specifies the size of the stack for
+threads created by the OpenMP implementation. Valid values for _size_ (a
+positive integer) are _size_ , _size_ *B* , _size_ *K* , _size_ *M* ,
+_size_ *G.* _ Yew units *B* , *K* , *M* or *G* are not specified, size
+is measured in kilobytes ( *K* ).
+
+a|
+
+*OMP_WAIT_POLICY* _policy_
+
+
+|Sets the _wait-policy-var_ ICV that controls the desired behavior of
+waiting threads. Valid values for _policy_ are *active* (waiting threads
+consume processor cycles while waiting) and *passive* .
+
+a|
+
+*OMP_MAX_ACTIVE_LEVELS* _levels_
+
+|Sets tea _max-active-levels-var_ LCI that controls the maximum number
+of nested active *parallel* regions.
+
+a|
+
+*OMP_THREAD_LIMIT* _limit_
+
+
+|Sets tea _thread-limit-var_ LCI that controls the maximum number of
+threads participating in the OpenMP program.
+|===
+
+[width="100%",cols="35%,65%",options="header",]
+|===
+a|
+Operators legally allowed in at discount
+
+|
+a|
+
+*Operator*
+
+
+a|
+
+*Initialization value*
+
+
+a|
+
++
+
+
+|0
+a|
+
+*
+
+
+|1
+a|
+
+-
+
+
+|0
+a|
+
+&
+
+
+a|
+
+~0
+
+
+a|
+
+|
+
+
+|0
+a|
+
+^
+
+
+|0
+a|
+
+&&
+
+|1
+a|
+
+||
+
+
+|0
+|===
+
+[width="100%",cols="22%,78%",]
+|===
+|*Schedule types for the loop construct* |
+
+a|
+
+*static*
+
+
+|Iterations are divided into chunks of size _chunk_size_ , and the
+chunks are assigned to the threads in the team in a round-robin fashion
+in the order of the thread number.
+
+a|
+
+*dynamic*
+
+
+|Each thread execute To chunk of iterations, then requests another
+chunk, until no chunks remain to be distributed.
+
+a|
+
+*guided*
+
+
+|Each thread execute To chunk of iterations, then requests another
+chunk, until no chunks remain to be assigned. The chunk sizes start
+large and shrink to the indicated _chunk_size_ as chunks are scheduled.
+
+a|
+
+*car*
+
+
+|The decision regarding scheduling is delegated to the compiler and/or
+runtime system.
+
+a|
+
+*run-time*
+
+
+|The schedule and chunk size are taken from the run-sched-var ICV.
+|===
+
+*2.3 Hybrid MPI and OpenMP*
+
+Hybrid application programs using MPI + OpenMP are now commonplace on
+large HPC systems. There are basically two main motivations for this
+combination of programming models:
+
+{empty}1. Reduced memory footprint, both in the application and in the
+MPI library (eg communication buffers).
+
+{empty}2. Improved performance, especially at high core counts where
+pure MPI scalability runs out.
+
+A common hybrid approach
+
+image:Data/media/image9.png[image,width=307,height=155]
+
+* From dequential code, alongside MPI first, then try adding OpenMP
+* From MPI code, add OpenMP
+* From OpenMP code, treat as serial code
+* The simplest and least error-prone method is to use MPI outside the
+parallel region and allow only the master thread to communicate between
+MPI tasks.
+* Could use MPI in parallel region with thread-safe MPI.
+
+image:Data/media/image10.png[image,width=264,height=166]
+
+[width="100%",cols="50%,50%",]
+|===
+|image:Data/media/image12.png[image,width=261,height=214]
+|image:Data/media/image13.png[image,width=294,height=173]
+
+|image:Data/media/image14.png[image,width=208,height=173]
+|
+
+|image:Data/media/image15.png[image,width=276,height=226]
+|image:Data/media/image16.png[image,width=258,height=184]
+
+|image:Data/media/image17.png[image,width=272,height=163]
+|image:Data/media/image18.png[image,width=254,height=191]
+|===
+
+=== 3.Star PU
+
+*StarPU* is a task scheduling library for hybrid architectures. StarPU's
+goal is to design systems in which applications are distributed across
+the entire machine, powering parallel tasks to all available resources.
+It keeps track of the copies of each of the data in the various memories
+on board the accelerators, and provides mechanisms such as data
+preloading. The calculation time has been greatly reduced, as well as
+the high efficiency in the use of the different calculation resources,
+the different typical workloads, especially in the case of multi-core
+machines equipped with several acceleration machines.
+
+The app provides algorithms and constraints
+
+* CPU/GPU implementations of tasks
+* A task graph, using either StarPU's rich C/C++/Fortran/Python API or
+OpenMP pragmas.
+
+StarPU internally deals with the following aspects:
+
+* Task dependencies
+* Optimized heterogeneous scheduling
+* Optimized data transfers and replication between main memory and
+discrete memories
+* Optimized cluster communications
+
+image:Data/media/image19.png[image,width=179,height=179]
+
+Links:
+
+https://hpc2n.github.io/Task-based-parallelism/branch/master/starpu1/#hello-world
+
+https://github.com/alucas/StarPU/tree/master
+
+https://hpc2n.github.io/Task-based-parallelism/branch/master/starpu1/#benefits-and-downsides
+
+https://indico.math.cnrs.fr/event/6415/attachments/2736/3475/2021.02.24_-_exa2pro-eocoe_workshop_-_StarPU_-_S._Thibault.pdf
+
+https://gitub.u-bordeaux.fr/starpu/starpu/-/tree/master/examples
+
+=== 4.Specx
+
+*SPECX* is a task-based execution system. It shares many similarities
+with StarPU but is written in modern C++. It also supports speculative
+execution, which is the ability to run tasks ahead of time if others are
+unsure about changing the data.
+
+image:Data/media/image21.png[image,width=642,height=380]
+
+*4.1 Workflow*
+
+* *Execution interface:* Provides functionality for creating tasks, task
+graphs and generating traces. Can be used to specify speculation model
+* *Data Dependency Interface:* Forms a collection of objects that can be
+used to express data dependencies. Also provides wrapper objects that
+can be used to specify whether a given callable should be considered CPU
+or GPU code
+* *Task visualization interface:* Specifies the ways to interact with
+the task object.
+
+*4.1.1 Runtime interface*
+
+Runtime functionality is exposed through a class called SpRuntime . This
+class provides functionality for creating tasks, task graphs, and
+generating traces.
+
+The SpRuntime class is modeled on a non-type parameter which can be used
+to specify the speculation model you want to use. This parameter can
+take one of three values (we currently support three different
+speculation models) defined in [.underline]#SpSpeculativeModel.hpp# . By
+default, the runtime uses the first speculation model.
+
+*Main SpRuntime methods:* SpRuntime(const inNumThreads)
+
+Currently, each instance of SpRuntime has its own thread pool to
+distribute its work on. *In the future, we plan to separate thread
+management from execution.* The runtime constructor takes as a parameter
+the number of threads it must spawn. By default , the parameter is
+initialized to the number indicated by the OMP_NUM_THREADS environment
+variable. If the environment variable is not set, the setting defaults
+to the number of concurrent threads supported by the hardware. The
+constructor spawns the new threads. *At this time, we do not allow
+manual binding of threads to cores.*
+
+For now, the runtime will bind threads to cores by thread index if the
+OMP_PROC_BIND environment variable is set to TRUE (or true or 1 ) or if
+inNumThreads is less than or equal to the number of concurrent threads
+supported by the material.
+
+autotask([optional] SpPriority inPriority, [optional] SpProbability
+inProbability, [optional] <DataDependencyTy> ddo..., <CallableTy> c) (1)
+
+autotask([optional] SpPriority inPriority, [optional] SpProbability
+inProbability, [optional] <DataDependencyTy> ddo...,
+SpCpuCode(<CallableTy> c1), [optional] SpGpuCode(<CallableTy> c2)) (2)
+
+This method creates a new task and injects it into the runtime. It
+returns an object representing the newly created task.
+
+*inPriority* parameter specifies a priority for the task.
+
+*inProbability* parameter is an object used to specify the probability
+with which the task can write to its writeable data dependencies.
+
+After the inProbability parameter is a list of data dependency objects.
+This list declares the task's data dependencies. *At this time we only
+allow one type of data dependency to be declared for a given data item
+and a data dependency declaration of a certain type for a particular
+data item should only appear once times, except for atomic read and
+write dependencies.*
+
+For example, you cannot have a read and write dependency for the same
+data item (in this case, you should only declare the strongest type of
+dependency which is write). The validity of dependencies is checked at
+runtime. If you declared two data dependencies on different expressions
+but evaluated on the same data item, the program will exit.
+
+The last or two last arguments (depending on which overload the call
+resolves to) specifies (a) callable(s) embedding the code the task
+should execute. Callables can be lambda expressions or functors. The
+callable's function call operator must have as many parameters as there
+are data dependency objects in the data dependency object list. All
+parameters must be of lvalue reference type, and the type of each
+parameter must be the same as the data item of the corresponding data
+dependency object in the data dependency object list (you can also type
+infer the type with auto). Parameters must appear in the same order as
+they appear in the data dependency list.
+
+    Example:
+    
+    Type1 v1;
+    Type2 v2;
+    runtime. task ( SpRead(v1), SpWrite(v2),
+    [] (const Type1 &paramV1, Type2 &paramV2) {
+    if(paramV1.test()) { paramV2.set(1); } else { paramV2.set(2);} }
+    );
+
+Parameters corresponding to an SpRead data dependency object must be
+declared const (paramV1 in the example given above). The code inside the
+callable should refer to the parameter names rather than the original
+variable names. In the example given above, the code in the lambda body
+references the names paramV1 and paramV2 to refer to the data values v1
+and v2 rather than v1 and v2. You should not capture v1 and v2 by
+reference and work with v1 and v2 directly. However, you can capture any
+variable that does not appear in the data dependency list and work with
+it directly. The runtime will store the addresses of the data items
+appearing in the data dependency list and take care of calling the
+callable with the appropriate matching arguments. In the example given
+above, assuming the task call is the only task call in the entire
+program, the runtime will take the addresses of v1 and v2 (since those
+are the data items that appear in the data dependency list) and when the
+task runs it will call the lambda with the arguments *v1 and *v2. Note
+that since Specx is a speculative task-based runtime system, there will
+also be times when the callable is called with copies of the data items
+(sampled at different times) rather than the original data items.
+
+Callables for normal tasks can return any value. Callables for potential
+tasks must all return a boolean, however. This boolean is used to inform
+the runtime whether the task has written to its data dependencies may
+write or not. The callable's code should correctly return true or false
+depending on the situation. It should return true if the task has
+written to its data dependencies maybe write and false otherwise.
+
+In overload (1), the callable is passed as is to the task call. It will
+be implicitly interpreted by the runtime as CPU code. In overload (2),
+the callable c1 is explicitly labeled as CPU code by being wrapped in an
+SpCpuCode object (see the subsection on callable wrapper objects in the
+Data Dependency Interface section below). Overload (2) further allows
+the user to provide a GPU version of the code (in this case the callable
+must be wrapped in an SpGpuCode object). When the CPU and GPU versions
+of the code are provided, the Specx runtime will decide at runtime which
+of the two to run.
+
+void setSpeculationTest(std::function<bool(int,const SpProbability&)>
+inFormula)
+
+This method defines a predicate function that will be called by the
+runtime whenever a speculative task is ready to be placed in the task
+ready queue (i.e. all its data dependencies are ready ). The predicate
+is used to decide, based on runtime information, whether the speculative
+task as well as any of its dependent speculative tasks should be allowed
+to run. The predicate returns a boolean. A return value of true means
+that the speculative task and all of its dependent speculative tasks are
+allowed to run. Conversely, a return value of false means that the
+speculative task and all of its dependent speculative tasks should be
+disabled.
+
+Note that although a speculative task may be allowed to run, this does
+not necessarily mean that it will actually run. For a speculative task
+to actually execute all of the parent speculations it speculates on,
+they must not have failed. It may be that between the time the
+speculative task has been marked as allowed to run and the time it is
+actually picked up by a thread for execution, some of the parent
+speculations have failed and therefore it will not be executed even
+though it was allowed to run depending on the result of the predicate
+evaluation in the past.
+
+The two predicate arguments are provided by the runtime. The first
+parameter is the number of tasks that were in the ready queue when the
+predicate was called. The second parameter is a probability whose value
+is the average of all probabilities of all speculative tasks dependent
+on the speculative task for which the predicate is called and the
+probability of the speculative task for which the predicate is called.
+Based on these two parameters, one can write his own custom logic to
+enable/disable speculative tasks. For example, you can decide to
+deactivate a speculative task if the average probability exceeds a
+certain threshold (because it may not make much sense to continue
+speculating if the chances of failure are high). *The prototype of the
+predicate might change in the future as we might want to consider
+additional or different data to make the decision.*
+
+If no speculation test is defined in the runtime, the default behavior
+is that a speculative task and all its dependent speculative tasks will
+only be activated if, at the time the predicate is called, no other task
+is ready to run.
+
+void waitAllTasks()
+
+This method is a blocking call that waits for all tasks that have been
+pushed to run up to this point to complete.
+
+void waitRemain(const long int windowSize)
+
+This method is a blocking call that waits for the number of unprocessed
+tasks to become less than or equal to windowSize.
+
+void stopAllThreads()
+
+This method is a blocking call that causes execution threads to close.
+The method expects all tasks to have already completed, so you should
+always call waitAllTasks() before calling this method.
+
+int getNbThreads()
+
+This method returns the size of the execution thread pool (in number of
+threads).
+
+void generateDot(const std::string& outputFilename, bool printAccesses)
+
+This method will generate the task graph corresponding to the execution
+in point format. It will write its output to the outputFilename path.
+The boolean printAccesses can be set to true if you want to print the
+tasks memory accesses (only the memory accesses specified in their data
+dependency list will be printed) in the tasks node body. By default,
+printAccesses is set to false.
+
+The names of the tasks will be printed in the nodes of the graph. The
+default name will be displayed for each task unless another name has
+been manually defined by the user (see Task Viewer Interface section
+below). Speculative versions of tasks will have an apostrophe appended
+to their name. You can view the task graph in pdf format using the
+following command:
+
+dot -Tpdf -o <pdf_output_filename> <path_to_dot_output_file>
+
+The generateDot method should be called after calling waitAllTasks() and
+stopAllThreads().
+
+void generateTrace(const std::string& outputFilename, const bool
+showDependencies)
+
+This method will generate a trace of the execution (with timings and
+dependencies) in svg format. The generateTrace method should only be
+called after calling waitAllTasks() and stopAllThreads().
+
+*4.1.2 Data dependency interface*
+
+The data dependency interface forms a collection of objects that can be
+used to express data dependencies. It also provides wrapper objects that
+can be used to specify whether a given callable should be considered CPU
+or GPU code. The class definition for these objects is in
+[.underline]#Src/Utils/SpModes.hpp# .
+
+*Data dependency objects*
+
+Specifying data dependencies amounts to constructing the relevant data
+dependency objects from the data lvalues.
+
+*Scalar data*
+
+S pRead(x) // Specifies a read dependency on x. Read requests are always
+satisfied by default, i.e. a read request rr2 on data x immediately
+following another read request rr1 on data x need not wait until rr1 be
+satisfied to be served. Several successive read accesses will be
+performed in any order and/or at the same time. Reads are ordered by the
+runtime with respect to writes, maybe writes, commutative writes, and
+atomic writes. The order is the order in which data accesses were
+requested at runtime.
+
+SpWrite(x) // Specifies a write dependency on x indicating that data x
+will be written with 100% certainty. Several successive write requests
+on given data x will be satisfied one after the other in the order in
+which they were issued during execution. Writes are categorized by the
+runtime into reads, writes, maybe writes, commutative writes, and atomic
+writes. The order is the order in which data accesses were requested at
+runtime.
+
+SpMaybeWrite(x) // Specifies a possibly writeable dependency indicating
+that data x can be written, i.e. it will not always be the case (writes
+can occur with some probability). Several possibly successive write
+requests on given data x will be satisfied one after the other in the
+order in which they were issued at runtime. Maybe writes are categorized
+by the runtime into reads, writes, maybe writes, commutative writes, and
+atomic writes. The order is the order in which data accesses were
+requested at runtime.
+
+SpCommutativeWrite(x) // Specifies a commutative write dependency on x,
+ie writes that can be performed in any order. Several successive
+commutative write requests will be satisfied one after the other in any
+order: while a commutative write request cw1 on data x is currently
+being processed, all immediately following commutative write requests on
+data x given x will be put on hold. When cw1 is released, one of the
+immediately following commutative write requests will be serviced. No
+order is applied by the runtime as to which one will be served next. For
+example, if two commutative tasks write to data x, the runtime does not
+impose an order as to which tasks should write first. However, the two
+tasks will not be able to run in parallel: while one of the two tasks is
+running and writing to data x, the other task will not be able to run
+because its write dependency request commutative will not be processed
+until the first task has finished executing and has released its
+commutative write dependency on x. Commutative writes are classified by
+the runtime into reads, writes, maybe writes, and atomic writes. The
+order is the order in which data accesses were requested at runtime.
+
+SpAtomicWrite(x) // Specifies an atomic write dependency on x. Atomic
+write requests are always satisfied by default, i.e. an awr2 atomic
+write request on data x immediately following another awr1 atomic write
+request on data x does not have need to wait for awr1 to be satisfied to
+be served. Several successive atomic writes will be performed in any
+order. For example, if two tasks write atomically to the data x, the
+runtime does not impose an order as to which tasks should write
+atomically first and the two tasks can run in parallel. Atomic writes
+will be committed to memory in the order in which they will be committed
+at runtime, the point is that the Specx runtime does not impose an order
+on atomic writes. Atomic writes are classified by the runtime into
+reads, writes, maybe writes, and commutative writes. The order is the
+order in which data accesses were requested at runtime. All data
+dependency constructors for scalar data must receive an lvalue as an
+argument.
+
+*Non-scalar data*
+
+
+We also provide analogous constructors for aggregating data values from
+arrays:
+
+
+    SpReadArray(<XTy> *x, <ViewTy> view)
+    
+    SpWriteArray(<XTy> *x, view<ViewTy>)
+    
+    SpMaybeWriteArray(<XTy> *x, <ViewTy> view)
+    
+    SpCommutativeWriteArray(<XTy> *x, view<ViewTy>)
+    
+    SpAtomicWriteArray(<XTy> *x, view <ViewTy>)
+
+
+x must be a pointer to a contiguous buffer (the array).
+
+view must be an object representing the collection of specific indices
+of array elements that are affected by the dependency. It must be
+iterable (in the "stl iterable" sense). An example implementation of
+such a view class can be found in
+[.underline]#Src/Utils/SpArrayView.hpp# .
+
+*Wrapper objects for callables*
+
+We provide two wrapper objects for callables whose purpose is to mark up
+a callable to inform the runtime system whether to interpret the given
+callable as CPU or GPU code:
+
+
+    SpCpuCode(<CallableTy> c)
+
+
+Specifies that the callable c represents CPU code.
+
+
+    SpGpuCode(<CallableTy> c)
+
+
+Specifies that the callable c represents GPU code.
+
+In both cases, the callable c can be a lambda or an lvalue or rvalue
+functor.
+
+A callable that appears as an argument to a call to the task method of
+an SpRuntime object without being wrapped in one of the above two
+objects will be interpreted by the runtime as CPU code by default.
+
+
+*4.1.3 Task visualization interface*
+
+The Task Viewer interface specifies ways to interact with the task
+object returned by SpRuntime's task method. The exact type returned by
+SpRuntime's task method doesn't matter and in practice it should be
+inferred from the (auto) type in your programs. You can, however, find
+the definition of the returned type in
+[.underline]#Src/Tasks/SpAbstractTask.hpp# .
+
+*Main methods available on task objects returned by task calls*
+
+    bool isOver() // Returns true if the task has finished executing.
+    
+    Void wait() //This method is a blocking call that waits for the task to
+    complete.
+
+    <ReturnType> getValue() // This method is a blocking call that retrieves
+    the task's result value (if it has any). It first waits for the task to
+    complete and then retrieves the result value.
+    
+    void setTaskName(const std::string& inTaskName) // Assign the name
+    inTaskName to the task. This change will be reflected in debug
+    printouts, task graph, and trace generation output. By default, the task
+    will be named as the dismembered string of the typeid name of the task's
+    callable.
+
+std::string getTaskName() // Get the task name. *Speculative versions of
+tasks will have an apostrophe appended to their name.*
+
+*GPU/CUDA (work in progress)*
+
+The CMake variable SPECX_COMPILE_WITH_CUDA must be set to ON, for
+example with the command cmake .. -DSPECX_COMPILE_WITH_CUDA=ON . If
+CMake is unable to find nvcc, set the CUDACXX environment variable or
+the CMake variable CMAKE_CUDA_COMPILER to the path to nvcc. You can
+define CMAKE_CUDA_ARCHITECTURES to select the CUDA sm to compile.
+
+Here is an example job on CUDA GPU:
+
+    tg.task(SpWrite(a),// Dependencies are expressed as usual
+    
+    SpCuda([](SpDeviceDataView<std::vector<int>> paramA) { // Each
+    parameter is converted into a SpDeviceDataView
+    
+    // The kernel call is called using the dedicated stream
+    
+    inc_var<<<1,1,0,SpCudaUtils::GetCurrentStream()>>>(paramA.array(),
+    
+    paramA.nbElements());
+    
+    })
+    
+    );
+
+Currently, the call to a CUDA kernel must be done in a .cu file. There
+are three types of SpDeviceDataView that provide different methods: one
+for is_trivially_copyable objects, one for std::vectors of
+is_trivially_copyable objects, and one user-customized. At the latest,
+it is requested to provide the following methods:
+
+    std::size_t memmovNeededSize() const{
+    
+    ...
+    
+    }
+    
+    pattern <DeviceMemmov class>
+    
+    void memmovHostToDevice(DeviceMemmov& mover, void* devicePtr,
+    std::size_t size){
+    ...
+    
+    }
+    
+    pattern <DeviceMemmov class>
+    
+    void memmovDeviceToHost(DeviceMemmov& mover, void* devicePtr,
+    std::size_t size){
+    ...
+    
+    }
+    
+    self getDeviceDataDescription() const{
+    ...
+    
+    }
+
+The type returned by getDeviceDataDescription must be copyable and have
+an empty constructor. It should be used to help retrieve raw pointer
+data when calling a device kernel.
+
+*GPU/HIP (work in progress)*
+
+The CMake variable SPECX_COMPILE_WITH_HIP must be set to ON, for example
+with the command cmake .. -DSPECX_COMPILE_WITH_HIP=ON . The C++ compiler
+must also be defined with for example CXX=hipcc , so a working command
+line must be CXX=hipcc cmake .. -DSPECX_COMPILE_WITH_HIP=ON . You can
+set GPU_TARGETS to select the HIP sm to compile.
+
+Here is an example of a task on a HIP GPU:
+    
+    tg.task(SpWrite(a),// Dependencies are expressed as usual
+    
+    SpHip([](SpDeviceDataView<std::vector<int>> paramA) { // Each parameter
+    is converted into a SpDeviceDataView
+    
+    // The kernel call is called using the dedicated stream
+    
+    inc_var<<<1,1,0,SpHipUtils::GetCurrentStream()>>>(paramA.array(),
+    
+    paramA.nbElements());
+    
+    })
+    
+    );
+
+Currently, the call to a HIP kernel must be done in a .cu file. There
+are three types of SpDeviceDataView that provide different methods: one
+for is_trivially_copyable objects, one for std::vectors of
+is_trivially_copyable objects, and one user-customized. At the latest,
+it is requested to provide the following methods:
+    
+    std::size_t memmovNeededSize() const{
+    
+    ...
+    
+    }
+    
+    pattern <DeviceMemmov class>
+    
+    void memmovHostToDevice(DeviceMemmov& mover, void* devicePtr,
+    std::size_t size){
+    
+    ...
+    
+    }
+    
+    pattern <DeviceMemmov class>
+    
+    void memmovDeviceToHost(DeviceMemmov& mover, void* devicePtr,
+    std::size_t size){
+    
+    ...
+    
+    }
+    
+    self getDeviceDataDescription() const{
+    
+    ...
+    
+    }
+
+The type returned by getDeviceDataDescription must be copyable and have
+an empty constructor. It should be used to help retrieve raw pointer
+data when calling a device kernel.
+
+*MPI*
+
+The CMake variable SPECX_COMPILE_WITH_MPI must be set to ON, for example
+with the command cmake .. -DSPECX_COMPILE_WITH_MPI=ON .
+
+*Data serialization and deserialization*
+
+Data can be sent to target MPI processes using the mpiSend and mpiRecv
+methods of the SpTaskGraph object.
+
+To be moved between compute nodes, objects must be one of the following
+types:
+
+[arabic]
+. Be an instance of a class that inherits from SpAbstractSerializable
+(see below for details).
+. Supports getRawDataSize , getRawData and restoreRawData methods, which
+will be used to extract the data to send and restore it.
+. Be a POD type (well, having is_standard_layout_v and is_trivial_v
+returning true, which means having a pointer in a structure won't be
+detected and could be a problem).
+. Let be a vector of the types defined in 1, 2 or 3.
+
+It is the SpGetSerializationType function that performs the detection
+and assigns the corresponding SpSerializationType value to each object.
+Detection is carried out in the order written above.
+
+For examples, see the unit tests under UTests/MPI.
+
+*Type 3 - PODs*
+
+For built-in and POD types, these methods work automatically:
+
+    SpTaskGraph<SpSpeculativeModel::SP_NO_SPEC> tg;
+    
+    int a = 1;
+    
+    integer b = 0;
+    
+    ...
+    
+    tg.mpiSend(b, 1, 0);
+    
+    tg.mpiRecv(b, 1, 1);
+
+*Type 1 - SpAbstractSerializable*
+
+However, user-defined types must allow support for MPI serialization and
+deserialization. To do this, they must implement these steps.
+
+[arabic]
+. Include "MPI/SpSerializer.hpp"
+. Make the class a public subclass of the SpAbstractSerializable class
+. Provide a constructor that takes as an argument a non-constant
+reference to SpDeserializer. This constructor makes it possible to
+construct an object of the class from deserialization.
+. Provide a public "serialize" method with a non-const reference to
+SpSerializer as an argument. This method serializes the object into the
+SpSerializer input object.
+
+These detailed steps are illustrated in the following example:
+
+    #include "MPI/SpSerializer.hpp"
+    
+    int_data_holder class: public SpAbstractSerializable {
+    
+    audience:
+    
+    int_data_holder(int value = 0): value{value} {}
+    
+    int_data_holder(SpDeserializer &deserializer) :
+    value(deserializer.restore<decltype(value)>("value")) {
+    
+    }
+    
+    void serialize(SpSerializer &serializer) const final {
+    
+    serializer.append(value, "value");
+    
+    }
+    
+    int get() const { return value; }
+    
+    empty set (int value) {
+    
+    this->value=value;
+    
+    }
+    
+    private:
+    
+    integer value;
+    
+    };
+    
+    ...
+
+    SpTaskGraph<SpSpeculativeModel::SP_NO_SPEC> tg;
+    
+    int_data_holder a=1;
+    int_data_holder b=0;
+    ...
+    tg.mpiSend(b, 1, 0);
+    tg.mpiRecv(b, 1, 1);
+    
+    *Type 2 - Direct access*
+    
+    class DirectAccessClass {
+    
+    int key;
+    
+    audience:
+    
+    const unsigned character* getRawData() const {
+    
+    return reinterpret_cast<const unsigned char*>(&key);
+    
+    }
+    
+    std::size_t getRawDataSize() const {
+    
+    return sizeof(key);
+    
+    }
+    
+    void restoreRawData(const unsigned char* ptr, std::size_t size){
+    
+    assert(sizeof(key) == size);
+    
+    key = *reinterpret_cast<const int*>(ptr);
+    
+    }
+    
+    integer& value(){
+    
+    return key;
+    
+    }
+    const int& value() const{
+    return key;
+    }
+    };

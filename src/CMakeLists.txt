@@ -21,3 +21,14 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 #
+
+
+#set(PARALLELPROGRAMMING_TARGET_NAME pp)
+#add_library(${PARALLELPROGRAMMING_TARGET} INTERFACE)
+#target_include_directories(${PARALLELPROGRAMMING_TARGET} INTERFACE
+#  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+#  $<INSTALL_INTERFACE:include>
+#  )
+#target_link_libraries(${PARALLELPROGRAMMING_TARGET} INTERFACE Feelpp::feelpp)
+
+

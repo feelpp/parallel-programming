@@ -152,7 +152,7 @@ int main()
     int NbProcs=1;
     struct data_set* info = new data_set;
     FILE* file = NULL;
-	file = fopen("Result_QuickSort_PosixThreads2.csv", "w");
+	file = fopen("Result_QuickSort_PosixThreads_Vers2.csv", "w");
 	fprintf(file, "NbElements,TimeDuration,NbProcs\n");
 	fclose(file);	
 
@@ -160,7 +160,7 @@ int main()
 
 	for( int k0 = 1; k0 < 100; k0++ )
     {
-		file = fopen("Result_QuickSort_PosixThreads2.csv", "a");
+		file = fopen("Result_QuickSort_PosixThreads_Vers2.csv", "a");
 		// Declaration
 		//int N=50;
 		//int N=pow(10,k0);

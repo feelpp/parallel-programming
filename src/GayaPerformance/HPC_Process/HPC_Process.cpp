@@ -2,13 +2,13 @@
 #include "stdio.h"
 #include "string.h"
 #include "sys/times.h"
-#include "sys/vtimes.h"
+//#include "sys/vtimes.h"
 
 static clock_t lastCPU, lastSysCPU, lastUserCPU;
 static unsigned long long lastTotalUser, lastTotalUserLow, lastTotalSys, lastTotalIdle;
 static int numProcessors;
 
-
+typedef void *HANDLE;
 
 void InitCurrentProcess(){
     FILE* file;
@@ -40,7 +40,7 @@ double GetCurrentValueFromCurrentProcess(){
         percent = -1.0;
     }
     else{
-        percent = (timeSample.tms_stime - lastSysCPU) +timeSample.tms_utime - lastUserCPU);
+        percent = (timeSample.tms_stime - lastSysCPU) +(timeSample.tms_utime - lastUserCPU);
         percent /= (now - lastCPU);
         percent /= numProcessors;
         percent *= 100;
@@ -93,7 +93,7 @@ double GetCurrentValueFromCPU(){
     return percent;
 }
 
-
+/*
 double GetPercentUsed()
 {
 
@@ -128,38 +128,43 @@ double GetPercentUsed()
     return(percent);
 }
 
+*/
 
+
+/*
 void Info()
 {
 //Total Virtual Memory:
-struct sysinfo memInfo;
+    struct sysinfo memInfo;
 
-sysinfo (&memInfo);
-long long totalVirtualMem = memInfo.totalram;
-//Add other values in next statement to avoid int overflow on right hand side...
-totalVirtualMem += memInfo.totalswap;
-totalVirtualMem *= memInfo.mem_unit;
+    sysinfo (&memInfo);
+    long long totalVirtualMem = memInfo.totalram;
+    //Add other values in next statement to avoid int overflow on right hand side...
+    totalVirtualMem += memInfo.totalswap;
+    totalVirtualMem *= memInfo.mem_unit;
 
-//Virtual Memory currently used:
-long long virtualMemUsed = memInfo.totalram - memInfo.freeram;
-//Add other values in next statement to avoid int overflow on right hand side...
-virtualMemUsed += memInfo.totalswap - memInfo.freeswap;
-virtualMemUsed *= memInfo.mem_unit;
+    //Virtual Memory currently used:
+    long long virtualMemUsed = memInfo.totalram - memInfo.freeram;
+    //Add other values in next statement to avoid int overflow on right hand side...
+    virtualMemUsed += memInfo.totalswap - memInfo.freeswap;
+    virtualMemUsed *= memInfo.mem_unit;
 
-//Total Physical Memory (RAM):
-long long totalPhysMem = memInfo.totalram;
-//Multiply in next statement to avoid int overflow on right hand side...
-totalPhysMem *= memInfo.mem_unit;
+    //Total Physical Memory (RAM):
+    long long totalPhysMem = memInfo.totalram;
+    //Multiply in next statement to avoid int overflow on right hand side...
+    totalPhysMem *= memInfo.mem_unit;
 
-//Physical Memory currently used:
-long long physMemUsed = memInfo.totalram - memInfo.freeram;
-//Multiply in next statement to avoid int overflow on right hand side...
-physMemUsed *= memInfo.mem_unit;
+    //Physical Memory currently used:
+    long long physMemUsed = memInfo.totalram - memInfo.freeram;
+    //Multiply in next statement to avoid int overflow on right hand side...
+    physMemUsed *= memInfo.mem_unit;
 }
+*/
 
 
-
-int GetValueVirtualMemoryCurrentlyUsedByCurrentProcess(){ //Note: this value is in KB!
+/*
+int GetValueVirtualMemoryCurrentlyUsedByCurrentProcess()
+{ //Note: this value is in KB!
     FILE* file = fopen("/proc/self/status", "r");
     int result = -1;
     char line[128];
@@ -173,6 +178,7 @@ int GetValueVirtualMemoryCurrentlyUsedByCurrentProcess(){ //Note: this value is 
     fclose(file);
     return result;
 }
+*/
 
 
 //Virtual Memory currently used by current process:
@@ -209,17 +215,17 @@ int main(int argc, char** argv) {
 
     InitCurrentProcess();
     Value=GetCurrentValueFromCurrentProcess();
-    printf("%d\n",Value);
+    printf("GetCurrentValueFromCurrentProcess=%d\n",Value);
     InitCurrentlyCPU();
     Value=GetCurrentValueFromCPU();
-    printf("%d\n",Value);
-    Value=GetPercentUsed();
-    printf("%d\n",Value);
+    printf("GetCurrentValueFromCPU=%d\n",Value);
+    //Value=GetPercentUsed();
+    //printf("%d\n",Value);
     //void Info();
-    v=GetValueVirtualMemoryCurrentlyUsedByCurrentProcess();
-    printf("%i\n",Value);
+    //v=GetValueVirtualMemoryCurrentlyUsedByCurrentProcess();
+    //printf("%i\n",Value);
     v=getValue();
-    printf("%i\n",Value);
+    printf("Proc Status=%i\n",Value);
 
     return 0;
 }

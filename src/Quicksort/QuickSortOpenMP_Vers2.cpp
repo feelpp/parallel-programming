@@ -74,7 +74,7 @@ void quicksort(int arr[], int start, int end)
 int main()
 {
     FILE* file = NULL;
-	file = fopen("Result_QuickSort_OpenMP2.csv", "w");
+	file = fopen("Result_QuickSort_OpenMP_Ver2.csv", "w");
 	fprintf(file, "NbElements,TimeDuration,NbProcs\n");
 	fclose(file);	
 	
@@ -82,7 +82,7 @@ int main()
 
     for( int k0 = 1; k0 < 100; k0++ )
     {
-		file = fopen("Result_QuickSort_OpenMP2.csv", "a");
+		file = fopen("Result_QuickSort_OpenMP_Vers2.csv", "a");
 		// Declaration
 		//int N=50000;
 		int N=pow(2,k0);

@@ -1,4 +1,7 @@
-*Parallel Programming _*
+
+[background-color="white"]
+
+*Parallel Programming*
 
 
 *MPI, OpenMP,…GPU, GPGPU*
@@ -91,24 +94,24 @@ graphics processing.
 
 The CPU basically consists of three parts:
 
-- [.underline]#The *control unit *#which searches for instructions in
+- The control unit which searches for instructions in
 memory, decodes them and coordinates the rest of the processor to
 execute them. A basic control unit basically consists of an instruction
 register and a "decoder/sequencer" unit
 
-- [.underline]#The *Arithmetic and Logic Unit* ( _ALU_ )# executes the
+- The Arithmetic and Logic Unit executes the
 arithmetic and logic instructions requested by the control unit.
 Instructions can relate to one or more operands. The execution speed is
 optimal when the operands are located in the registers rather than in
 the memory external to the processor.
 
-- [.underline]#Registers# are memory cells internal to the CPU
-*[.underline]#.#* They are few in number but very quick to access. They
+- Registers are memory cells internal to the CPU
+They are few in number but very quick to access. They
 are used to store variables, the intermediate results of operations
 (arithmetic or logical) or processor control information.
 
 
-image:Data/media/image1.png[image,width=322,height=220]
+image:media/image1.png[image,width=322,height=220]
 
 The register structure varies from processor to processor. This is why
 each type of CPU has its own instruction set. Their basic functions are nevertheless similar and all processors have roughly the same categories of registers:
@@ -207,7 +210,7 @@ application.
 
 Explicit code targeting GPUs: CUDA, HIP, SYCL, Kokkos, RAJA,...
 
-image:Data/media/image2.png[image,width=488,height=342]
+image:media/image2.png[image,width=488,height=342]
 
 _Fig: illustrates the main hardware architecture differences between
 CPUs and GPUs. The transistor counts associated with various functions
@@ -284,7 +287,7 @@ GPUs can be 10+X faster than GPUs for parallel code.
 
 *1.3 GPGPU ( General-Purpose Graphics Processing Unit)*
 
-image:Data/media/image4.png[image,width=642,height=331]
+image:media/image4.png[image,width=642,height=331]
 
 A *General-Purpose Graphics Processing Unit* (GPGPU) is a graphics
 processing unit (GPU) that is programmed for purposes beyond graphics
@@ -359,7 +362,7 @@ mapping
 Such an architecture is said to be "throughput-oriented". The latest
 from the Santa-Clara firm, codenamed “Fermi” has 512 cores.
 
-image:Data/media/image5.png[image,width=530,height=241]
+image:media/image5.png[image,width=530,height=241]
 
 _CPU architecture vs. GPUs_
 
@@ -712,7 +715,7 @@ New containers are continually being added to the hub.
 === AMD Fusion System Architecture 
 === Moves to Unify CPUs and GPUs
 
-image:Data/media/image6.png[image,width=511,height=287]
+image:media/image6.png[image,width=511,height=287]
 
 
 *1.7 TPU (Tensor Processing Unit) form Google*
@@ -751,7 +754,7 @@ at ultra-high speeds but must be paired with a CPU to give and execute
 instructions.
 
 
-image:Data/media/image22.png[image,width=544,height=419]
+image:media/image22.png[image,width=544,height=419]
 
 
 *Applications for TPUs*
@@ -939,7 +942,7 @@ Note: on a cluster of independent shared-memory multiprocessor machines
 in the same program can be a major advantage for the parallel
 performance of the code.
 
-image:Data/media/image7.png[image,width=581,height=336]
+image:media/image7.png[image,width=581,height=336]
 
 
 
@@ -1550,10 +1553,10 @@ the status of the variables (private or shared).
 
 An OpenMP program is executed by a single process.
 
-● This process activates lightweight processes (threads) at the entrance
+* This process activates lightweight processes (threads) at the entrance
 to a parallel region. +
-● Each thread performs a task consisting of a set of instructions. +
-● During the execution of a task, a variable can be read and/or modified
+* Each thread performs a task consisting of a set of instructions. +
+* During the execution of a task, a variable can be read and/or modified
 in memory.
 
 
@@ -1563,14 +1566,14 @@ process; we then speak of a private variable
 – It can be defined in a shared memory space
 
 
-● An OpenMP program is an alternation of sequential regions and parallel
+* An OpenMP program is an alternation of sequential regions and parallel
 regions. +
-● A sequential region is always executed by the master task, the one
+* A sequential region is always executed by the master task, the one
 whose rank is 0. +
-● A parallel region can be executed by several tasks at the same time. +
-● The tasks can share the work contained in the parallel region.
+* A parallel region can be executed by several tasks at the same time. +
+* The tasks can share the work contained in the parallel region.
 
-● Work sharing essentially consists of:
+* Work sharing essentially consists of:
 
 
 – execute a loop by distributing the iterations between the tasks; +
@@ -1579,11 +1582,11 @@ whose rank is 0. +
 (orphaning)
 
 
-● It is sometimes necessary to introduce a synchronization between the
+* It is sometimes necessary to introduce a synchronization between the
 concurrent tasks to avoid, for example, that these modify in any order
 the value of the same shared variable (case of reduction operations).
 
-●Generally, tasks are assigned to processors by the operating system.
+* Generally, tasks are assigned to processors by the operating system.
 Different cases can occur:
 
 
@@ -1595,7 +1598,7 @@ processor; +
 processors are not dedicated, the situation is generally intermediate.
 
 
-● To overcome these problems, it is possible to build the OpenMP runtime
+* To overcome these problems, it is possible to build the OpenMP runtime
 on a library of mixed threads and thus control the scheduling of tasks.
 
 *Construction of a parallel region*
@@ -2930,7 +2933,7 @@ pure MPI scalability runs out.
 
 A common hybrid approach
 
-image:Data/media/image9.png[image,width=307,height=155]
+image:media/image9.png[image,width=307,height=155]
 
 * From dequential code, alongside MPI first, then try adding OpenMP
 * From MPI code, add OpenMP
@@ -2940,21 +2943,21 @@ parallel region and allow only the master thread to communicate between
 MPI tasks.
 * Could use MPI in parallel region with thread-safe MPI.
 
-image:Data/media/image10.png[image,width=264,height=166]
+image:media/image10.png[image,width=264,height=166]
 
 [width="100%",cols="50%,50%",]
 |===
-|image:Data/media/image12.png[image,width=261,height=214]
-|image:Data/media/image13.png[image,width=294,height=173]
+|image:media/image12.png[image,width=261,height=214]
+|image:media/image13.png[image,width=294,height=173]
 
-|image:Data/media/image14.png[image,width=208,height=173]
+|image:media/image14.png[image,width=208,height=173]
 |
 
-|image:Data/media/image15.png[image,width=276,height=226]
-|image:Data/media/image16.png[image,width=258,height=184]
+|image:media/image15.png[image,width=276,height=226]
+|image:media/image16.png[image,width=258,height=184]
 
-|image:Data/media/image17.png[image,width=272,height=163]
-|image:Data/media/image18.png[image,width=254,height=191]
+|image:media/image17.png[image,width=272,height=163]
+|image:media/image18.png[image,width=254,height=191]
 |===
 
 === 3.Star PU
@@ -2983,7 +2986,7 @@ StarPU internally deals with the following aspects:
 discrete memories
 * Optimized cluster communications
 
-image:Data/media/image19.png[image,width=179,height=179]
+image:media/image19.png[image,width=179,height=179]
 
 Links:
 
@@ -3004,7 +3007,7 @@ with StarPU but is written in modern C++. It also supports speculative
 execution, which is the ability to run tasks ahead of time if others are
 unsure about changing the data.
 
-image:Data/media/image21.png[image,width=642,height=380]
+image:media/image21.png[image,width=642,height=380]
 
 *4.1 Workflow*
 

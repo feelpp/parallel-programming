@@ -11,12 +11,9 @@ cmake_minimum_required(VERSION 3.17)
 #set(CMAKE_CXX_COMPILER "/usr/bin/gcc")
 #set(CMAKE_CXX_COMPILER "/usr/bin/g++-11")
 
-#project( firstprivate )
 
-#find_package( OpenCV REQUIRED )
-#include_directories( ${OpenCV_INCLUDE_DIRS} 
 
-if(FALSE)
+if(TRUE)
     find_package(OpenMP)
     if (OPENMP_FOUND)
         set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")

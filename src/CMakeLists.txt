@@ -72,8 +72,11 @@ endif()
 #END:HIP
 
 #BEGIN:GayaPerformance
-if(FALSE)
+if(TRUE)
     add_subdirectory(GayaPerformance/HPC_Explorer)
+endif()
+
+if(FALSE)
     add_subdirectory(GayaPerformance/HPC_Process)
 endif()
 #END:GayaPerformance/PB /usr/include/sys/times.h' file not found
@@ -82,7 +85,7 @@ endif()
 if(TRUE)
     add_subdirectory(Quicksort)
 endif()
-#END:Quicksort
+#END:Quicksort/OK
 
 #BEGIN:Specx
 if(FALSE)

@@ -32,53 +32,71 @@
 #target_link_libraries(${PARALLELPROGRAMMING_TARGET} INTERFACE Feelpp::feelpp)
 
 #BEGIN:MPI
-add_subdirectory(MPI/MPI_1)
-add_subdirectory(MPI/MPI_2)
-add_subdirectory(MPI/MPI_3)
+if(TRUE)
+    add_subdirectory(MPI/MPI_1)
+    add_subdirectory(MPI/MPI_2)
+    add_subdirectory(MPI/MPI_3)
+endif()
 #END:MPI
 
 #BEGIN:OpenMP
-add_subdirectory(OpenMP)
+if(TRUE)
+    add_subdirectory(OpenMP)
+endif()
 #END:OpenMP
 
 #BEGIN:OpenStar
-add_subdirectory(OpenStar/OpenMP_MPI)
+if(TRUE)
+    add_subdirectory(OpenStar/OpenMP_MPI)
+endif()
 #END:OpenStar
 
 #BEGIN:CUDA PART
-add_subdirectory(CUDA/Array_Addition)
-add_subdirectory(CUDA/Array_Reduction)
-add_subdirectory(CUDA/Matrix_Summation)
-add_subdirectory(CUDA/Matrix_Summation)
-add_subdirectory(CUDA/Task_Parallelism)
-add_subdirectory(CUDA/Vector)
+if(FALSE)
+    add_subdirectory(CUDA/Array_Addition)
+    add_subdirectory(CUDA/Array_Reduction)
+    add_subdirectory(CUDA/Matrix_Summation)
+    add_subdirectory(CUDA/Matrix_Summation)
+    add_subdirectory(CUDA/Task_Parallelism)
+    add_subdirectory(CUDA/Vector)
+endif()
 #END:CUDA PART
 
 #BEGIN:HIP
-add_subdirectory(HIP/Array_Addition)
-add_subdirectory(HIP/Matrix_Summation)
-add_subdirectory(HIP/Practice)
+if(FALSE)
+    add_subdirectory(HIP/Array_Addition)
+    add_subdirectory(HIP/Matrix_Summation)
+    add_subdirectory(HIP/Practice)
+endif()
 #END:HIP
 
 #BEGIN:GayaPerformance
-add_subdirectory(GayaPerformance/HPC_Explorer)
-add_subdirectory(GayaPerformance/HPC_Process)
+if(TRUE)
+    add_subdirectory(GayaPerformance/HPC_Explorer)
+    add_subdirectory(GayaPerformance/HPC_Process)
+endif()
 #END:GayaPerformance
 
 #BEGIN:Quicksort
-add_subdirectory(Quicksort)
+if(TRUE)
+    add_subdirectory(Quicksort)
+endif()
 #END:Quicksort
 
 #BEGIN:Specx
-add_subdirectory(Specx)
+if(FALSE)
+    add_subdirectory(Specx)
+endif()
 #END:Specx
 
 
 #BEGIN:Heat_Equation_ParallelPrograming_Comparison
-add_subdirectory(Heat_Equation_ParallelPrograming_Comparison/Cuda)
-add_subdirectory(Heat_Equation_ParallelPrograming_Comparison/Hip)
-add_subdirectory(Heat_Equation_ParallelPrograming_Comparison/MPI)
-add_subdirectory(Heat_Equation_ParallelPrograming_Comparison/MPI_OpenMP)
+if(FALSE)
+    add_subdirectory(Heat_Equation_ParallelPrograming_Comparison/Cuda)
+    add_subdirectory(Heat_Equation_ParallelPrograming_Comparison/Hip)
+    add_subdirectory(Heat_Equation_ParallelPrograming_Comparison/MPI)
+    add_subdirectory(Heat_Equation_ParallelPrograming_Comparison/MPI_OpenMP)
+endif()
 #END:Heat_Equation_ParallelPrograming_Comparison
 
 

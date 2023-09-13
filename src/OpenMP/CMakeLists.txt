@@ -36,14 +36,6 @@ endif()
 
 if(TRUE)
     find_package(OpenMP REQUIRED)
-    if (OpenMP_CXX_FOUND)
-        MESSAGE("{OpenMP_CXX_LIBRARIES}")
-        set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-        set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-        set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
-        else (OpenMP_CXX_FOUND)
-        MESSAGE (SEND_ERROR "This application cannot compile without OpenMP")
-    endif(OpenMP_CXX_FOUND)
 endif()
 
 
@@ -58,10 +50,10 @@ foreach (myfile ${WFOPenMP_SRC})
     message("${myname}.cpp | ${dir_src}")
     add_executable(${myname} "${myname}.cpp")
     
-    target_compile_options(${myname} PRIVATE ${OpenMP_CXX_FLAGS})
-    target_link_libraries(${myname} PRIVATE ${OpenMP_CXX_FLAGS})
+    #target_compile_options(${myname} PRIVATE ${OpenMP_CXX_FLAGS})
+    #target_link_libraries(${myname} PRIVATE ${OpenMP_CXX_FLAGS})
 
-    #target_link_libraries(${myname} PUBLIC OpenMP::OpenMP_CXX)    
+    target_link_libraries(${myname} PUBLIC OpenMP::OpenMP_CXX)    
 endforeach (file ${WFOPenMP_SRC})
 
 

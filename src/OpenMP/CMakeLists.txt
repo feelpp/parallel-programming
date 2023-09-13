@@ -13,7 +13,7 @@ cmake_minimum_required(VERSION 3.17)
 
 
 
-if(TRUE)
+if(FALSE)
     find_package(OpenMP)
     if (OPENMP_FOUND)
         set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
@@ -21,6 +21,17 @@ if(TRUE)
         set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
     endif()
 endif()
+
+if(TRUE)
+    find_package(OpenMP)
+    if (OpenMP_CXX_FOUND)
+        MESSAGE("{OpenMP_CXX_LIBRARIES}")
+        else (OpenMP_CXX_FOUND)
+        MESSAGE (SEND_ERROR "This application cannot compile without OpenMP")
+    endif(OpenMP_CXX_FOUND)
+endif()
+
+
 
 
 file(GLOB WFOPenMP_SRC

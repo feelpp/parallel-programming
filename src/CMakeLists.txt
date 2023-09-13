@@ -72,7 +72,7 @@ endif()
 #END:HIP
 
 #BEGIN:GayaPerformance
-if(FALSE)
+if(TRUE)
     add_subdirectory(GayaPerformance/HPC_Explorer)
     add_subdirectory(GayaPerformance/HPC_Process)
 endif()

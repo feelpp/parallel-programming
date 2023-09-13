@@ -27,7 +27,7 @@ endif()
 
 
 
-if(TRUE)
+if(FALSE)
     find_package(MPI REQUIRED)
     if (MPI_FOUND)
         MESSAGE("{MPI_CXX_LIBRARIES}")
@@ -43,7 +43,6 @@ if(FALSE)
         else (OpenMP_CXX_FOUND)
         MESSAGE (SEND_ERROR "This application cannot compile without OpenMPI")
     endif(OpenMP_CXX_FOUND)
-
 endif()
 
 

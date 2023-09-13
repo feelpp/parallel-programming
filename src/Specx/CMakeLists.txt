@@ -70,10 +70,10 @@ include_directories(SYSTEM ${MPI_INCLUDES_PATH})
 	# Add execs - 1 cpp = 1 exec
 	foreach(exec ${source_tests_files}) 
     		#if(${SPECX_COMPILE_WITH_MPI} OR NOT ${exec} MATCHES "-mpi\.")
-		    #get_filename_component(
-			#    execname ${exec}
-			#    NAME_WE
-		    #)
+		    get_filename_component(
+			    execname ${exec}
+			    NAME_WE
+		    )
 
 		    if($ENV{VERBOSE})
 			    MESSAGE(STATUS "Benchmark Demo -- Add ${execname}")

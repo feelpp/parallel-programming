@@ -44,13 +44,13 @@ endif()
 if(TRUE)
     add_subdirectory(OpenMP)
 endif()
-#END:OpenMP
+#END:OpenMP/OK
 
 #BEGIN:OpenStar
 if(TRUE)
     add_subdirectory(OpenStar/OpenMP_MPI)
 endif()
-#END:OpenStar
+#END:OpenStar/OK
 
 #BEGIN:CUDA PART
 if(FALSE)
@@ -72,14 +72,14 @@ endif()
 #END:HIP
 
 #BEGIN:GayaPerformance
-if(TRUE)
+if(FALSE)
     add_subdirectory(GayaPerformance/HPC_Explorer)
     add_subdirectory(GayaPerformance/HPC_Process)
 endif()
-#END:GayaPerformance
+#END:GayaPerformance/PB /usr/include/sys/times.h' file not found
 
 #BEGIN:Quicksort
-if(FALSE)
+if(TRUE)
     add_subdirectory(Quicksort)
 endif()
 #END:Quicksort

@@ -17,7 +17,7 @@
 	set(SPECX_DO_INSTALL ON)
 	set(SPECX_COMPILE_WITH_MPI OFF)
 	set(FETCHCONTENT_SOURCE_DIR_SPECX ${CMAKE_CURRENT_SOURCE_DIR}/specx)
-	FetchContent_Declare(SPECX GIT_REPOSITORY https://github.com/feelpp/specx.git GIT_TAG e092e061ec17afd42374041cccfa6f44b939b19c)
+	#FetchContent_Declare(SPECX GIT_REPOSITORY https://github.com/feelpp/specx.git GIT_TAG e092e061ec17afd42374041cccfa6f44b939b19c)
 
 	set(SPECX_INSTALL_CMAKE_DIR  "${CMAKE_INSTALL_DATADIR}/feel/cmake/modules")
 	message(STATUS "[feelpp-specx] cmake dir: ${CMAKE_INSTALL_DATADIR}/feel/cmake/modules")
@@ -97,7 +97,7 @@ include_directories(SYSTEM ${MPI_INCLUDES_PATH})
 			    ${SPECX_LIBRARIES}
 			    #${BLAS_LIBRARIES}
 			    #${LAPACK_LIBRARIES}
-				#Feelpp::feelpp
+				Feelpp::feelpp
                 ${MPI_CXX_LIBRARIES}
                 #${OpenMP_CXX_LIBRARIES}
 				#OpenMP::OpenMP_CXX

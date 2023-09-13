@@ -31,12 +31,6 @@
 #  )
 #target_link_libraries(${PARALLELPROGRAMMING_TARGET} INTERFACE Feelpp::feelpp)
 
-#BEGIN:MPI
-if(FALSE)
-    add_subdirectory(MPI/MPI_1)
-endif()
-#END:MPI
-
 
 #BEGIN:MPI
 if(TRUE)
@@ -44,10 +38,10 @@ if(TRUE)
     add_subdirectory(MPI/MPI_2)
     add_subdirectory(MPI/MPI_3)
 endif()
-#END:MPI
+#END:MPI/OK
 
 #BEGIN:OpenMP
-if(FALSE)
+if(TRUE)
     add_subdirectory(OpenMP)
 endif()
 #END:OpenMP

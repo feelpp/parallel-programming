@@ -37,7 +37,7 @@ project(SPECX CXX)
       )
   target_link_libraries( feelpp_contrib INTERFACE feelpp_specx )
   set(FEELPP_ENABLED_OPTIONS_CONTRIB "${FEELPP_ENABLED_OPTIONS_CONTRIB} specx")
-endif()
+
 
 
 

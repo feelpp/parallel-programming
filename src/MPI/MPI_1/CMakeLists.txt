@@ -35,7 +35,7 @@ if(FALSE)
         MESSAGE (SEND_ERROR "This application cannot compile without OpenMPI")
     endif(OpenMP_CXX_FOUND)
 
-endif
+endif()
 
 
 

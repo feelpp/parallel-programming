@@ -102,6 +102,6 @@ include_directories(SYSTEM ${MPI_INCLUDES_PATH})
                 #${OpenMP_CXX_LIBRARIES}
 				#OpenMP::OpenMP_CXX
 			)
-		endif()
+		#endif()
 	endforeach(exec)
 	

@@ -1,4 +1,5 @@
-project(SPECX CXX)
+
+  #project(SPECX CXX)
 
 
 
@@ -39,25 +40,6 @@ project(SPECX CXX)
   set(FEELPP_ENABLED_OPTIONS_CONTRIB "${FEELPP_ENABLED_OPTIONS_CONTRIB} specx")
 
 
-
-
-#set(CMAKE_C_COMPILER /usr/bin/clang)
-#set(CMAKE_CXX_COMPILER /usr/bin/clang++)
-#set(CMAKE_CXX_COMPILER "/usr/bin/gcc")
-#set(CMAKE_CXX_COMPILER "/usr/bin/g++")
-
-
-#include(GNUInstallDirs)
-#include_directories("/usr/include/feelpp") 
-#include_directories("/usr/include/feelpp/eigen") 
-#add_definitions(-DOPENCV_DISABLE_EIGEN_TENSOR_SUPPORT)
-
-
-
-if (POLICY CMP0077)
-  cmake_policy(SET CMP0077 NEW)
-  set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
-endif()
 
 
 #include_directories(SYSTEM ${MPI_INCLUDES_PATH})

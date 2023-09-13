@@ -22,7 +22,7 @@ if(FALSE)
     endif()
 endif()
 
-if(TRUE)
+if(FALSE)
     find_package(OpenMP)
     if (OpenMP_CXX_FOUND)
         MESSAGE("{OpenMP_CXX_LIBRARIES}")
@@ -31,7 +31,14 @@ if(TRUE)
     endif(OpenMP_CXX_FOUND)
 endif()
 
-
+if(TRUE)
+    find_package(OpenMP REQUIRED)
+    if (OpenMP_CXX_FOUND)
+        MESSAGE("{OpenMP_CXX_LIBRARIES}")
+        else (OpenMP_CXX_FOUND)
+        MESSAGE (SEND_ERROR "This application cannot compile without OpenMP")
+    endif(OpenMP_CXX_FOUND)
+endif()
 
 
 file(GLOB WFOPenMP_SRC
@@ -44,7 +51,11 @@ foreach (myfile ${WFOPenMP_SRC})
     get_filename_component(dirname ${myfile} DIRECTORY)
     message("${myname}.cpp | ${dir_src}")
     add_executable(${myname} "${myname}.cpp")
-    target_link_libraries(${myname} PUBLIC OpenMP::OpenMP_CXX)    
+    
+    target_compile_options(${myname} PRIVATE -Wall ${OpenMP_CXX_FLAGS})
+    target_link_libraries(${myname} PRIVATE ${OpenMP_CXX_FLAGS})
+
+    #target_link_libraries(${myname} PUBLIC OpenMP::OpenMP_CXX)    
 endforeach (file ${WFOPenMP_SRC})
 
 

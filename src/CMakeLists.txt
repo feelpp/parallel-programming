@@ -34,19 +34,26 @@
 #BEGIN:MPI
 if(TRUE)
     add_subdirectory(MPI/MPI_1)
+endif()
+#END:MPI
+
+
+#BEGIN:MPI
+if(FALSE)
+    add_subdirectory(MPI/MPI_1)
     add_subdirectory(MPI/MPI_2)
     add_subdirectory(MPI/MPI_3)
 endif()
 #END:MPI
 
 #BEGIN:OpenMP
-if(TRUE)
+if(FALSE)
     add_subdirectory(OpenMP)
 endif()
 #END:OpenMP
 
 #BEGIN:OpenStar
-if(TRUE)
+if(FALSE)
     add_subdirectory(OpenStar/OpenMP_MPI)
 endif()
 #END:OpenStar
@@ -71,14 +78,14 @@ endif()
 #END:HIP
 
 #BEGIN:GayaPerformance
-if(TRUE)
+if(FALSE)
     add_subdirectory(GayaPerformance/HPC_Explorer)
     add_subdirectory(GayaPerformance/HPC_Process)
 endif()
 #END:GayaPerformance
 
 #BEGIN:Quicksort
-if(TRUE)
+if(FALSE)
     add_subdirectory(Quicksort)
 endif()
 #END:Quicksort

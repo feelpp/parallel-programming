@@ -19,21 +19,28 @@ set(CMAKE_BUILD_TYPE Release)
 
 
 
+if(FALSE)
+    find_package(MPI REQUIRED)
+    if (MPI_FOUND)
+        MESSAGE("{MPI_CXX_LIBRARIES}")
+        else (MPI_FOUND)
+        MESSAGE (SEND_ERROR "This application cannot compile without MPI")
+    endif(MPI_FOUND)
+endif()
 
-find_package(MPI REQUIRED)
-if (MPI_FOUND)
-    MESSAGE("{MPI_CXX_LIBRARIES}")
-    else (MPI_FOUND)
-    MESSAGE (SEND_ERROR "This application cannot compile without MPI")
-endif(MPI_FOUND)
+if(FALSE)
+    find_package(OpenMP)
+    if (OpenMP_CXX_FOUND)
+        MESSAGE("{OpenMP_CXX_LIBRARIES}")
+        else (OpenMP_CXX_FOUND)
+        MESSAGE (SEND_ERROR "This application cannot compile without OpenMP")
+    endif(OpenMP_CXX_FOUND)
+endif()
 
+if(TRUE)
+    find_package(OpenMP REQUIRED)
+endif()
 
-find_package(OpenMP)
-if (OpenMP_CXX_FOUND)
-    MESSAGE("{OpenMP_CXX_LIBRARIES}")
-    else (OpenMP_CXX_FOUND)
-    MESSAGE (SEND_ERROR "This application cannot compile without OpenMP")
-endif(OpenMP_CXX_FOUND)
 
 
 

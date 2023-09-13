@@ -49,13 +49,6 @@
 
 #include_directories(SYSTEM ${MPI_INCLUDES_PATH})
 
-if(BLAS_FOUND AND LAPACK_FOUND)
-	if($ENV{VERBOSE})
-	    MESSAGE(STATUS "Benchmark SOLAR_SHADING -- BLAS_LIBRARIES   : ${BLAS_LIBRARIES}")
-	    MESSAGE(STATUS "Benchmark SOLAR_SHADING -- BLAS_LINKER_FLAGS   : ${BLAS_LINKER_FLAGS}")
-	    MESSAGE(STATUS "Benchmark SOLAR_SHADING -- LAPACK_LIBRARIES   : ${LAPACK_LIBRARIES}")
-	    MESSAGE(STATUS "Benchmark SOLAR_SHADING -- LAPACK_LINKER_FLAGS   : ${LAPACK_LINKER_FLAGS}")
-	endif()
 
 	# Find all code files
 	file(	
@@ -69,13 +62,9 @@ if(BLAS_FOUND AND LAPACK_FOUND)
 	INCLUDE_DIRECTORIES(
 	     ${SPECX_BINARY_DIR}/Src    
 	     ${SPECX_SOURCE_DIR}/Src   
-         ${MPI_CXX_INCLUDE_DIRS} 
-		 ${OpenMP_CXX_INCLUDE_DIRS} 
+         #${MPI_CXX_INCLUDE_DIRS} 
+		 #${OpenMP_CXX_INCLUDE_DIRS} 
 	)
-
-    LINK_DIRECTORIES(
-    )
-
 
 	# Add execs - 1 cpp = 1 exec
 	foreach(exec ${source_tests_files}) 
@@ -86,7 +75,7 @@ if(BLAS_FOUND AND LAPACK_FOUND)
 		    )
 
 		    if($ENV{VERBOSE})
-			    MESSAGE(STATUS "Benchmark -- Add ${execname}")
+			    MESSAGE(STATUS "Benchmark Demo -- Add ${execname}")
 		    endif()
 
 		    if(SPECX_COMPILE_WITH_CUDA)
@@ -99,34 +88,19 @@ if(BLAS_FOUND AND LAPACK_FOUND)
 
 		    add_executable(${execname} ${exec})
 
-        
-		    
-		    # TODO set_target_properties(${execname} PROPERTIES COMPILE_FLAGS "-llapack -lblas")
-
-        #set_target_properties(${execname} PROPERTIES COMPILE_FLAGS "-llapack -lblas")
+        	#set_target_properties(${execname} PROPERTIES COMPILE_FLAGS "-llapack -lblas")
 
 		    target_link_libraries(
 			    ${execname}
 			    specx
 			    ${SPECX_LIBRARIES}
-			    ${BLAS_LIBRARIES}
-			    ${LAPACK_LIBRARIES}
+			    #${BLAS_LIBRARIES}
+			    #${LAPACK_LIBRARIES}
 				#Feelpp::feelpp
-                ${MPI_CXX_LIBRARIES}
+                #${MPI_CXX_LIBRARIES}
                 #${OpenMP_CXX_LIBRARIES}
 				#OpenMP::OpenMP_CXX
 			)
 		endif()
 	endforeach(exec)
 	
-else(BLAS_FOUND AND LAPACK_FOUND)
-    MESSAGE(STATUS "Benchmark SPECX_TESTS -- Disable -- BLAS_FOUND : ${BLAS_FOUND}")
-    MESSAGE(STATUS "Benchmark SPECX_TESTS -- Disable -- LAPACK_FOUND : ${LAPACK_FOUND}")
-endif()
-
-
-
-
-
-
-

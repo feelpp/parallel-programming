@@ -55,6 +55,7 @@ add_executable(HeatMPI ${SOURCES})
 include_directories(SYSTEM ${MPI_INCLUDES_PATH})
 target_include_directories(HeatMPI PUBLIC ${MPI_CXX_INCLUDE_DIRS})
 target_link_libraries(HeatMPI  PUBLIC ${MPI_CXX_LIBRARIES} PRIVATE PNGwriter::PNGwriter )
+#target_link_libraries(HeatMPI  PUBLIC ${MPI_CXX_LIBRARIES} PRIVATE libPNGwrite.a)
 
 
 

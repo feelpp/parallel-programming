@@ -38,19 +38,19 @@ if(TRUE)
     add_subdirectory(MPI/MPI_2)
     add_subdirectory(MPI/MPI_3)
 endif()
-#END:MPI/OK
+#END:MPI/+++>OK
 
 #BEGIN:OpenMP
 if(TRUE)
     add_subdirectory(OpenMP)
 endif()
-#END:OpenMP/OK
+#END:OpenMP//+++>OK
 
 #BEGIN:OpenStar
 if(TRUE)
     add_subdirectory(OpenStar/OpenMP_MPI)
 endif()
-#END:OpenStar/OK
+#END:OpenStar//+++>OK
 
 #BEGIN:CUDA PART
 if(FALSE)
@@ -75,6 +75,7 @@ endif()
 if(TRUE)
     add_subdirectory(GayaPerformance/HPC_Explorer)
 endif()
+#BEGIN:GayaPerformance//+++>OK
 
 if(FALSE)
     add_subdirectory(GayaPerformance/HPC_Process)
@@ -85,10 +86,10 @@ endif()
 if(TRUE)
     add_subdirectory(Quicksort)
 endif()
-#END:Quicksort/OK
+#END:Quicksort//+++>OK
 
 #BEGIN:Specx
-if(FALSE)
+if(TRUE)
     add_subdirectory(Specx)
 endif()
 #END:Specx
@@ -97,8 +98,17 @@ endif()
 #BEGIN:Heat_Equation_ParallelPrograming_Comparison
 if(FALSE)
     add_subdirectory(Heat_Equation_ParallelPrograming_Comparison/Cuda)
+endif()
+
+if(FALSE)
     add_subdirectory(Heat_Equation_ParallelPrograming_Comparison/Hip)
+endif()
+
+if(FALSE)
     add_subdirectory(Heat_Equation_ParallelPrograming_Comparison/MPI)
+endif()
+
+if(FALSE)
     add_subdirectory(Heat_Equation_ParallelPrograming_Comparison/MPI_OpenMP)
 endif()
 #END:Heat_Equation_ParallelPrograming_Comparison

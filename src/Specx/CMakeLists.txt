@@ -1,103 +1,145 @@
 project(SPECX CXX)
 
-cmake_minimum_required (VERSION 3.20 FATAL_ERROR)
-
-set(SPECX_SOURCE_DIR ${specx_SOURCE_DIR} )
-set(SPECX_BINARY_DIR ${specx_BINARY_DIR} )
 
 
-include(CheckLanguage)
-check_language(CUDA)
+  option( FEELPP_ENABLE_SPECX "Enable specx" ON )
+  message(STATUS "Configuring specx")
 
-OPTION(SPECX_COMPILE_WITH_CUDA "Set to on to compile tasks with CUDA callables" ${CMAKE_CUDA_COMPILER})
-OPTION(SPECX_COMPILE_WITH_HIP "Set to on to compile tasks with HIP callables" ${CMAKE_HIP_COMPILER})
+  # set(FETCHCONTENT_SOURCE_DIR_SPECX ${CMAKE_CURRENT_SOURCE_DIR}/SPECX)
+  # patch includes fix for 18.04 compilation
+  set(SPECX_JUST_LIB ON)
+  set(SPECX_DO_INSTALL ON)
+  set(SPECX_COMPILE_WITH_MPI OFF)
+  set(FETCHCONTENT_SOURCE_DIR_SPECX ${CMAKE_CURRENT_SOURCE_DIR}/specx)
+  FetchContent_Declare(SPECX GIT_REPOSITORY https://github.com/feelpp/specx.git GIT_TAG e092e061ec17afd42374041cccfa6f44b939b19c)
 
-if(SPECX_COMPILE_WITH_CUDA AND SPECX_COMPILE_WITH_HIP)
-    message(FATAL_ERROR "Impossible to use both CUDA and HIP together")
+  set(SPECX_INSTALL_CMAKE_DIR  "${CMAKE_INSTALL_DATADIR}/feel/cmake/modules")
+  message(STATUS "[feelpp-specx] cmake dir: ${CMAKE_INSTALL_DATADIR}/feel/cmake/modules")
+  FetchContent_MakeAvailable(specx)
+  add_library(feelpp_specx INTERFACE)
+
+  # set_target_properties(specx PROPERTIES OUTPUT_NAME "feelpp_specx")
+  target_compile_definitions(feelpp_contrib INTERFACE FEELPP_HAS_SPECX)
+  target_link_libraries(feelpp_specx INTERFACE specx )
+  add_library(Feelpp::feelpp_specx ALIAS feelpp_specx)
+  target_include_directories(feelpp_specx INTERFACE
+    $<BUILD_INTERFACE:${specx_BINARY_DIR}/>
+    $<BUILD_INTERFACE:${specx_BINARY_DIR}/Src>
+    $<BUILD_INTERFACE:${specx_SOURCE_DIR}/>
+    $<BUILD_INTERFACE:${specx_SOURCE_DIR}/Src>
+    $<INSTALL_INTERFACE:include/feelpp>
+    $<INSTALL_INTERFACE:include/feelpp/specx>)
+  install(TARGETS feelpp_specx specx EXPORT feelpp-contrib-export-targets
+      LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+      ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+      RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+      INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+      )
+  target_link_libraries( feelpp_contrib INTERFACE feelpp_specx )
+  set(FEELPP_ENABLED_OPTIONS_CONTRIB "${FEELPP_ENABLED_OPTIONS_CONTRIB} specx")
 endif()
 
-if(SPECX_COMPILE_WITH_CUDA)
-	enable_language(CUDA)
-		
-	if(NOT CMAKE_CUDA_ARCHITECTURES)
-      set(CMAKE_CUDA_ARCHITECTURES "75" CACHE STRING
-          "Set CUDA target architecture" FORCE)
-    endif()
+
+
+#set(CMAKE_C_COMPILER /usr/bin/clang)
+#set(CMAKE_CXX_COMPILER /usr/bin/clang++)
+#set(CMAKE_CXX_COMPILER "/usr/bin/gcc")
+#set(CMAKE_CXX_COMPILER "/usr/bin/g++")
+
+
+#include(GNUInstallDirs)
+#include_directories("/usr/include/feelpp") 
+#include_directories("/usr/include/feelpp/eigen") 
+#add_definitions(-DOPENCV_DISABLE_EIGEN_TENSOR_SUPPORT)
+
+
+
+if (POLICY CMP0077)
+  cmake_policy(SET CMP0077 NEW)
+  set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 endif()
 
-if(SPECX_COMPILE_WITH_HIP)
-    # Search for rocm in common locations
-    list(APPEND CMAKE_PREFIX_PATH /opt/rocm/hip /opt/rocm)
-    # Find hip
-    find_package(hip)
-    # Set the GPU to compile for
-    set(GPU_TARGETS "gfx900" CACHE STRING "GPU targets to compile for")
+
+#include_directories(SYSTEM ${MPI_INCLUDES_PATH})
+
+if(BLAS_FOUND AND LAPACK_FOUND)
+	if($ENV{VERBOSE})
+	    MESSAGE(STATUS "Benchmark SOLAR_SHADING -- BLAS_LIBRARIES   : ${BLAS_LIBRARIES}")
+	    MESSAGE(STATUS "Benchmark SOLAR_SHADING -- BLAS_LINKER_FLAGS   : ${BLAS_LINKER_FLAGS}")
+	    MESSAGE(STATUS "Benchmark SOLAR_SHADING -- LAPACK_LIBRARIES   : ${LAPACK_LIBRARIES}")
+	    MESSAGE(STATUS "Benchmark SOLAR_SHADING -- LAPACK_LINKER_FLAGS   : ${LAPACK_LINKER_FLAGS}")
+	endif()
+
+	# Find all code files
+	file(	
+	    GLOB_RECURSE
+	    source_tests_files
+	    ./*.cpp
+	)
+
+
+	# Adding the project sources dir as an include dir
+	INCLUDE_DIRECTORIES(
+	     ${SPECX_BINARY_DIR}/Src    
+	     ${SPECX_SOURCE_DIR}/Src   
+         ${MPI_CXX_INCLUDE_DIRS} 
+		 ${OpenMP_CXX_INCLUDE_DIRS} 
+	)
+
+    LINK_DIRECTORIES(
+    )
+
+
+	# Add execs - 1 cpp = 1 exec
+	foreach(exec ${source_tests_files}) 
+    		if(${SPECX_COMPILE_WITH_MPI} OR NOT ${exec} MATCHES "-mpi\.")
+		    get_filename_component(
+			    execname ${exec}
+			    NAME_WE
+		    )
+
+		    if($ENV{VERBOSE})
+			    MESSAGE(STATUS "Benchmark -- Add ${execname}")
+		    endif()
+
+		    if(SPECX_COMPILE_WITH_CUDA)
+			    set_source_files_properties(${exec} PROPERTIES LANGUAGE CUDA)
+			    set(SPECX_LIBRARIES "${SPECX_LIBRARIES};cublas;cusolver")
+		    endif()
+		    
+
+        
+
+		    add_executable(${execname} ${exec})
+
+        
+		    
+		    # TODO set_target_properties(${execname} PROPERTIES COMPILE_FLAGS "-llapack -lblas")
+
+        #set_target_properties(${execname} PROPERTIES COMPILE_FLAGS "-llapack -lblas")
+
+		    target_link_libraries(
+			    ${execname}
+			    specx
+			    ${SPECX_LIBRARIES}
+			    ${BLAS_LIBRARIES}
+			    ${LAPACK_LIBRARIES}
+				#Feelpp::feelpp
+                ${MPI_CXX_LIBRARIES}
+                #${OpenMP_CXX_LIBRARIES}
+				#OpenMP::OpenMP_CXX
+			)
+		endif()
+	endforeach(exec)
+	
+else(BLAS_FOUND AND LAPACK_FOUND)
+    MESSAGE(STATUS "Benchmark SPECX_TESTS -- Disable -- BLAS_FOUND : ${BLAS_FOUND}")
+    MESSAGE(STATUS "Benchmark SPECX_TESTS -- Disable -- LAPACK_FOUND : ${LAPACK_FOUND}")
 endif()
 
-INCLUDE(CMakeDependentOption)
-set(SPECX_LIBRARIES "")
-set(SPECX_INCLUDE_DIR "")
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
-
-# need pthread
-list(APPEND SPECX_LIBRARIES pthread)
-
-
-ADD_DEFINITIONS(${SPECX_CXX_FLAGS})
 
 
 
-
-find_package(MPI REQUIRED)
-if (MPI_FOUND)
-    MESSAGE("{MPI_CXX_LIBRARIES}")
-    else (MPI_FOUND)
-    MESSAGE (SEND_ERROR "This application cannot compile without MPI")
-endif(MPI_FOUND)
-
-
-find_package(OpenMP)
-if (OpenMP_CXX_FOUND)
-    MESSAGE("{OpenMP_CXX_LIBRARIES}")
-    else (OpenMP_CXX_FOUND)
-    MESSAGE (SEND_ERROR "This application cannot compile without OpenMPI")
-endif(OpenMP_CXX_FOUND)
-
-
-file(GLOB WFOPenMP_SRC
-     "*.hpp"
-     "*.cpp"
-)
-
-
-foreach (myfile ${WFOPenMP_SRC})
-    get_filename_component(myname ${myfile} NAME_WLE)
-    get_filename_component(dirname ${myfile} DIRECTORY)
-    message("${myname}.cpp | ${dir_src}")
-
-    add_executable(${myname} "${myname}.cpp")
-
-	target_link_libraries(
-		${myname}
-		specx
-		${SPECX_LIBRARIES}
-		)
-
-
-    #if(MPI_FOUND)
-        #include_directories(SYSTEM ${MPI_INCLUDES_PATH})
-        #target_include_directories(${myname}  PUBLIC ${MPI_CXX_INCLUDE_DIRS})
-        #target_link_libraries(${myname}  PUBLIC ${MPI_CXX_LIBRARIES} )
-    #endif()
-
-    #if(OpenMP_CXX_FOUND)
-    #    target_link_libraries(${myname} PUBLIC OpenMP::OpenMP_CXX ${OpenCV_LIBS})
-    #endif()
-endforeach (file ${WFOPenMP_SRC})
 
 
 

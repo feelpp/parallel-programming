@@ -47,7 +47,8 @@
 
 
 
-#include_directories(SYSTEM ${MPI_INCLUDES_PATH})
+
+include_directories(SYSTEM ${MPI_INCLUDES_PATH})
 
 
 	# Find all code files
@@ -62,7 +63,7 @@
 	INCLUDE_DIRECTORIES(
 	     ${SPECX_BINARY_DIR}/Src    
 	     ${SPECX_SOURCE_DIR}/Src   
-         #${MPI_CXX_INCLUDE_DIRS} 
+         ${MPI_CXX_INCLUDE_DIRS} 
 		 #${OpenMP_CXX_INCLUDE_DIRS} 
 	)
 
@@ -97,7 +98,7 @@
 			    #${BLAS_LIBRARIES}
 			    #${LAPACK_LIBRARIES}
 				#Feelpp::feelpp
-                #${MPI_CXX_LIBRARIES}
+                ${MPI_CXX_LIBRARIES}
                 #${OpenMP_CXX_LIBRARIES}
 				#OpenMP::OpenMP_CXX
 			)

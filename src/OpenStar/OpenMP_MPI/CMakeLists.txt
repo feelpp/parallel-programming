@@ -32,7 +32,7 @@ find_package(OpenMP)
 if (OpenMP_CXX_FOUND)
     MESSAGE("{OpenMP_CXX_LIBRARIES}")
     else (OpenMP_CXX_FOUND)
-    MESSAGE (SEND_ERROR "This application cannot compile without OpenMPI")
+    MESSAGE (SEND_ERROR "This application cannot compile without OpenMP")
 endif(OpenMP_CXX_FOUND)
 
 

@@ -58,7 +58,7 @@ foreach (myfile ${WFOPenMP_SRC})
     message("${myname}.cpp | ${dir_src}")
     add_executable(${myname} "${myname}.cpp")
     
-    target_compile_options(${myname} PRIVATE -Wall ${OpenMP_CXX_FLAGS})
+    target_compile_options(${myname} PRIVATE ${OpenMP_CXX_FLAGS})
     target_link_libraries(${myname} PRIVATE ${OpenMP_CXX_FLAGS})
 
     #target_link_libraries(${myname} PUBLIC OpenMP::OpenMP_CXX)    

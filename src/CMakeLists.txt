@@ -89,7 +89,7 @@ endif()
 #END:Quicksort//+++>OK
 
 #BEGIN:Specx
-if(TRUE)
+if(FALSE)
     add_subdirectory(Specx)
 endif()
 #END:Specx
@@ -104,7 +104,7 @@ if(FALSE)
     add_subdirectory(Heat_Equation_ParallelPrograming_Comparison/Hip)
 endif()
 
-if(FALSE)
+if(TRUE)
     add_subdirectory(Heat_Equation_ParallelPrograming_Comparison/MPI)
 endif()
 

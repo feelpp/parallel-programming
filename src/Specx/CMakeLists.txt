@@ -10,7 +10,7 @@
   endif()
 
 
-  if(TRUE)
+  if(FALSE)
 	# set(FETCHCONTENT_SOURCE_DIR_SPECX ${CMAKE_CURRENT_SOURCE_DIR}/SPECX)
 	# patch includes fix for 18.04 compilation
 	set(SPECX_JUST_LIB ON)

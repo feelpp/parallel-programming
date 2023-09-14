@@ -14,7 +14,7 @@
   if(TRUE)
 	set(FETCHCONTENT_SOURCE_DIR_SPECX ${CMAKE_CURRENT_SOURCE_DIR}/SPECX)
 
-	MESSAGE("LINK======******=>" ${CMAKE_CURRENT_SOURCE_DIR}/SPECX)
+	MESSAGE("LINK ======******=>" ${CMAKE_CURRENT_SOURCE_DIR}/SPECX)
 
 
 	set(SPECX_JUST_LIB ON)
@@ -51,11 +51,16 @@
 
 
 
+  
+
   include_directories(SYSTEM ${MPI_INCLUDES_PATH})
 
   set(SPECX_SOURCE_DIR ${specx_SOURCE_DIR} )
   set(SPECX_BINARY_DIR ${specx_BINARY_DIR} )
-  
+
+  MESSAGE("LINK SOURCE_DIR ======******=>" ${specx_SOURCE_DIR})
+  MESSAGE("LINK BINARY_DIR ======******=>" ${specx_BINARY_DIR})
+  MESSAGE("LINK SPECX LIBRARIES ======******=>" ${SPECX_LIBRARIES})
 
 
 #file(GLOB_RECURSE MyFiles

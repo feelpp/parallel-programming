@@ -134,6 +134,14 @@ foreach(exec ${MyFiles})
 				#OpenMP::OpenMP_CXX
 				#feelpp_specx
 			)
+
+			target_include_directories(
+				${execname}  
+				feelpp_specx
+			)
+			
+
+
 		#endif()
 	endforeach(exec)
 	

@@ -115,8 +115,7 @@ foreach(exec ${MyFiles})
 
 		    target_link_libraries(
 			    ${exec}
-				feelpp_specx
-			    #specx
+			    specx
 			    ${SPECX_LIBRARIES}
 			    #${BLAS_LIBRARIES}
 			    #${LAPACK_LIBRARIES}
@@ -124,6 +123,7 @@ foreach(exec ${MyFiles})
                 #${MPI_CXX_LIBRARIES}
                 #${OpenMP_CXX_LIBRARIES}
 				#OpenMP::OpenMP_CXX
+				#feelpp_specx
 			)
 		#endif()
 	endforeach(exec)

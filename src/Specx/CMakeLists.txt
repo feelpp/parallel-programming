@@ -18,11 +18,9 @@
 
 # Test if Specx works
 
+option( FEELPP_ENABLE_SPECX "Enable specx" ON )
+
   if(TRUE)
-	set(FETCHCONTENT_SOURCE_DIR_SPECX ${CMAKE_CURRENT_SOURCE_DIR}/SPECX)
-
-	MESSAGE("LINK ======******=>" ${CMAKE_CURRENT_SOURCE_DIR}/SPECX)
-
 	message(STATUS "------------------------------------------------------------")
 	message(STATUS "Configuring specx")
   
@@ -32,6 +30,10 @@
 	set(SPECX_DO_INSTALL ON)
 	set(SPECX_COMPILE_WITH_MPI OFF)
 	set(FETCHCONTENT_SOURCE_DIR_SPECX ${CMAKE_CURRENT_SOURCE_DIR}/specx)
+
+	MESSAGE("LINK ======******=>" ${CMAKE_CURRENT_SOURCE_DIR}/SPECX)
+
+
 	FetchContent_Declare(SPECX GIT_REPOSITORY https://github.com/feelpp/specx.git GIT_TAG e092e061ec17afd42374041cccfa6f44b939b19c)
   
 	set(SPECX_INSTALL_CMAKE_DIR  "${CMAKE_INSTALL_DATADIR}/feel/cmake/modules")
@@ -112,7 +114,7 @@
 
 
 	foreach(exec ${MyFiles}) 
-				#if(${SPECX_COMPILE_WITH_MPI} OR NOT ${exec} MATCHES "-mpi\.")
+			#if(${SPECX_COMPILE_WITH_MPI} OR NOT ${exec} MATCHES "-mpi\.")
 			#get_filename_component( execname ${exec} NAME_WE)
 			get_filename_component(execname ${exec} NAME_WLE)
 			get_filename_component(dirname ${exec} DIRECTORY)
@@ -127,8 +129,8 @@
 				#endif()
 				
 
-				#message("${exec}.cpp")
-				#add_executable(${execname} ${exec})
+				message("${exec}.cpp")
+				add_executable(${execname} ${exec})
 				
 				#set_target_properties(${execname} PROPERTIES COMPILE_FLAGS "-llapack -lblas")
 

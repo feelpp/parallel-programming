@@ -88,15 +88,11 @@ LINK_DIRECTORIES(
 	${MPI_CXX_INCLUDE_DIRS} 
 )
 
-
-
-
 foreach(exec ${MyFiles}) 
     		#if(${SPECX_COMPILE_WITH_MPI} OR NOT ${exec} MATCHES "-mpi\.")
-		get_filename_component(
-			    execname ${exec}
-			    NAME_WE
-		)
+		#get_filename_component( execname ${exec} NAME_WE)
+		get_filename_component( execname ${exec} NAME_WLE)
+		get_filename_component(dirname ${exec} DIRECTORY)
 
 		    #if($ENV{VERBOSE})
 			#    MESSAGE(STATUS "Benchmark Demo -- Add ${execname}")

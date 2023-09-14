@@ -41,7 +41,7 @@ foreach (myfile ${WFOPenMP_SRC})
     message("${myname}.cpp | ${dir_src}")
     add_executable(${myname} "${myname}.cpp")
     #if(OpenMP_CXX_FOUND)
-        target_link_libraries(${myname} PUBLIC OpenMP::OpenMP_CXX ${OpenCV_LIBS})
+        target_link_libraries(${myname} PUBLIC OpenMP::OpenMP_CXX)
     #endif()
 endforeach (file ${WFOPenMP_SRC})
 

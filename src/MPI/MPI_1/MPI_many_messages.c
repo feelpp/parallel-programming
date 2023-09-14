@@ -26,7 +26,7 @@ int main (int argc, char** argv)
       char msg_to_send[100];
       for(i = 0; i < NUM_MESSAGES; i++)
       {
-        sprintf(msg_to_send, "Hi from server, this is msg %d\n\0", i);
+        sprintf(msg_to_send, "Hi from server, this is msg %d\n", i);
         mpi_error_code = MPI_Isend(msg_to_send, strlen(msg_to_send)+1, 
           MPI_CHAR, 1, i, MPI_COMM_WORLD, &req[i]);
       }

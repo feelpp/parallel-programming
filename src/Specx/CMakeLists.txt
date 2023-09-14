@@ -90,12 +90,13 @@ LINK_DIRECTORIES(
 )
 
 
-MESSAGE("LINK SOURCE_DIR ======******=>" ${specx_SOURCE_DIR})
-MESSAGE("LINK BINARY_DIR ======******=>" ${specx_BINARY_DIR})
+MESSAGE("LINK SOURCE_DIR 1======******=>" ${specx_SOURCE_DIR})
+MESSAGE("LINK BINARY_DIR 2 ======******=>" ${specx_BINARY_DIR})
 MESSAGE("LINK SPECX LIBRARIES ======******=>" ${SPECX_LIBRARIES})
 
 MESSAGE("LINK BINARY_DIR 2 ======******=>" ${SPECX_BINARY_DIR})
 MESSAGE("LINK SOURCE_DIR 2 ======******=>" ${SPECX_SOURCE_DIR})
+
 
 
 
@@ -122,8 +123,9 @@ foreach(exec ${MyFiles})
 
 		    target_link_libraries(
 			    ${execname}
-			    specx
-			    ${SPECX_LIBRARIES}
+				Feelpp::feelpp_specx
+			    #specx
+			    #${SPECX_LIBRARIES}
 			    #${BLAS_LIBRARIES}
 			    #${LAPACK_LIBRARIES}
 				#Feelpp::feelpp

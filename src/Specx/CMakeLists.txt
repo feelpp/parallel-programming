@@ -12,15 +12,18 @@
 
   if(TRUE)
 	set(FETCHCONTENT_SOURCE_DIR_SPECX ${CMAKE_CURRENT_SOURCE_DIR}/SPECX)
-	# patch includes fix for 18.04 compilation
+
+	MESSAGE(${CMAKE_CURRENT_SOURCE_DIR}/SPECX)
+
+
 	set(SPECX_JUST_LIB ON)
 	set(SPECX_DO_INSTALL ON)
 	set(SPECX_COMPILE_WITH_MPI OFF)
 	set(FETCHCONTENT_SOURCE_DIR_SPECX ${CMAKE_CURRENT_SOURCE_DIR}/specx)
 	#FetchContent_Declare(SPECX GIT_REPOSITORY https://github.com/feelpp/specx.git GIT_TAG e092e061ec17afd42374041cccfa6f44b939b19c)
 
-	set(SPECX_INSTALL_CMAKE_DIR  "${CMAKE_INSTALL_DATADIR}/feel/cmake/modules")
-	message(STATUS "[feelpp-specx] cmake dir: ${CMAKE_INSTALL_DATADIR}/feel/cmake/modules")
+	#set(SPECX_INSTALL_CMAKE_DIR  "${CMAKE_INSTALL_DATADIR}/feel/cmake/modules")
+	#message(STATUS "[feelpp-specx] cmake dir: ${CMAKE_INSTALL_DATADIR}/feel/cmake/modules")
 	#FetchContent_MakeAvailable(specx)
 	#add_library(feelpp_specx INTERFACE)
 
@@ -41,7 +44,7 @@
 	#	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 	#	INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 	#	)
-	#target_link_libraries( feelpp_contrib INTERFACE feelpp_specx )
+	target_link_libraries( feelpp_contrib INTERFACE feelpp_specx )
 	set(FEELPP_ENABLED_OPTIONS_CONTRIB "${FEELPP_ENABLED_OPTIONS_CONTRIB} specx")
   endif()
 
@@ -90,7 +93,7 @@ include_directories(SYSTEM ${MPI_INCLUDES_PATH})
 
 		    add_executable(${execname} ${exec})
 
-        	#set_target_properties(${execname} PROPERTIES COMPILE_FLAGS "-llapack -lblas")
+        	set_target_properties(${execname} PROPERTIES COMPILE_FLAGS "-llapack -lblas")
 
 		    target_link_libraries(
 			    ${execname}

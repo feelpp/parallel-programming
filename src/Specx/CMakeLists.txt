@@ -60,12 +60,12 @@ include_directories(SYSTEM ${MPI_INCLUDES_PATH})
 
 
 	# Adding the project sources dir as an include dir
-	INCLUDE_DIRECTORIES(
-	     ${SPECX_BINARY_DIR}/Src    
-	     ${SPECX_SOURCE_DIR}/Src   
-         ${MPI_CXX_INCLUDE_DIRS} 
-		 #${OpenMP_CXX_INCLUDE_DIRS} 
-	)
+	#INCLUDE_DIRECTORIES(
+	#     ${SPECX_BINARY_DIR}/Src    
+	#     ${SPECX_SOURCE_DIR}/Src   
+    #     ${MPI_CXX_INCLUDE_DIRS} 
+#		 #${OpenMP_CXX_INCLUDE_DIRS} 
+#	)
 
 	# Add execs - 1 cpp = 1 exec
 	foreach(exec ${source_tests_files}) 
@@ -97,7 +97,7 @@ include_directories(SYSTEM ${MPI_INCLUDES_PATH})
 			    ${SPECX_LIBRARIES}
 			    #${BLAS_LIBRARIES}
 			    #${LAPACK_LIBRARIES}
-				Feelpp::feelpp
+				#Feelpp::feelpp
                 ${MPI_CXX_LIBRARIES}
                 #${OpenMP_CXX_LIBRARIES}
 				#OpenMP::OpenMP_CXX

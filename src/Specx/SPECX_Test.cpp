@@ -7,7 +7,10 @@
 
 
 
-#include "Data/SpDataAccessMode.hpp"
+
+
+
+#include "../Data/SpDataAccessMode.hpp"
 #include "Utils/SpUtils.hpp"
 #include "Random/SpPhiloxGenerator.hpp"
 

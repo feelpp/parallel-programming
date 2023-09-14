@@ -4,6 +4,9 @@
 
   #message("FEELPP DIR" ${FEELPP_DIR})
 
+
+  include(FetchContent)
+
   option( FEELPP_ENABLE_SPECX "Enable specx" ON )
 
 #  if ( FEELPP_ENABLE_SPECX )

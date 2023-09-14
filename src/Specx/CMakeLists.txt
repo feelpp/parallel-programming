@@ -96,15 +96,15 @@
 
 		    add_executable(${execname} ${exec})
 
-        	#set_target_properties(${execname} PROPERTIES COMPILE_FLAGS "-llapack -lblas")
+        	set_target_properties(${execname} PROPERTIES COMPILE_FLAGS "-llapack -lblas")
 
 		    target_link_libraries(
 			    ${execname}
 				feelpp_specx
 			    #specx
-			    #${SPECX_LIBRARIES}
-			    #${BLAS_LIBRARIES}
-			    #${LAPACK_LIBRARIES}
+			    ${SPECX_LIBRARIES}
+			    ${BLAS_LIBRARIES}
+			    ${LAPACK_LIBRARIES}
 				#Feelpp::feelpp
                 #${MPI_CXX_LIBRARIES}
                 #${OpenMP_CXX_LIBRARIES}

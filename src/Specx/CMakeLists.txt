@@ -64,7 +64,7 @@
 
 
   
-  if(FALSE)
+  if(TRUE)
 
 	include_directories(SYSTEM ${MPI_INCLUDES_PATH})
 

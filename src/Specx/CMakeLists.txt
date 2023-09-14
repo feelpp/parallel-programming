@@ -22,12 +22,12 @@
 	set(SPECX_INSTALL_CMAKE_DIR  "${CMAKE_INSTALL_DATADIR}/feel/cmake/modules")
 	message(STATUS "[feelpp-specx] cmake dir: ${CMAKE_INSTALL_DATADIR}/feel/cmake/modules")
 	#FetchContent_MakeAvailable(specx)
-	add_library(feelpp_specx INTERFACE)
+	#add_library(feelpp_specx INTERFACE)
 
 	# set_target_properties(specx PROPERTIES OUTPUT_NAME "feelpp_specx")
 	#target_compile_definitions(feelpp_contrib INTERFACE FEELPP_HAS_SPECX)
 	#target_link_libraries(feelpp_specx INTERFACE specx )
-	add_library(Feelpp::feelpp_specx ALIAS feelpp_specx)
+	#add_library(Feelpp::feelpp_specx ALIAS feelpp_specx)
 	#target_include_directories(feelpp_specx INTERFACE
 	#	$<BUILD_INTERFACE:${specx_BINARY_DIR}/>
 	#	$<BUILD_INTERFACE:${specx_BINARY_DIR}/Src>
@@ -76,14 +76,14 @@ include_directories(SYSTEM ${MPI_INCLUDES_PATH})
 			    NAME_WE
 		    )
 
-		    if($ENV{VERBOSE})
-			    MESSAGE(STATUS "Benchmark Demo -- Add ${execname}")
-		    endif()
+		    #if($ENV{VERBOSE})
+			#    MESSAGE(STATUS "Benchmark Demo -- Add ${execname}")
+		    #endif()
 
-		    if(SPECX_COMPILE_WITH_CUDA)
-			    set_source_files_properties(${exec} PROPERTIES LANGUAGE CUDA)
-			    set(SPECX_LIBRARIES "${SPECX_LIBRARIES};cublas;cusolver")
-		    endif()
+		    #if(SPECX_COMPILE_WITH_CUDA)
+			#    set_source_files_properties(${exec} PROPERTIES LANGUAGE CUDA)
+			#    set(SPECX_LIBRARIES "${SPECX_LIBRARIES};cublas;cusolver")
+		    #endif()
 		    
 
         
@@ -94,15 +94,17 @@ include_directories(SYSTEM ${MPI_INCLUDES_PATH})
 
 		    target_link_libraries(
 			    ${execname}
-			    specx
-			    ${SPECX_LIBRARIES}
+				Feelpp::feelpp_specx
+			    #specx
+			    #${SPECX_LIBRARIES}
 			    #${BLAS_LIBRARIES}
 			    #${LAPACK_LIBRARIES}
 				#Feelpp::feelpp
-                ${MPI_CXX_LIBRARIES}
+                #${MPI_CXX_LIBRARIES}
                 #${OpenMP_CXX_LIBRARIES}
 				#OpenMP::OpenMP_CXX
 			)
 		#endif()
 	endforeach(exec)
+	
 	

@@ -103,7 +103,7 @@ message("LINK SOURCE_DIR 3 ======******=>" ${CMAKE_INSTALL_DATADIR}"/feel/cmake/
 foreach(exec ${MyFiles}) 
     		#if(${SPECX_COMPILE_WITH_MPI} OR NOT ${exec} MATCHES "-mpi\.")
 		#get_filename_component( execname ${exec} NAME_WE)
-		get_filename_component( execname ${exec} NAME_WLE)
+		get_filename_component(execname ${exec} NAME_WLE)
 		get_filename_component(dirname ${exec} DIRECTORY)
 
 		    #if($ENV{VERBOSE})
@@ -135,10 +135,15 @@ foreach(exec ${MyFiles})
 				#feelpp_specx
 			)
 
-			target_include_directories(
-				${execname}  
-				feelpp_specx
-			)
+
+
+			target_include_directories(${execname} 
+				$<BUILD_INTERFACE:${specx_BINARY_DIR}/>
+				$<BUILD_INTERFACE:${specx_BINARY_DIR}/Src>
+				$<BUILD_INTERFACE:${specx_SOURCE_DIR}/>
+				$<BUILD_INTERFACE:${specx_SOURCE_DIR}/Src>
+				$<INSTALL_INTERFACE:include/feelpp>
+				$<INSTALL_INTERFACE:include/feelpp/specx>)
 			
 
 

@@ -142,9 +142,8 @@ foreach(exec ${MyFiles})
 			#	"../include/feelpp/specx"
 			#)
 			
-			#feelpp_add_application( specx SRCS ${execname} LINK_LIBRARIES Feelpp::feelpp_specx )
 
-			feelpp_add_application( specx SRCS ${execname} LINK_LIBRARIES Feelpp::feelpp_specx )
+			feelpp_add_application(${exec} SRCS ${execname} LINK_LIBRARIES Feelpp::feelpp_specx )
 
 		#endif()
 	endforeach(exec)

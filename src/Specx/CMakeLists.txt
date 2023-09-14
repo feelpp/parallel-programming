@@ -20,7 +20,7 @@
 
 option( FEELPP_ENABLE_SPECX "Enable specx" ON )
 
-  if(FALSE)
+  if(TRUE)
 	message(STATUS "------------------------------------------------------------")
 	message(STATUS "Configuring specx")
   
@@ -58,8 +58,8 @@ option( FEELPP_ENABLE_SPECX "Enable specx" ON )
 		RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 		INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 		)
-	target_link_libraries( feelpp_contrib INTERFACE feelpp_specx )
-	set(FEELPP_ENABLED_OPTIONS_CONTRIB "${FEELPP_ENABLED_OPTIONS_CONTRIB} specx")
+	#target_link_libraries( feelpp_contrib INTERFACE feelpp_specx )
+	#set(FEELPP_ENABLED_OPTIONS_CONTRIB "${FEELPP_ENABLED_OPTIONS_CONTRIB} specx")
 	
   endif()
 
@@ -136,7 +136,8 @@ option( FEELPP_ENABLE_SPECX "Enable specx" ON )
 
 				target_link_libraries(
 					${execname}
-					Feelpp::feelpp_specx 
+					#Feelpp::feelpp_specx 
+					feelpp_specx
 					#feelpp_specx
 					#specx
 					#${SPECX_LIBRARIES}

@@ -94,7 +94,7 @@ include_directories(SYSTEM ${MPI_INCLUDES_PATH})
 
 		    target_link_libraries(
 			    ${execname}
-				Feelpp::feelpp_specx
+				feelpp_specx
 			    #specx
 			    #${SPECX_LIBRARIES}
 			    #${BLAS_LIBRARIES}

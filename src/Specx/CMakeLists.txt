@@ -63,7 +63,7 @@
 #)
 
 file(GLOB MyFiles
-	"*.hpp"
+	
 	"*.cpp"
 )
 

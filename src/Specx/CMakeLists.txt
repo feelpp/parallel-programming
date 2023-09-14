@@ -21,7 +21,7 @@
 	set(SPECX_DO_INSTALL ON)
 	set(SPECX_COMPILE_WITH_MPI OFF)
 	set(FETCHCONTENT_SOURCE_DIR_SPECX ${CMAKE_CURRENT_SOURCE_DIR}/specx)
-	#FetchContent_Declare(SPECX GIT_REPOSITORY https://github.com/feelpp/specx.git GIT_TAG e092e061ec17afd42374041cccfa6f44b939b19c)
+	FetchContent_Declare(SPECX GIT_REPOSITORY https://github.com/feelpp/specx.git GIT_TAG e092e061ec17afd42374041cccfa6f44b939b19c)
 
 	#set(SPECX_INSTALL_CMAKE_DIR  "${CMAKE_INSTALL_DATADIR}/feel/cmake/modules")
 	#message(STATUS "[feelpp-specx] cmake dir: ${CMAKE_INSTALL_DATADIR}/feel/cmake/modules")
@@ -75,11 +75,9 @@ file(GLOB MyFiles
 INCLUDE_DIRECTORIES(
 	     ${SPECX_BINARY_DIR}/Src    
 	     ${SPECX_SOURCE_DIR}/Src   
-		 ${SPECX_SOURCE_DIR}/Src/Data   
          ${MPI_CXX_INCLUDE_DIRS} 
 		 #${OpenMP_CXX_INCLUDE_DIRS} 
-
-		 #${CMAKE_CURRENT_SOURCE_DIR}/specx/Src
+         #${CMAKE_CURRENT_SOURCE_DIR}/specx/Src
 		 #${CMAKE_CURRENT_SOURCE_DIR}/specx/Src/Data
 )
 
@@ -121,9 +119,9 @@ foreach(exec ${MyFiles})
 			
 			#set_target_properties(${execname} PROPERTIES COMPILE_FLAGS "-llapack -lblas")
 
-		    #target_link_libraries(
-			#    ${execname}
-			#	Feelpp::feelpp_specx 
+		    target_link_libraries(
+			    ${execname}
+				Feelpp::feelpp_specx 
 				#feelpp_specx
 			    #specx
 			    #${SPECX_LIBRARIES}
@@ -134,7 +132,7 @@ foreach(exec ${MyFiles})
                 #${OpenMP_CXX_LIBRARIES}
 				#OpenMP::OpenMP_CXX
 				#feelpp_specx
-			#)
+			)
 
 
 
@@ -143,7 +141,7 @@ foreach(exec ${MyFiles})
 			#)
 			
 
-			feelpp_add_application(${exec} SRCS ${execname} LINK_LIBRARIES Feelpp::feelpp_specx )
+			#feelpp_add_application(${exec} SRCS ${execname} LINK_LIBRARIES Feelpp::feelpp_specx )
 
 		#endif()
 	endforeach(exec)

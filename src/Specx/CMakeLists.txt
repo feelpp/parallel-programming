@@ -109,12 +109,12 @@ foreach(exec ${MyFiles})
 		    
 
 			message("${exec}.cpp")
-			add_executable(${exec} "${exec}.cpp")
+			add_executable(${execname} ${exec})
 			
 			#set_target_properties(${execname} PROPERTIES COMPILE_FLAGS "-llapack -lblas")
 
 		    target_link_libraries(
-			    ${exec}
+			    ${execname}
 			    specx
 			    ${SPECX_LIBRARIES}
 			    #${BLAS_LIBRARIES}

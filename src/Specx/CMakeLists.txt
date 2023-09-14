@@ -97,7 +97,7 @@ MESSAGE("LINK SPECX LIBRARIES ======******=>" ${SPECX_LIBRARIES})
 MESSAGE("LINK BINARY_DIR 2 ======******=>" ${SPECX_BINARY_DIR})
 MESSAGE("LINK SOURCE_DIR 2 ======******=>" ${SPECX_SOURCE_DIR})
 
-
+message("LINK SOURCE_DIR 3 ======******=>" ${CMAKE_INSTALL_DATADIR}"/feel/cmake/modules")
 
 
 foreach(exec ${MyFiles}) 

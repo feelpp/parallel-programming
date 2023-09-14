@@ -123,7 +123,8 @@ foreach(exec ${MyFiles})
 
 		    target_link_libraries(
 			    ${execname}
-				feelpp_specx
+				Feelpp::feelpp_specx 
+				#feelpp_specx
 			    #specx
 			    #${SPECX_LIBRARIES}
 			    #${BLAS_LIBRARIES}
@@ -137,15 +138,11 @@ foreach(exec ${MyFiles})
 
 
 
-			target_include_directories(${execname} 
-				$<BUILD_INTERFACE:${specx_BINARY_DIR}/>
-				$<BUILD_INTERFACE:${specx_BINARY_DIR}/Src>
-				$<BUILD_INTERFACE:${specx_SOURCE_DIR}/>
-				$<BUILD_INTERFACE:${specx_SOURCE_DIR}/Src>
-				$<INSTALL_INTERFACE:include/feelpp>
-				$<INSTALL_INTERFACE:include/feelpp/specx>)
+			#target_include_directories(${execname} 
+			#	"../include/feelpp/specx"
+			#)
 			
-
+			#feelpp_add_application( specx SRCS ${execname} LINK_LIBRARIES Feelpp::feelpp_specx )
 
 		#endif()
 	endforeach(exec)

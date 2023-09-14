@@ -7,25 +7,28 @@
 
 
 
-#include "Data/SpDataAccessMode.hpp"
-#include "Utils/SpUtils.hpp"
-#include "Random/SpPhiloxGenerator.hpp"
 
 
-#include "mcglobal.hpp"
+#include <specx/Data/SpDataAccessMode.hpp>
+#include <specx/Utils/SpUtils.hpp>
+#include <specx/Random/SpPhiloxGenerator.hpp>
+
+
+#include "mcglobal.hpp>
 
 
 
-#include "Data/SpDataAccessMode.hpp"
-#include "Utils/SpUtils.hpp"
+#include <specx/Data/SpDataAccessMode.hpp>
+#include <specx/Utils/SpUtils.hpp>
 
-#include "Task/SpTask.hpp"
-#include "Legacy/SpRuntime.hpp"
-#include "Utils/SpTimer.hpp"
-#include "Utils/small_vector.hpp"
-#include "Utils/SpBufferDataView.hpp"
-#include "Utils/SpArrayView.hpp"
-#include "Utils/SpHeapBuffer.hpp"
+#include <specx/Task/SpTask.hpp>
+#include <specx/Legacy/SpRuntime.hpp>
+#include <specx/Utils/SpTimer.hpp>
+#include <specx/Utils/small_vector.hpp>
+#include <specx/Utils/SpBufferDataView.hpp>
+#include <specx/Utils/SpArrayView.hpp>
+#include <specx/Utils/SpHeapBuffer.hpp>
+
 
 
 #include "UTester.hpp"
@@ -41,61 +44,6 @@
 
 
 using namespace std;
-
-template <typename C> void print(const string& s, const C& c) {
-    cout << s;
-    for (const auto& e : c) { cout << e << " "; }
-    cout << endl;
-}
-
-void fillVector(vector<int>& v)
-{
-    // A local static variable.
-    static int nextValue = 1;
-
-    // The lambda expression that appears in the following call to
-    // the generate function modifies and uses the local static
-    // variable nextValue.
-    generate(v.begin(), v.end(), [] { return nextValue++; });
-    //WARNING: this isn't thread-safe and is shown for illustration only
-}
-
-
-int gen()
-{
-    static int i = 0;
-    return ++i;
-}
-
-class MyFunction001
-{
-public:
-    // The required constructor for this example.
-    explicit MyFunction001(int& evenCount)
-        : m_evenCount(evenCount) { }
-
-    // The function-call operator prints whether the number is
-    // even or odd. If the number is even, this method updates
-    // the counter.
-    void operator()(int n) const {
-        cout << n;
-
-        if (n % 2 == 0) {
-            cout << " is even " << endl;
-            ++m_evenCount;
-        } else {
-            cout << " is odd " << endl;
-        }
-    }
-
-private:
-    // Default assignment operator to silence warning C4512.
-    MyFunction001& operator=(const MyFunction001&);
-
-    int& m_evenCount; // the number of even variables in the vector.
-};
-
-
 
 
 int main(int argc, char **argv)

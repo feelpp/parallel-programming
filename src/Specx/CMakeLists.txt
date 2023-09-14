@@ -58,10 +58,7 @@
   set(SPECX_SOURCE_DIR ${specx_SOURCE_DIR} )
   set(SPECX_BINARY_DIR ${specx_BINARY_DIR} )
 
-  MESSAGE("LINK SOURCE_DIR ======******=>" ${specx_SOURCE_DIR})
-  MESSAGE("LINK BINARY_DIR ======******=>" ${specx_BINARY_DIR})
-  MESSAGE("LINK SPECX LIBRARIES ======******=>" ${SPECX_LIBRARIES})
-
+ 
 
 #file(GLOB_RECURSE MyFiles
 #	./*.cpp
@@ -91,6 +88,16 @@ LINK_DIRECTORIES(
 	${SPECX_SOURCE_DIR}/Src/Data 
 	${MPI_CXX_INCLUDE_DIRS} 
 )
+
+
+MESSAGE("LINK SOURCE_DIR ======******=>" ${specx_SOURCE_DIR})
+MESSAGE("LINK BINARY_DIR ======******=>" ${specx_BINARY_DIR})
+MESSAGE("LINK SPECX LIBRARIES ======******=>" ${SPECX_LIBRARIES})
+
+MESSAGE("LINK BINARY_DIR 2 ======******=>" ${SPECX_BINARY_DIR})
+MESSAGE("LINK SOURCE_DIR 2 ======******=>" ${SPECX_SOURCE_DIR})
+
+
 
 foreach(exec ${MyFiles}) 
     		#if(${SPECX_COMPILE_WITH_MPI} OR NOT ${exec} MATCHES "-mpi\.")

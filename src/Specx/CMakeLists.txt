@@ -20,7 +20,7 @@
 
 option( FEELPP_ENABLE_SPECX "Enable specx" ON )
 
-  if(TRUE)
+  if(FALSE)
 	message(STATUS "------------------------------------------------------------")
 	message(STATUS "Configuring specx")
   
@@ -151,9 +151,10 @@ option( FEELPP_ENABLE_SPECX "Enable specx" ON )
 
 
 
-				#target_include_directories(${execname} 
-				#	"../include/feelpp/specx"
-				#)
+				target_include_directories(${execname} 
+					${execname}
+					Feelpp::feelpp-contrib-export-targets
+				)
 				
 
 				#feelpp_add_application(${exec} SRCS ${execname} LINK_LIBRARIES Feelpp::feelpp_specx )

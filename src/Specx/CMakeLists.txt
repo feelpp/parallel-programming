@@ -60,12 +60,13 @@ include_directories(SYSTEM ${MPI_INCLUDES_PATH})
 
 
 	# Adding the project sources dir as an include dir
-	#INCLUDE_DIRECTORIES(
-	#     ${SPECX_BINARY_DIR}/Src    
-	#     ${SPECX_SOURCE_DIR}/Src   
-    #     ${MPI_CXX_INCLUDE_DIRS} 
-#		 #${OpenMP_CXX_INCLUDE_DIRS} 
-#	)
+	INCLUDE_DIRECTORIES(
+	     ${SPECX_BINARY_DIR}/Src    
+	     ${SPECX_SOURCE_DIR}/Src   
+		 ${SPECX_SOURCE_DIR}/Src/Data   
+         ${MPI_CXX_INCLUDE_DIRS} 
+		 #${OpenMP_CXX_INCLUDE_DIRS} 
+	)
 
 	# Add execs - 1 cpp = 1 exec
 	foreach(exec ${source_tests_files}) 

@@ -116,14 +116,14 @@ foreach(exec ${MyFiles})
 		    #endif()
 		    
 
-			message("${exec}.cpp")
-			add_executable(${execname} ${exec})
+			#message("${exec}.cpp")
+			#add_executable(${execname} ${exec})
 			
 			#set_target_properties(${execname} PROPERTIES COMPILE_FLAGS "-llapack -lblas")
 
-		    target_link_libraries(
-			    ${execname}
-				Feelpp::feelpp_specx 
+		    #target_link_libraries(
+			#    ${execname}
+			#	Feelpp::feelpp_specx 
 				#feelpp_specx
 			    #specx
 			    #${SPECX_LIBRARIES}
@@ -134,7 +134,7 @@ foreach(exec ${MyFiles})
                 #${OpenMP_CXX_LIBRARIES}
 				#OpenMP::OpenMP_CXX
 				#feelpp_specx
-			)
+			#)
 
 
 
@@ -143,6 +143,8 @@ foreach(exec ${MyFiles})
 			#)
 			
 			#feelpp_add_application( specx SRCS ${execname} LINK_LIBRARIES Feelpp::feelpp_specx )
+
+			feelpp_add_application( specx SRCS ${execname} LINK_LIBRARIES Feelpp::feelpp_specx )
 
 		#endif()
 	endforeach(exec)

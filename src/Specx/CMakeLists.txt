@@ -2,6 +2,7 @@
   #project(SPECX CXX)
 
 
+  #message("FEELPP DIR" ${FEELPP_DIR})
 
   option( FEELPP_ENABLE_SPECX "Enable specx" ON )
 
@@ -50,37 +51,52 @@
 
 
 
+  include_directories(SYSTEM ${MPI_INCLUDES_PATH})
 
-#include_directories(SYSTEM ${MPI_INCLUDES_PATH})
+  set(SPECX_SOURCE_DIR ${specx_SOURCE_DIR} )
+  set(SPECX_BINARY_DIR ${specx_BINARY_DIR} )
+  
 
 
-	# Find all code files
-	file(	
-	    GLOB_RECURSE
-	    source_tests_files
-	    ./*.cpp
-	)
+#file(GLOB_RECURSE MyFiles
+#	./*.cpp
+#)
+
+file(GLOB MyFiles
+	"*.hpp"
+	"*.cpp"
+)
+
+
 
 
 	# Adding the project sources dir as an include dir
-	INCLUDE_DIRECTORIES(
+INCLUDE_DIRECTORIES(
 	     ${SPECX_BINARY_DIR}/Src    
 	     ${SPECX_SOURCE_DIR}/Src   
 		 ${SPECX_SOURCE_DIR}/Src/Data   
          ${MPI_CXX_INCLUDE_DIRS} 
 		 #${OpenMP_CXX_INCLUDE_DIRS} 
 
-		 ${CMAKE_CURRENT_SOURCE_DIR}/specx/Src
-		 ${CMAKE_CURRENT_SOURCE_DIR}/specx/Src/Data
-	)
+		 #${CMAKE_CURRENT_SOURCE_DIR}/specx/Src
+		 #${CMAKE_CURRENT_SOURCE_DIR}/specx/Src/Data
+)
 
-	# Add execs - 1 cpp = 1 exec
-	foreach(exec ${source_tests_files}) 
+LINK_DIRECTORIES(
+	${SPECX_SOURCE_DIR}/Src   
+	${SPECX_SOURCE_DIR}/Src/Data 
+	${MPI_CXX_INCLUDE_DIRS} 
+)
+
+
+
+
+foreach(exec ${MyFiles}) 
     		#if(${SPECX_COMPILE_WITH_MPI} OR NOT ${exec} MATCHES "-mpi\.")
-		    get_filename_component(
+		get_filename_component(
 			    execname ${exec}
 			    NAME_WE
-		    )
+		)
 
 		    #if($ENV{VERBOSE})
 			#    MESSAGE(STATUS "Benchmark Demo -- Add ${execname}")
@@ -92,19 +108,18 @@
 		    #endif()
 		    
 
-        
-
-		    add_executable(${execname} ${exec})
-
-        	set_target_properties(${execname} PROPERTIES COMPILE_FLAGS "-llapack -lblas")
+			message("${exec}.cpp")
+			add_executable(${exec} "${exec}.cpp")
+			
+			#set_target_properties(${execname} PROPERTIES COMPILE_FLAGS "-llapack -lblas")
 
 		    target_link_libraries(
-			    ${execname}
+			    ${exec}
 				feelpp_specx
 			    #specx
 			    ${SPECX_LIBRARIES}
-			    ${BLAS_LIBRARIES}
-			    ${LAPACK_LIBRARIES}
+			    #${BLAS_LIBRARIES}
+			    #${LAPACK_LIBRARIES}
 				#Feelpp::feelpp
                 #${MPI_CXX_LIBRARIES}
                 #${OpenMP_CXX_LIBRARIES}

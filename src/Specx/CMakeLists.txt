@@ -5,9 +5,9 @@
 
   option( FEELPP_ENABLE_SPECX "Enable specx" ON )
 
-  if ( FEELPP_ENABLE_SPECX )
-	message(STATUS "Configuring specx")
-  endif()
+#  if ( FEELPP_ENABLE_SPECX )
+#	message(STATUS "Configuring specx")
+#  endif()
 
 
   if(TRUE)
@@ -51,7 +51,7 @@
 
 
 
-include_directories(SYSTEM ${MPI_INCLUDES_PATH})
+#include_directories(SYSTEM ${MPI_INCLUDES_PATH})
 
 
 	# Find all code files
@@ -69,6 +69,9 @@ include_directories(SYSTEM ${MPI_INCLUDES_PATH})
 		 ${SPECX_SOURCE_DIR}/Src/Data   
          ${MPI_CXX_INCLUDE_DIRS} 
 		 #${OpenMP_CXX_INCLUDE_DIRS} 
+
+		 ${CMAKE_CURRENT_SOURCE_DIR}/specx/Src
+		 ${CMAKE_CURRENT_SOURCE_DIR}/specx/Src/Data
 	)
 
 	# Add execs - 1 cpp = 1 exec
@@ -93,7 +96,7 @@ include_directories(SYSTEM ${MPI_INCLUDES_PATH})
 
 		    add_executable(${execname} ${exec})
 
-        	set_target_properties(${execname} PROPERTIES COMPILE_FLAGS "-llapack -lblas")
+        	#set_target_properties(${execname} PROPERTIES COMPILE_FLAGS "-llapack -lblas")
 
 		    target_link_libraries(
 			    ${execname}

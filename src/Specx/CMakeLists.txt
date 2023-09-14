@@ -151,11 +151,11 @@ option( FEELPP_ENABLE_SPECX "Enable specx" ON )
 
 
 
-				target_include_directories(
-					${execname}
+				#target_include_directories(
+				#	${execname}
 					#PUBLIC Feelpp::feelpp-contrib-export-targets
-					PUBLIC Feelpp::feelpp_specx 
-				)
+				#	PUBLIC Feelpp::feelpp_specx 
+				#)
 				
 
 				#feelpp_add_application(${exec} SRCS ${execname} LINK_LIBRARIES Feelpp::feelpp_specx )

@@ -8,20 +8,12 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui.hpp>
 
-
-
-
-
-
 using namespace cv;
-
-
-
 
 int main(int argc, char** argv) 
 {
   // the input image
-  cv::Mat image;
+  Mat image;
 
   // the total size of the image matrix (rows * columns * channels):
   size_t imageTotalSize;
@@ -55,9 +47,6 @@ int main(int argc, char** argv)
   // read the image and its properties in the ROOT process:
   if ( rank == 0 ) 
   { 
-
-
- 
 
   start_time=time(NULL);
 
@@ -97,14 +86,8 @@ int main(int argc, char** argv)
   // send the number of channels in the image from #0 to other processes:
   MPI_Bcast( &channels, 1, MPI_INT, 0, MPI_COMM_WORLD );
 
-
-
-
   // synchronize the processes here, to make sure that the sizes are initialized:
   MPI_Barrier( MPI_COMM_WORLD );
-
-
-
 
   // allocate the partial buffer:
   partialBuffer = new uchar[imagePartialSize];
@@ -117,7 +100,6 @@ int main(int argc, char** argv)
 
   // synchronize the image processing:
   MPI_Barrier( MPI_COMM_WORLD );
-
 
 
   // -----------------------------------------------------------------------------------------------------------------------------------------------
@@ -156,8 +138,6 @@ int main(int argc, char** argv)
   MPI_Barrier( MPI_COMM_WORLD );
 
 
-
-
   // initialize the output image (only need to do it in the ROOT process)
   if ( rank == 0 ) 
   { 
@@ -178,17 +158,17 @@ int main(int argc, char** argv)
   if ( rank == 0 ) 
   {
     // save the image:
-    cv::imwrite( "Res.jpg", outImage );
+    imwrite( "Res.jpg", outImage );
 
     // or show it on screen:
     while ( true ) 
     {
-      cv::imshow( "image", outImage );
+      imshow( "image", outImage );
 
-      if ( cv::waitKey( 1 ) == 27 )
+      if ( waitKey( 1 ) == 27 )
         break;
     }
-    cv::destroyAllWindows();
+    destroyAllWindows();
   }
   
   delete[]partialBuffer;

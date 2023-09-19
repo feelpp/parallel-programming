@@ -34,9 +34,7 @@
 
 #BEGIN:MPI
 if(TRUE)
-    add_subdirectory(MPI/MPI_1)
-    add_subdirectory(MPI/MPI_2)
-    add_subdirectory(MPI/MPI_3)
+    add_subdirectory(MPI)
 endif()
 #END:MPI/+++>OK
 
@@ -89,7 +87,7 @@ endif()
 #END:Quicksort//+++>OK
 
 #BEGIN:Specx
-if(TRUE)
+if(FALSE)
     add_subdirectory(Specx)
 endif()
 #END:Specx

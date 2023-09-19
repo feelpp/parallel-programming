@@ -21,10 +21,6 @@
 #define ARRAY_LEN 10000
 
 
-
-
-
-
 int main(int argc, char** argv) {
 
     //arguments NumOption QSee NbPingPong NameFile

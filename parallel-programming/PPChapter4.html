@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Untitled :: Parallel Programming</title>
+    <link rel="canonical" href="https://feelpp.github.io/parallel-programming/parallel-programming/PPChapter4.html">
+    <meta name="generator" content="Antora 3.1.3">
+    <link rel="stylesheet" href="../_/css/site.css">
+<link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+<script>!function(l,p){if(l.protocol!==p&&l.host=="docs.antora.org"){l.protocol=p}else if(/\.gitlab\.io$/.test(l.host)){l.replace(p+"//docs.antora.org"+l.pathname.substr(l.pathname.indexOf("/",1))+l.search+l.hash)}}(location,"https:")</script>
+
+<script src="../_/js/vendor/tabs-block-extension.js"></script>
+<script src="../_/js/vendor/tabs-block-behavior.js"></script>
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\\[','\\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+
+  TeX: {
+      Macros: {
+      bold: ["{\\bf #1}",1],
+      calTh: "{\\mathcal{T}_h}",
+      card: ["{\\operatorname{card}(#1)}",1],
+      card: ["{\\operatorname{card}(#1)}",1],
+      Ck: ["{\\mathcal{C}^{#1}}",1],
+      deformt: ["{\\mathbf{\\varepsilon(#1)}}",1],
+      diam: "{\\operatorname{diam}}",
+      dim: ["{\\operatorname{dim}(#1)}",1],
+      disp: ["{\\mathbf{#1}}",1],
+      domain: "{\\Omega}",
+      ds: "",
+      essinf: "{\\operatorname{ess}\\, \\operatorname{inf}}",
+      F:"{\\mathcal{F}}",
+      geo: "{\\mathrm{geo}}",
+      Ich: ["{\\mathcal{I}^{#1}_{c,h}#2}",2],
+      Id: "{\\mathcal{I}}",
+      Ilag: ["{\\mathcal{I}^{\\mathrm{lag}}_{#1}}",1],
+      jump: ["{[\\![ #1 ]\\!]}",1],
+      n:"{\\mathbf{n}}",
+      Ne: "{N_{\\mathrm{e}}}",
+      Next: "{\\mathrm{n}}",
+      nf: "{n_f}",
+      ngeo: "{n_{\\mathrm{geo}}}",
+      Nma: "{N_{\\mathrm{ma}}}",
+      NN: "{\\mathbb N}",
+      Nno: "{N_{\\mathrm{no}}}",
+      Nso: "{N_{\\mathrm{so}}}",
+      opdim: "{\\operatorname{dim}}",
+      p: "{\\mathrm{p}}",
+      P:"{\\mathcal{P}}",
+      Pch: ["{P^{#1}_{c,h}}",1],
+      Pcho: ["{P^{#1}_{c,h,0}}",1],
+      Pk: ["{\\mathcal{P}^{#1}}",1],
+      poly: ["{\\mathbb{#1}",1],
+      poly: ["{\\mathbb{#1}}",1],
+      prect: ["{\\left\\(#1\\right\\)}",1],
+      q:"{\\mathbf{q}}",
+      Qch: ["{Q^{#1}_{c,h}}",1],
+      Qk: ["{\\mathcal{Q}^{#1}}",1],
+      R: ["{\\mathbb{R}^{#1}}",1],
+      RR: "{\\mathbb R}",
+      set: ["{\\left\\{#1\\right\\}}",1],
+      stresst: ["{\\mathbf{\\sigma(#1)}}",1],
+      T:"{\\mathcal{T}}",
+      tr: "{\\operatorname{tr}}",
+      v:"{\\mathbf{v}}",
+      vertiii: ["\\left\\vert\\kern-0.25ex\\left\\vert\\kern-0.25ex\\left\\vert #1 \\right\\vert\\kern-0.25ex\\right\\vert\\kern-0.25ex\\right\\vert",1]
+  },
+  extensions: ["mhchem.js"] 
+  }
+});
+</script>
+<!--<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>-->
+<!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML' async></script> -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_CHTML'></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.0/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>-->
+
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.css" integrity="sha384-TEMocfGvRuD1rIAacqrknm5BQZ7W7uWitoih+jMNFXQIbNl16bO8OZmylH/Vi/Ei" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.js" integrity="sha384-jmxIlussZWB7qCuB+PgKG1uLjjxbVVIayPJwi6cG6Zb4YKq0JIw+OMnkkEC7kYCq" crossorigin="anonymous"></script>-->
+<script>var uiRootPath = '../_'</script>
+
+  </head>
+  <body class="article">
+<header class="header">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark navbar-template-project" style="border-top: 4px solid #9E9E9E">
+        <div class="navbar-brand">
+            <div class="navbar-item feelpp-logo">
+                <a href="https://feelpp.github.io/parallel-programming">Parallel Programming</a>
+            </div>
+            <button class="navbar-burger" data-target="topbar-nav">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+
+        <div id="topbar-nav" class="navbar-menu">
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <a href="https://docs.feelpp.org/">Documentation Reference</a>
+                </div>
+                <div class="navbar-item has-dropdown is-hoverable download-item">
+                    <div class="navbar-item"><a href="https://docs.feelpp.org/user/latest/install/index.html" class="download-btn">Get Feel++</a></div>
+                </div>
+                <div class="navbar-item">
+                    <a class="navbar-brand"  href="https://www.cemosis.fr">
+                        <img class="cemosis-logo"  src="../_/img/cemosis-logo.svg" alt="Cemosis logo"/>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="body">
+<a href="#" class="menu-expand-toggle"></a>
+<div class="nav-container" data-component="parallel-programming" data-version="">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html">Template Project</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Introduction</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">{Parallel Programming} Environment</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="PPChapter1.html">CPU, GPU, GPGPU Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="PPChapter2.html">Programming interface for parallel computing</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="PPChapter3.html">Star PU</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="PPChapter4.html">Specx</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="cmake.html">cmake environment</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="antora.html">antora environment</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="vscode.html">vscode integration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="githubactions.html">Github Actions</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="rename.html">Renaming the project</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jupyter.html">Jupyter Notebook</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Template Project</span>
+    <span class="version"></span>
+  </div>
+  <ul class="components">
+      <li class="component">
+        <a class="title" href="../feelpp-antora-ui/index.html">Antora Feel++ UI</a>
+      </li>
+      <li class="component is-current">
+        <a class="title" href="index.html">Template Project</a>
+      </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+  <button class="nav-toggle"></button>
+    <a href="index.html" class="home-link"></a>
+  <nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Template Project</a></li>
+    <li>{Parallel Programming} Environment</li>
+    <li><a href="PPChapter4.html">Specx</a></li>
+  </ul>
+</nav>
+
+  
+    <div class="edit-this-page"><a href="https://github.com/feelpp/parallel-programming/edit/lem/docs/modules/ROOT/pages/PPChapter4.adoc">Edit this Page</a></div>
+  
+  <div class="page-downloads">
+  <span class="label">Download as</span>
+  <ul class="download-options">
+    <li>
+      <a onclick="print(this)" href="#" data-toggle="tooltip" data-placement="left" title="Print to PDF"
+         class="pdf-download">
+        <img class="pdf-file-icon icon" src="../_/img/pdf.svg"/> .pdf
+      </a>
+    </li>
+  </ul>
+</div>
+</div>
+
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<div class="sect2">
+<h3 id="_4_specx"><a class="anchor" href="#_4_specx"></a>1. 4.Specx</h3>
+<div class="paragraph">
+<p><strong>SPECX</strong> is a task-based execution system. It shares many similarities
+with StarPU but is written in modern C++. It also supports speculative
+execution, which is the ability to run tasks ahead of time if others are
+unsure about changing the data.</p>
+</div>
+<div class="paragraph">
+<p><span class="image unresolved"><img src="../assests/images/image21.png" alt="image" width="642" height="380"></span></p>
+</div>
+<div class="paragraph">
+<p><strong>4.1 Workflow</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Execution interface:</strong> Provides functionality for creating tasks, task
+graphs and generating traces. Can be used to specify speculation model</p>
+</li>
+<li>
+<p><strong>Data Dependency Interface:</strong> Forms a collection of objects that can be
+used to express data dependencies. Also provides wrapper objects that
+can be used to specify whether a given callable should be considered CPU
+or GPU code</p>
+</li>
+<li>
+<p><strong>Task visualization interface:</strong> Specifies the ways to interact with
+the task object.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>4.1.1 Runtime interface</strong></p>
+</div>
+<div class="paragraph">
+<p>Runtime functionality is exposed through a class called SpRuntime . This
+class provides functionality for creating tasks, task graphs, and
+generating traces.</p>
+</div>
+<div class="paragraph">
+<p>The SpRuntime class is modeled on a non-type parameter which can be used
+to specify the speculation model you want to use. This parameter can
+take one of three values (we currently support three different
+speculation models) defined in <span class="underline">SpSpeculativeModel.hpp</span> . By
+default, the runtime uses the first speculation model.</p>
+</div>
+<div class="paragraph">
+<p><strong>Main SpRuntime methods:</strong> SpRuntime(const inNumThreads)</p>
+</div>
+<div class="paragraph">
+<p>Currently, each instance of SpRuntime has its own thread pool to
+distribute its work on. <strong>In the future, we plan to separate thread
+management from execution.</strong> The runtime constructor takes as a parameter
+the number of threads it must spawn. By default , the parameter is
+initialized to the number indicated by the OMP_NUM_THREADS environment
+variable. If the environment variable is not set, the setting defaults
+to the number of concurrent threads supported by the hardware. The
+constructor spawns the new threads. <strong>At this time, we do not allow
+manual binding of threads to cores.</strong></p>
+</div>
+<div class="paragraph">
+<p>For now, the runtime will bind threads to cores by thread index if the
+OMP_PROC_BIND environment variable is set to TRUE (or true or 1 ) or if
+inNumThreads is less than or equal to the number of concurrent threads
+supported by the material.</p>
+</div>
+<div class="paragraph">
+<p>autotask([optional] SpPriority inPriority, [optional] SpProbability
+inProbability, [optional] &lt;DataDependencyTy&gt; ddo&#8230;&#8203;, &lt;CallableTy&gt; c) (1)</p>
+</div>
+<div class="paragraph">
+<p>autotask([optional] SpPriority inPriority, [optional] SpProbability
+inProbability, [optional] &lt;DataDependencyTy&gt; ddo&#8230;&#8203;,
+SpCpuCode(&lt;CallableTy&gt; c1), [optional] SpGpuCode(&lt;CallableTy&gt; c2)) (2)</p>
+</div>
+<div class="paragraph">
+<p>This method creates a new task and injects it into the runtime. It
+returns an object representing the newly created task.</p>
+</div>
+<div class="paragraph">
+<p><strong>inPriority</strong> parameter specifies a priority for the task.</p>
+</div>
+<div class="paragraph">
+<p><strong>inProbability</strong> parameter is an object used to specify the probability
+with which the task can write to its writeable data dependencies.</p>
+</div>
+<div class="paragraph">
+<p>After the inProbability parameter is a list of data dependency objects.
+This list declares the task&#8217;s data dependencies. <strong>At this time we only
+allow one type of data dependency to be declared for a given data item
+and a data dependency declaration of a certain type for a particular
+data item should only appear once times, except for atomic read and
+write dependencies.</strong></p>
+</div>
+<div class="paragraph">
+<p>For example, you cannot have a read and write dependency for the same
+data item (in this case, you should only declare the strongest type of
+dependency which is write). The validity of dependencies is checked at
+runtime. If you declared two data dependencies on different expressions
+but evaluated on the same data item, the program will exit.</p>
+</div>
+<div class="paragraph">
+<p>The last or two last arguments (depending on which overload the call
+resolves to) specifies (a) callable(s) embedding the code the task
+should execute. Callables can be lambda expressions or functors. The
+callable&#8217;s function call operator must have as many parameters as there
+are data dependency objects in the data dependency object list. All
+parameters must be of lvalue reference type, and the type of each
+parameter must be the same as the data item of the corresponding data
+dependency object in the data dependency object list (you can also type
+infer the type with auto). Parameters must appear in the same order as
+they appear in the data dependency list.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Example:</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Type1 v1;
+Type2 v2;
+runtime. task ( SpRead(v1), SpWrite(v2),
+[] (const Type1 &amp;paramV1, Type2 &amp;paramV2) {
+if(paramV1.test()) { paramV2.set(1); } else { paramV2.set(2);} }
+);</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Parameters corresponding to an SpRead data dependency object must be
+declared const (paramV1 in the example given above). The code inside the
+callable should refer to the parameter names rather than the original
+variable names. In the example given above, the code in the lambda body
+references the names paramV1 and paramV2 to refer to the data values v1
+and v2 rather than v1 and v2. You should not capture v1 and v2 by
+reference and work with v1 and v2 directly. However, you can capture any
+variable that does not appear in the data dependency list and work with
+it directly. The runtime will store the addresses of the data items
+appearing in the data dependency list and take care of calling the
+callable with the appropriate matching arguments. In the example given
+above, assuming the task call is the only task call in the entire
+program, the runtime will take the addresses of v1 and v2 (since those
+are the data items that appear in the data dependency list) and when the
+task runs it will call the lambda with the arguments *v1 and *v2. Note
+that since Specx is a speculative task-based runtime system, there will
+also be times when the callable is called with copies of the data items
+(sampled at different times) rather than the original data items.</p>
+</div>
+<div class="paragraph">
+<p>Callables for normal tasks can return any value. Callables for potential
+tasks must all return a boolean, however. This boolean is used to inform
+the runtime whether the task has written to its data dependencies may
+write or not. The callable&#8217;s code should correctly return true or false
+depending on the situation. It should return true if the task has
+written to its data dependencies maybe write and false otherwise.</p>
+</div>
+<div class="paragraph">
+<p>In overload (1), the callable is passed as is to the task call. It will
+be implicitly interpreted by the runtime as CPU code. In overload (2),
+the callable c1 is explicitly labeled as CPU code by being wrapped in an
+SpCpuCode object (see the subsection on callable wrapper objects in the
+Data Dependency Interface section below). Overload (2) further allows
+the user to provide a GPU version of the code (in this case the callable
+must be wrapped in an SpGpuCode object). When the CPU and GPU versions
+of the code are provided, the Specx runtime will decide at runtime which
+of the two to run.</p>
+</div>
+<div class="paragraph">
+<p>void setSpeculationTest(std::function&lt;bool(int,const SpProbability&amp;)&gt;
+inFormula)</p>
+</div>
+<div class="paragraph">
+<p>This method defines a predicate function that will be called by the
+runtime whenever a speculative task is ready to be placed in the task
+ready queue (i.e. all its data dependencies are ready ). The predicate
+is used to decide, based on runtime information, whether the speculative
+task as well as any of its dependent speculative tasks should be allowed
+to run. The predicate returns a boolean. A return value of true means
+that the speculative task and all of its dependent speculative tasks are
+allowed to run. Conversely, a return value of false means that the
+speculative task and all of its dependent speculative tasks should be
+disabled.</p>
+</div>
+<div class="paragraph">
+<p>Note that although a speculative task may be allowed to run, this does
+not necessarily mean that it will actually run. For a speculative task
+to actually execute all of the parent speculations it speculates on,
+they must not have failed. It may be that between the time the
+speculative task has been marked as allowed to run and the time it is
+actually picked up by a thread for execution, some of the parent
+speculations have failed and therefore it will not be executed even
+though it was allowed to run depending on the result of the predicate
+evaluation in the past.</p>
+</div>
+<div class="paragraph">
+<p>The two predicate arguments are provided by the runtime. The first
+parameter is the number of tasks that were in the ready queue when the
+predicate was called. The second parameter is a probability whose value
+is the average of all probabilities of all speculative tasks dependent
+on the speculative task for which the predicate is called and the
+probability of the speculative task for which the predicate is called.
+Based on these two parameters, one can write his own custom logic to
+enable/disable speculative tasks. For example, you can decide to
+deactivate a speculative task if the average probability exceeds a
+certain threshold (because it may not make much sense to continue
+speculating if the chances of failure are high). <strong>The prototype of the
+predicate might change in the future as we might want to consider
+additional or different data to make the decision.</strong></p>
+</div>
+<div class="paragraph">
+<p>If no speculation test is defined in the runtime, the default behavior
+is that a speculative task and all its dependent speculative tasks will
+only be activated if, at the time the predicate is called, no other task
+is ready to run.</p>
+</div>
+<div class="paragraph">
+<p>void waitAllTasks()</p>
+</div>
+<div class="paragraph">
+<p>This method is a blocking call that waits for all tasks that have been
+pushed to run up to this point to complete.</p>
+</div>
+<div class="paragraph">
+<p>void waitRemain(const long int windowSize)</p>
+</div>
+<div class="paragraph">
+<p>This method is a blocking call that waits for the number of unprocessed
+tasks to become less than or equal to windowSize.</p>
+</div>
+<div class="paragraph">
+<p>void stopAllThreads()</p>
+</div>
+<div class="paragraph">
+<p>This method is a blocking call that causes execution threads to close.
+The method expects all tasks to have already completed, so you should
+always call waitAllTasks() before calling this method.</p>
+</div>
+<div class="paragraph">
+<p>int getNbThreads()</p>
+</div>
+<div class="paragraph">
+<p>This method returns the size of the execution thread pool (in number of
+threads).</p>
+</div>
+<div class="paragraph">
+<p>void generateDot(const std::string&amp; outputFilename, bool printAccesses)</p>
+</div>
+<div class="paragraph">
+<p>This method will generate the task graph corresponding to the execution
+in point format. It will write its output to the outputFilename path.
+The boolean printAccesses can be set to true if you want to print the
+tasks memory accesses (only the memory accesses specified in their data
+dependency list will be printed) in the tasks node body. By default,
+printAccesses is set to false.</p>
+</div>
+<div class="paragraph">
+<p>The names of the tasks will be printed in the nodes of the graph. The
+default name will be displayed for each task unless another name has
+been manually defined by the user (see Task Viewer Interface section
+below). Speculative versions of tasks will have an apostrophe appended
+to their name. You can view the task graph in pdf format using the
+following command:</p>
+</div>
+<div class="paragraph">
+<p>dot -Tpdf -o &lt;pdf_output_filename&gt; &lt;path_to_dot_output_file&gt;</p>
+</div>
+<div class="paragraph">
+<p>The generateDot method should be called after calling waitAllTasks() and
+stopAllThreads().</p>
+</div>
+<div class="paragraph">
+<p>void generateTrace(const std::string&amp; outputFilename, const bool
+showDependencies)</p>
+</div>
+<div class="paragraph">
+<p>This method will generate a trace of the execution (with timings and
+dependencies) in svg format. The generateTrace method should only be
+called after calling waitAllTasks() and stopAllThreads().</p>
+</div>
+<div class="paragraph">
+<p><strong>4.1.2 Data dependency interface</strong></p>
+</div>
+<div class="paragraph">
+<p>The data dependency interface forms a collection of objects that can be
+used to express data dependencies. It also provides wrapper objects that
+can be used to specify whether a given callable should be considered CPU
+or GPU code. The class definition for these objects is in
+<span class="underline">Src/Utils/SpModes.hpp</span> .</p>
+</div>
+<div class="paragraph">
+<p><strong>Data dependency objects</strong></p>
+</div>
+<div class="paragraph">
+<p>Specifying data dependencies amounts to constructing the relevant data
+dependency objects from the data lvalues.</p>
+</div>
+<div class="paragraph">
+<p><strong>Scalar data</strong></p>
+</div>
+<div class="paragraph">
+<p>S pRead(x) // Specifies a read dependency on x. Read requests are always
+satisfied by default, i.e. a read request rr2 on data x immediately
+following another read request rr1 on data x need not wait until rr1 be
+satisfied to be served. Several successive read accesses will be
+performed in any order and/or at the same time. Reads are ordered by the
+runtime with respect to writes, maybe writes, commutative writes, and
+atomic writes. The order is the order in which data accesses were
+requested at runtime.</p>
+</div>
+<div class="paragraph">
+<p>SpWrite(x) // Specifies a write dependency on x indicating that data x
+will be written with 100% certainty. Several successive write requests
+on given data x will be satisfied one after the other in the order in
+which they were issued during execution. Writes are categorized by the
+runtime into reads, writes, maybe writes, commutative writes, and atomic
+writes. The order is the order in which data accesses were requested at
+runtime.</p>
+</div>
+<div class="paragraph">
+<p>SpMaybeWrite(x) // Specifies a possibly writeable dependency indicating
+that data x can be written, i.e. it will not always be the case (writes
+can occur with some probability). Several possibly successive write
+requests on given data x will be satisfied one after the other in the
+order in which they were issued at runtime. Maybe writes are categorized
+by the runtime into reads, writes, maybe writes, commutative writes, and
+atomic writes. The order is the order in which data accesses were
+requested at runtime.</p>
+</div>
+<div class="paragraph">
+<p>SpCommutativeWrite(x) // Specifies a commutative write dependency on x,
+ie writes that can be performed in any order. Several successive
+commutative write requests will be satisfied one after the other in any
+order: while a commutative write request cw1 on data x is currently
+being processed, all immediately following commutative write requests on
+data x given x will be put on hold. When cw1 is released, one of the
+immediately following commutative write requests will be serviced. No
+order is applied by the runtime as to which one will be served next. For
+example, if two commutative tasks write to data x, the runtime does not
+impose an order as to which tasks should write first. However, the two
+tasks will not be able to run in parallel: while one of the two tasks is
+running and writing to data x, the other task will not be able to run
+because its write dependency request commutative will not be processed
+until the first task has finished executing and has released its
+commutative write dependency on x. Commutative writes are classified by
+the runtime into reads, writes, maybe writes, and atomic writes. The
+order is the order in which data accesses were requested at runtime.</p>
+</div>
+<div class="paragraph">
+<p>SpAtomicWrite(x) // Specifies an atomic write dependency on x. Atomic
+write requests are always satisfied by default, i.e. an awr2 atomic
+write request on data x immediately following another awr1 atomic write
+request on data x does not have need to wait for awr1 to be satisfied to
+be served. Several successive atomic writes will be performed in any
+order. For example, if two tasks write atomically to the data x, the
+runtime does not impose an order as to which tasks should write
+atomically first and the two tasks can run in parallel. Atomic writes
+will be committed to memory in the order in which they will be committed
+at runtime, the point is that the Specx runtime does not impose an order
+on atomic writes. Atomic writes are classified by the runtime into
+reads, writes, maybe writes, and commutative writes. The order is the
+order in which data accesses were requested at runtime. All data
+dependency constructors for scalar data must receive an lvalue as an
+argument.</p>
+</div>
+<div class="paragraph">
+<p><strong>Non-scalar data</strong></p>
+</div>
+<div class="paragraph">
+<p>We also provide analogous constructors for aggregating data values from
+arrays:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>SpReadArray(&lt;XTy&gt; *x, &lt;ViewTy&gt; view)</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>SpWriteArray(&lt;XTy&gt; *x, view&lt;ViewTy&gt;)</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>SpMaybeWriteArray(&lt;XTy&gt; *x, &lt;ViewTy&gt; view)</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>SpCommutativeWriteArray(&lt;XTy&gt; *x, view&lt;ViewTy&gt;)</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>SpAtomicWriteArray(&lt;XTy&gt; *x, view &lt;ViewTy&gt;)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>x must be a pointer to a contiguous buffer (the array).</p>
+</div>
+<div class="paragraph">
+<p>view must be an object representing the collection of specific indices
+of array elements that are affected by the dependency. It must be
+iterable (in the "stl iterable" sense). An example implementation of
+such a view class can be found in
+<span class="underline">Src/Utils/SpArrayView.hpp</span> .</p>
+</div>
+<div class="paragraph">
+<p><strong>Wrapper objects for callables</strong></p>
+</div>
+<div class="paragraph">
+<p>We provide two wrapper objects for callables whose purpose is to mark up
+a callable to inform the runtime system whether to interpret the given
+callable as CPU or GPU code:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>SpCpuCode(&lt;CallableTy&gt; c)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Specifies that the callable c represents CPU code.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>SpGpuCode(&lt;CallableTy&gt; c)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Specifies that the callable c represents GPU code.</p>
+</div>
+<div class="paragraph">
+<p>In both cases, the callable c can be a lambda or an lvalue or rvalue
+functor.</p>
+</div>
+<div class="paragraph">
+<p>A callable that appears as an argument to a call to the task method of
+an SpRuntime object without being wrapped in one of the above two
+objects will be interpreted by the runtime as CPU code by default.</p>
+</div>
+<div class="paragraph">
+<p><strong>4.1.3 Task visualization interface</strong></p>
+</div>
+<div class="paragraph">
+<p>The Task Viewer interface specifies ways to interact with the task
+object returned by SpRuntime&#8217;s task method. The exact type returned by
+SpRuntime&#8217;s task method doesn&#8217;t matter and in practice it should be
+inferred from the (auto) type in your programs. You can, however, find
+the definition of the returned type in
+<span class="underline">Src/Tasks/SpAbstractTask.hpp</span> .</p>
+</div>
+<div class="paragraph">
+<p><strong>Main methods available on task objects returned by task calls</strong></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>bool isOver() // Returns true if the task has finished executing.</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Void wait() //This method is a blocking call that waits for the task to
+complete.</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;ReturnType&gt; getValue() // This method is a blocking call that retrieves
+the task's result value (if it has any). It first waits for the task to
+complete and then retrieves the result value.</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>void setTaskName(const std::string&amp; inTaskName) // Assign the name
+inTaskName to the task. This change will be reflected in debug
+printouts, task graph, and trace generation output. By default, the task
+will be named as the dismembered string of the typeid name of the task's
+callable.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>std::string getTaskName() // Get the task name. <strong>Speculative versions of
+tasks will have an apostrophe appended to their name.</strong></p>
+</div>
+<div class="paragraph">
+<p><strong>GPU/CUDA (work in progress)</strong></p>
+</div>
+<div class="paragraph">
+<p>The CMake variable SPECX_COMPILE_WITH_CUDA must be set to ON, for
+example with the command cmake .. -DSPECX_COMPILE_WITH_CUDA=ON . If
+CMake is unable to find nvcc, set the CUDACXX environment variable or
+the CMake variable CMAKE_CUDA_COMPILER to the path to nvcc. You can
+define CMAKE_CUDA_ARCHITECTURES to select the CUDA sm to compile.</p>
+</div>
+<div class="paragraph">
+<p>Here is an example job on CUDA GPU:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>tg.task(SpWrite(a),// Dependencies are expressed as usual</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>SpCuda([](SpDeviceDataView&lt;std::vector&lt;int&gt;&gt; paramA) { // Each
+parameter is converted into a SpDeviceDataView</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>// The kernel call is called using the dedicated stream</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>inc_var&lt;&lt;&lt;1,1,0,SpCudaUtils::GetCurrentStream()&gt;&gt;&gt;(paramA.array(),</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>paramA.nbElements());</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>})</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>);</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Currently, the call to a CUDA kernel must be done in a .cu file. There
+are three types of SpDeviceDataView that provide different methods: one
+for is_trivially_copyable objects, one for std::vectors of
+is_trivially_copyable objects, and one user-customized. At the latest,
+it is requested to provide the following methods:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>std::size_t memmovNeededSize() const{</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>...</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>pattern &lt;DeviceMemmov class&gt;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>void memmovHostToDevice(DeviceMemmov&amp; mover, void* devicePtr,
+std::size_t size){
+...</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>pattern &lt;DeviceMemmov class&gt;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>void memmovDeviceToHost(DeviceMemmov&amp; mover, void* devicePtr,
+std::size_t size){
+...</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>self getDeviceDataDescription() const{
+...</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The type returned by getDeviceDataDescription must be copyable and have
+an empty constructor. It should be used to help retrieve raw pointer
+data when calling a device kernel.</p>
+</div>
+<div class="paragraph">
+<p><strong>GPU/HIP (work in progress)</strong></p>
+</div>
+<div class="paragraph">
+<p>The CMake variable SPECX_COMPILE_WITH_HIP must be set to ON, for example
+with the command cmake .. -DSPECX_COMPILE_WITH_HIP=ON . The C++ compiler
+must also be defined with for example CXX=hipcc , so a working command
+line must be CXX=hipcc cmake .. -DSPECX_COMPILE_WITH_HIP=ON . You can
+set GPU_TARGETS to select the HIP sm to compile.</p>
+</div>
+<div class="paragraph">
+<p>Here is an example of a task on a HIP GPU:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>tg.task(SpWrite(a),// Dependencies are expressed as usual</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>SpHip([](SpDeviceDataView&lt;std::vector&lt;int&gt;&gt; paramA) { // Each parameter
+is converted into a SpDeviceDataView</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>// The kernel call is called using the dedicated stream</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>inc_var&lt;&lt;&lt;1,1,0,SpHipUtils::GetCurrentStream()&gt;&gt;&gt;(paramA.array(),</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>paramA.nbElements());</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>})</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>);</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Currently, the call to a HIP kernel must be done in a .cu file. There
+are three types of SpDeviceDataView that provide different methods: one
+for is_trivially_copyable objects, one for std::vectors of
+is_trivially_copyable objects, and one user-customized. At the latest,
+it is requested to provide the following methods:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>std::size_t memmovNeededSize() const{</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>...</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>pattern &lt;DeviceMemmov class&gt;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>void memmovHostToDevice(DeviceMemmov&amp; mover, void* devicePtr,
+std::size_t size){</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>...</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>pattern &lt;DeviceMemmov class&gt;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>void memmovDeviceToHost(DeviceMemmov&amp; mover, void* devicePtr,
+std::size_t size){</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>...</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>self getDeviceDataDescription() const{</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>...</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The type returned by getDeviceDataDescription must be copyable and have
+an empty constructor. It should be used to help retrieve raw pointer
+data when calling a device kernel.</p>
+</div>
+<div class="paragraph">
+<p><strong>MPI</strong></p>
+</div>
+<div class="paragraph">
+<p>The CMake variable SPECX_COMPILE_WITH_MPI must be set to ON, for example
+with the command cmake .. -DSPECX_COMPILE_WITH_MPI=ON .</p>
+</div>
+<div class="paragraph">
+<p><strong>Data serialization and deserialization</strong></p>
+</div>
+<div class="paragraph">
+<p>Data can be sent to target MPI processes using the mpiSend and mpiRecv
+methods of the SpTaskGraph object.</p>
+</div>
+<div class="paragraph">
+<p>To be moved between compute nodes, objects must be one of the following
+types:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Be an instance of a class that inherits from SpAbstractSerializable
+(see below for details).</p>
+</li>
+<li>
+<p>Supports getRawDataSize , getRawData and restoreRawData methods, which
+will be used to extract the data to send and restore it.</p>
+</li>
+<li>
+<p>Be a POD type (well, having is_standard_layout_v and is_trivial_v
+returning true, which means having a pointer in a structure won&#8217;t be
+detected and could be a problem).</p>
+</li>
+<li>
+<p>Let be a vector of the types defined in 1, 2 or 3.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>It is the SpGetSerializationType function that performs the detection
+and assigns the corresponding SpSerializationType value to each object.
+Detection is carried out in the order written above.</p>
+</div>
+<div class="paragraph">
+<p>For examples, see the unit tests under UTests/MPI.</p>
+</div>
+<div class="paragraph">
+<p><strong>Type 3 - PODs</strong></p>
+</div>
+<div class="paragraph">
+<p>For built-in and POD types, these methods work automatically:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>SpTaskGraph&lt;SpSpeculativeModel::SP_NO_SPEC&gt; tg;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int a = 1;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>integer b = 0;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>...</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>tg.mpiSend(b, 1, 0);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>tg.mpiRecv(b, 1, 1);</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Type 1 - SpAbstractSerializable</strong></p>
+</div>
+<div class="paragraph">
+<p>However, user-defined types must allow support for MPI serialization and
+deserialization. To do this, they must implement these steps.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Include "MPI/SpSerializer.hpp"</p>
+</li>
+<li>
+<p>Make the class a public subclass of the SpAbstractSerializable class</p>
+</li>
+<li>
+<p>Provide a constructor that takes as an argument a non-constant
+reference to SpDeserializer. This constructor makes it possible to
+construct an object of the class from deserialization.</p>
+</li>
+<li>
+<p>Provide a public "serialize" method with a non-const reference to
+SpSerializer as an argument. This method serializes the object into the
+SpSerializer input object.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>These detailed steps are illustrated in the following example:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>#include "MPI/SpSerializer.hpp"</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int_data_holder class: public SpAbstractSerializable {</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>audience:</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int_data_holder(int value = 0): value{value} {}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int_data_holder(SpDeserializer &amp;deserializer) :
+value(deserializer.restore&lt;decltype(value)&gt;("value")) {</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>void serialize(SpSerializer &amp;serializer) const final {</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>serializer.append(value, "value");</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int get() const { return value; }</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>empty set (int value) {</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>this-&gt;value=value;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>private:</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>integer value;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>};</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>...</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>SpTaskGraph&lt;SpSpeculativeModel::SP_NO_SPEC&gt; tg;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int_data_holder a=1;
+int_data_holder b=0;
+...
+tg.mpiSend(b, 1, 0);
+tg.mpiRecv(b, 1, 1);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>*Type 2 - Direct access*</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>class DirectAccessClass {</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int key;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>audience:</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>const unsigned character* getRawData() const {</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>return reinterpret_cast&lt;const unsigned char*&gt;(&amp;key);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>std::size_t getRawDataSize() const {</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>return sizeof(key);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>void restoreRawData(const unsigned char* ptr, std::size_t size){</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>assert(sizeof(key) == size);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>key = *reinterpret_cast&lt;const int*&gt;(ptr);</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>integer&amp; value(){</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>return key;</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>}
+const int&amp; value() const{
+return key;
+}
+};</pre>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer" style="border-top: 2px solid #e9e9e9; background-color: #fafafa; padding-bottom: 2em; padding-top: 2em;">
+    <div class="container" style="display: flex; flex-direction: column; align-items: center; gap: 0.5em;">
+        <div>
+            <a href="https://www.cemosis.fr">
+                <img src="../_/img/cemosis-logo.svg" alt="Cemosis logo" height="50">
+            </a>
+        </div>
+        <span style="font-size: 0.8rem; color: #9e9e9e">© 2023 <a href="https://www.cemosis.fr" style="text-decoration: underline;">Cemosis</a>, Université de Strasbourg</span>
+    </div>
+</footer>
+<script id="site-script" src="../_/js/site.js" data-ui-root-path="../_"></script>
+
+
+<script async src="../_/js/vendor/fontawesome-icon-defs.js"></script>
+<script async src="../_/js/vendor/fontawesome.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+
+
+<script type="text/javascript">
+function toggleFullScreen() {
+   var doc = window.document;
+   var docEl = doc.documentElement;
+
+   var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+   var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+   if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+       requestFullScreen.call(docEl);
+   }
+   else {
+       cancelFullScreen.call(doc);
+   }
+}
+</script>
+  </body>
+</html>

@@ -1,6 +1,10 @@
 * xref:index.adoc[Introduction]
 * {Parallel Programming} Environment
-** xref:ParallelProgramming.adoc[environment]
+** xref:PPChapter1.adoc[CPU, GPU, GPGPU Architecture]
+** xref:PPChapter2.adoc[Programming interface for parallel computing]
+** xref:PPChapter3.adoc[Star PU]
+** xref:PPChapter4.adoc[Specx]
+
 
 ** xref:cmake.adoc[cmake environment]
 ** xref:antora.adoc[antora environment]

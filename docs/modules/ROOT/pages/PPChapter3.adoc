@@ -1,0 +1,40 @@
+=== 3.Star PU
+
+*StarPU* is a task scheduling library for hybrid architectures. StarPU's
+goal is to design systems in which applications are distributed across
+the entire machine, powering parallel tasks to all available resources.
+It keeps track of the copies of each of the data in the various memories
+on board the accelerators, and provides mechanisms such as data
+preloading. The calculation time has been greatly reduced, as well as
+the high efficiency in the use of the different calculation resources,
+the different typical workloads, especially in the case of multi-core
+machines equipped with several acceleration machines.
+
+The app provides algorithms and constraints
+
+* CPU/GPU implementations of tasks
+* A task graph, using either StarPU's rich C/C++/Fortran/Python API or
+OpenMP pragmas.
+
+StarPU internally deals with the following aspects:
+
+* Task dependencies
+* Optimized heterogeneous scheduling
+* Optimized data transfers and replication between main memory and
+discrete memories
+* Optimized cluster communications
+
+image:../assests/images/image19.png[image,width=179,height=179]
+
+Links:
+
+https://hpc2n.github.io/Task-based-parallelism/branch/master/starpu1/#hello-world
+
+https://github.com/alucas/StarPU/tree/master
+
+https://hpc2n.github.io/Task-based-parallelism/branch/master/starpu1/#benefits-and-downsides
+
+https://indico.math.cnrs.fr/event/6415/attachments/2736/3475/2021.02.24_-_exa2pro-eocoe_workshop_-_StarPU_-_S._Thibault.pdf
+
+https://gitub.u-bordeaux.fr/starpu/starpu/-/tree/master/examples
+

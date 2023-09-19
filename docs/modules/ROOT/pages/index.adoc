@@ -13,24 +13,28 @@ endif::[]
 ** xref:PPChapter2.adoc[Programming interface for parallel computing]
 ** xref:PPChapter3.adoc[Star PU]
 ** xref:PPChapter4.adoc[Specx]
-** xref:PPLinkPDFs.adoc[Links PDFs]
+
 
 ****
 
 
 .LINKS
 ****
-link:../attachments/Session1_ParallelProgramming_Introduction.pdf[Session1 ParallelProgramming Introduction]
+xref:../attachments/Session1_ParallelProgramming_Introduction.pdf[Session1 ParallelProgramming Introduction]
 
-link:../attachments/Session2_ParallelProgramming_MPI.pdf[Session2 Parallel Programming MPI]
+xref:../attachments/Session2_ParallelProgramming_MPI.pdf[Session2 Parallel Programming MPI]
 
-link:../attachments/Session3_ParallelProgramming_HybridOpenMP_MPI.pdf[Session3 Parallel Programming Hybrid]
+xref:../attachments/Session3_ParallelProgramming_HybridOpenMP_MPI.pdf[Session3 Parallel Programming Hybrid]
 
-link:../attachments/Session4_ParallelProgramming_Cuda.pdf[Session4 Parallel Programming CUDA]
+xref:../attachments/Session4_ParallelProgramming_Cuda.pdf[Session4 Parallel Programming CUDA]
 
-link:../attachments/Session5_ParallelProgramming_HIP.pdf[Session5 Parallel Programming HIP]
+xref:../attachments/Session5_ParallelProgramming_HIP.pdf[Session5 Parallel Programming HIP]
 
-link:../attachments/Session6_ParallelProgramming_Specx.pdf[Session6 Parallel Programming Specx]
+xref:../attachments/Session6_ParallelProgramming_Specx.pdf[Session6 Parallel Programming Specx]
+
+
+xref:version@component:module:attachment$file-coordinate-of-attachment.ext[optional link text]
+
 ****
 
 

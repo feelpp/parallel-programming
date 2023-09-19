@@ -5,9 +5,9 @@ link:./ppt/Session2_ParallelProgramming_MPI.pdf[Session2 Parallel Programming MP
 
 link:./ppt/Session3_ParallelProgramming_HybridOpenMP_MPI.pdf[Session3 Parallel Programming Hybrid]
 
-link:./ppt/Session4_ParallelProgramming_Cuda.pdf[Session4 Parallel Programming Cuda]
+link:./ppt/Session4_ParallelProgramming_Cuda.pdf[Session4 Parallel Programming CUDA]
 
-link:./ppt/Session5_ParallelProgramming_Hip.pdf[Session5 Parallel Programming Hip]
+link:./ppt/Session5_ParallelProgramming_HIP.pdf[Session5 Parallel Programming HIP]
 
 link:./ppt/Session6_ParallelProgramming_Specx.pdf[Session6 Parallel Programming Specx]
 

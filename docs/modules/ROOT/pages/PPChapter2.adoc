@@ -20,7 +20,7 @@ Note: on a cluster of independent shared-memory multiprocessor machines
 in the same program can be a major advantage for the parallel
 performance of the code.
 
-image:../assests/images/image7.png[image,width=581,height=336]
+image:../assets/images/image7.png[image,width=581,height=336]
 
 
 
@@ -2011,7 +2011,7 @@ pure MPI scalability runs out.
 
 A common hybrid approach
 
-image:../assests/images/image9.png[image,width=307,height=155]
+image:../assets/images/image9.png[image,width=307,height=155]
 
 * From dequential code, alongside MPI first, then try adding OpenMP
 * From MPI code, add OpenMP
@@ -2021,4 +2021,4 @@ parallel region and allow only the master thread to communicate between
 MPI tasks.
 * Could use MPI in parallel region with thread-safe MPI.
 
-image:../assests/images/image10.png[image,width=264,height=166]
+image:../assets/images/image10.png[image,width=264,height=166]

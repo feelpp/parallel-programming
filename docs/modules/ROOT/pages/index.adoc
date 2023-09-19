@@ -5,19 +5,12 @@
 
 ifeval::["{project_name}" == "Parallel Programming"]
 [.lead]
-{project_name} is a GitHub repository template providing a starting point for {feelpp} projects.
 endif::[]
-ifeval::["{project_name}" != "Parallel Programming"]
-{project_name} is a {feelpp} project. It was created using the repository template https://github.com/feelpp/parallel-programming[`feelpp/parallel-programming`].
-endif::[]
-
 
 .DOCUMENTS
 [.examp]
 ****
 
-
-* {Parallel Programming} Environment
 ** xref:PPChapter1.adoc[CPU, GPU, GPGPU Architecture]
 ** xref:PPChapter2.adoc[Programming interface for parallel computing]
 ** xref:PPChapter3.adoc[Star PU]

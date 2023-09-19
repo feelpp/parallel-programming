@@ -1,4 +1,6 @@
 * xref:index.adoc[Introduction]
 * {Parallel Programming} Environment
-** xref:ParallelProgramming.adoc[Block 0]
+** xref:ParallelProgramming.adoc[block0]
+
+** xref:cmake.adoc[cmake environment]
 

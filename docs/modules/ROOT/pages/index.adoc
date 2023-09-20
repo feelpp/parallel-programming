@@ -9,35 +9,159 @@ endif::[]
 [.examp]
 ****
 
+
+Parallel machines provide a wonderful opportunity for applications with large computational re-
+quirements. Effective use of these machines, though, requires a keen understanding of how they
+work. 
+
+
 *What Is Parallel Computing?*
 
-* Serial Computing *
+*Serial Computing*
 
 
 Traditionally, software has been written for serial computation:
 
-    A problem is broken into a discrete series of instructions
-    Instructions are executed sequentially one after another
-    Executed on a single processor
-    Only one instruction may execute at any moment in time
+* A problem is broken into a discrete series of instructions
+* Instructions are executed sequentially one after another
+* Executed on a single processor
+* Only one instruction may execute at any moment in time
 
+image::serialProblem.gif[xref=#fragment_000_001,scaledwidth=20%]
 
-* Parallel Computing *
+*Parallel Computing*
 
 In the simplest sense, parallel computing is the simultaneous use of multiple compute resources to solve a computational problem:
 
-    A problem is broken into discrete parts that can be solved concurrently
-    Each part is further broken down to a series of instructions
-    Instructions from each part execute simultaneously on different processors
-    An overall control/coordination mechanism is employed
+* A problem is broken into discrete parts that can be solved concurrently
+** Each part is further broken down to a series of instructions
+** Instructions from each part execute simultaneously on different processors
+** An overall control/coordination mechanism is employed
 
+
+image::parallelProblem.gif[xref=#fragment_000_002,scaledwidth=20%]
+
+For example
+
+image::parallelProblem2.gif[xref=#fragment_000_003,scaledwidth=20%]
+
+* The computational problem should be able to:
+** Be broken apart into discrete pieces of work that can be solved simultaneously;
+** Execute multiple program instructions at any moment in time;
+** Be solved in less time with multiple compute resources than with a single compute resource.
+* The compute resources are typically:
+** A single computer with multiple processors/cores
+** An arbitrary number of such computers connected by a network
+
+
+*Parallel Computers*
+
+*Virtually all stand-alone computers today are parallel from a hardware perspective:
+** Multiple functional units (L1 cache, L2 cache, branch, prefetch, decode, floating-point, graphics processing (GPU), integer, etc.)
+** Multiple execution units/cores
+** Multiple hardware threads
+
+image::bgqComputeChip.jpeg[xref=#fragment_000_004,scaledwidth=20%]
+
+
+* Networks connect multiple stand-alone computers (nodes) to make larger parallel computer clusters.
+
+image::nodesNetwork.gif[xref=#fragment_000_005,scaledwidth=20%]
+
+
+* For example, the schematic below shows a typical LLNL parallel computer cluster:
+** Each compute node is a multi-processor parallel computer in itself
+** Multiple compute nodes are networked together with an Infiniband network
+** Special purpose nodes, also multi-processor, are used for other purposes
+
+image::parallelComputer1.gif[xref=#fragment_000_006,scaledwidth=20%]
+
+* The majority of the world's large parallel computers (supercomputers) are clusters of hardware produced by a handful of (mostly) well known vendors.
+
+
+
+
+
+*Why Use Parallel Computing?*
+
+The Real World Is Massively Complex
+
+* In the natural world, many complex, interrelated events are happening at the same time, yet within a temporal sequence.
+* Compared to serial computing, parallel computing is much better suited for modeling, simulating and understanding complex, real world phenomena.
+
+
+*Main Reasons for Using Parallel Programming*
+
+SAVE TIME AND/OR MONEY
+
+* In theory, throwing more resources at a task will shorten its time to completion, with potential cost savings.
+* Parallel computers can be built from cheap, commodity components
+
+
+SOLVE LARGER / MORE COMPLEX PROBLEMS
+
+* Many problems are so large and/or complex that it is impractical or impossible to solve them using a serial program, especially given limited computer memory.
+
+
+PROVIDE CONCURRENCY
+
+* A single compute resource can only do one thing at a time. Multiple compute resources can do many things simultaneously.
+* Example: Collaborative Networks provide a global venue where people from around the world can meet and conduct work "virtually."
+
+TAKE ADVANTAGE OF NON-LOCAL RESOURCES
+
+* Using compute resources on a wide area network, or even the Internet when local compute resources are scarce or insufficient.
+
+MAKE BETTER USE OF UNDERLYING PARALLEL HARDWARE
+
+* Modern computers, even laptops, are parallel in architecture with multiple processors/cores.
+* Parallel software is specifically intended for parallel hardware with multiple cores, threads, etc.
+* In most cases, serial programs run on modern computers "waste" potential computing power.
+
+
+*Who Is Using Parallel Computing?*
+
+* Science and Engineering
+
+** Historically, parallel computing has been considered to be "the high end of computing," and has been used to model difficult problems in many areas of science and engineering:
+
+*** Atmosphere, Earth, Environment
+*** Physics - applied, nuclear, particle, condensed matter, high pressure, fusion, photonics
+*** Bioscience, Biotechnology, Genetics
+*** Chemistry, Molecular Sciences
+*** Geology, Seismology
+*** Mechanical Engineering - from prosthetics to spacecraft
+*** Electrical Engineering, Circuit Design, Microelectronics
+*** Computer Science, Mathematics
+*** Defense, Weapons
+
+image::simulations01.jpeg[xref=#fragment_000_007,scaledwidth=20%]
+
+
+* Industrial and Commercial
+
+** Today, commercial applications provide an equal or greater driving force in the development of faster computers. These applications require the processing of large amounts of data in sophisticated ways. For example:
+
+***  "Big Data," databases, data mining
+*** Artificial Intelligence (AI)
+*** Oil exploration
+*** Web search engines, web based business services
+*** Medical imaging and diagnosis
+*** Pharmaceutical design
+*** Financial and economic modeling
+*** Management of national and multi-national corporations
+*** Advanced graphics and virtual reality, particularly in the entertainment industry
+*** Networked video and multi-media technologies
+*** Collaborative work environments
+
+image::simulations03.jpeg[xref=#fragment_000_008,scaledwidth=20%]
 
 
 
 ****
 
 
-.LINKS
+.DOCUMENTATIONS
 ****
 xref:../assets/attachments/Session1_ParallelProgramming_Introduction.pdf[Session1 ParallelProgramming Introduction]
 

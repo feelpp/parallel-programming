@@ -5,7 +5,8 @@ with StarPU but is written in modern C++. It also supports speculative
 execution, which is the ability to run tasks ahead of time if others are
 unsure about changing the data.
 
-image:../assets/images/image21.png[image,width=642,height=380]
+image::image21.png[xref=#fragment21,image,width=642,height=380]
+
 
 *4.1 Workflow*
 

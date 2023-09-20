@@ -24,7 +24,8 @@ StarPU internally deals with the following aspects:
 discrete memories
 * Optimized cluster communications
 
-image:../assets/images/image19.png[image,width=179,height=179]
+image::image19.png[xref=#fragment19,width=179,height=179]
+
 
 Links:
 

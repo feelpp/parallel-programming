@@ -51,14 +51,8 @@ They are few in number but very quick to access. They
 are used to store variables, the intermediate results of operations
 (arithmetic or logical) or processor control information.
 
-
-
-image::image1.png[xref=#fragment,width=322,height=220]
-
-
-
-image::Session1_ParallelProgramming_Introduction.pdf[xref=#fragment,page=1]
-
+image::image1.png[xref=#fragment1,width=322,height=220]
+//image::../assets/images/image1.png[xref=#img1,width=322,height=220]
 
 
 The register structure varies from processor to processor. This is why
@@ -158,7 +152,7 @@ application.
 
 Explicit code targeting GPUs: CUDA, HIP, SYCL, Kokkos, RAJA,...
 
-image:image2.png[xref=#fragment,width=488,height=342]
+image:image2.png[xref=#fragment2,width=488,height=342]
 
 _Fig: illustrates the main hardware architecture differences between
 CPUs and GPUs. The transistor counts associated with various functions
@@ -235,7 +229,7 @@ GPUs can be 10+X faster than GPUs for parallel code.
 
 *1.3 GPGPU ( General-Purpose Graphics Processing Unit)*
 
-image:image4.png[xref=#fragment,width=642,height=331]
+image:image4.png[xref=#fragment4,width=642,height=331]
 
 A *General-Purpose Graphics Processing Unit* (GPGPU) is a graphics
 processing unit (GPU) that is programmed for purposes beyond graphics
@@ -310,7 +304,7 @@ mapping
 Such an architecture is said to be "throughput-oriented". The latest
 from the Santa-Clara firm, codenamed “Fermi” has 512 cores.
 
-image:image5.png[xref=#fragment,width=530,height=241]
+image:image5.png[xref=#fragment5,width=530,height=241]
 
 _CPU architecture vs. GPUs_
 
@@ -663,7 +657,7 @@ New containers are continually being added to the hub.
 === AMD Fusion System Architecture 
 === Moves to Unify CPUs and GPUs
 
-image:image6.png[xref=#fragment,width=511,height=287]
+image:image6.png[xref=#fragment6,width=511,height=287]
 
 
 *1.7 TPU (Tensor Processing Unit) form Google*
@@ -702,7 +696,7 @@ at ultra-high speeds but must be paired with a CPU to give and execute
 instructions.
 
 
-image:image22.png[xref=#fragment,width=544,height=419]
+image:image22.png[xref=#fragment22,width=544,height=419]
 
 
 *Applications for TPUs*

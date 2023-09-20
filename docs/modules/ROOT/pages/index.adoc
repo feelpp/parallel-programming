@@ -9,10 +9,29 @@ endif::[]
 [.examp]
 ****
 
-** xref:PPChapter1.adoc[Architecture]
-** xref:PPChapter2.adoc[Programming interface for parallel computing]
-** xref:PPChapter3.adoc[Star PU]
-** xref:PPChapter4.adoc[Specx]
+*What Is Parallel Computing?*
+
+* Serial Computing *
+
+
+Traditionally, software has been written for serial computation:
+
+    A problem is broken into a discrete series of instructions
+    Instructions are executed sequentially one after another
+    Executed on a single processor
+    Only one instruction may execute at any moment in time
+
+
+* Parallel Computing *
+
+In the simplest sense, parallel computing is the simultaneous use of multiple compute resources to solve a computational problem:
+
+    A problem is broken into discrete parts that can be solved concurrently
+    Each part is further broken down to a series of instructions
+    Instructions from each part execute simultaneously on different processors
+    An overall control/coordination mechanism is employed
+
+
 
 
 ****
@@ -32,7 +51,7 @@ xref:../assets/attachments/Session5_ParallelProgramming_HIP.pdf[Session5 Paralle
 
 xref:../assets/attachments/Session6_ParallelProgramming_Specx.pdf[Session6 Parallel Programming Specx]
 
-Update 10:45
+
 
 ****
 
@@ -41,6 +60,10 @@ Update 10:45
 .Coding with {feelpp} in {cpp} or {python}
 [.examp]
 ****
+
+Update 10:45
+
+image::Session1_ParallelProgramming_Introduction.pdf[xref=#fragment,page=1]
 
 
 ****

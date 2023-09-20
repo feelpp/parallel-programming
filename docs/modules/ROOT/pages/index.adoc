@@ -9,7 +9,7 @@ endif::[]
 [.examp]
 ****
 
-** xref:PPChapter1.adoc[CPU, GPU, GPGPU Architecture]
+** xref:PPChapter1.adoc[Architecture]
 ** xref:PPChapter2.adoc[Programming interface for parallel computing]
 ** xref:PPChapter3.adoc[Star PU]
 ** xref:PPChapter4.adoc[Specx]
@@ -20,20 +20,23 @@ endif::[]
 
 .LINKS
 ****
-xref:../attachments/Session1_ParallelProgramming_Introduction.pdf[Session1 ParallelProgramming Introduction]
+xref:../assets/attachments/Session1_ParallelProgramming_Introduction.pdf[Session1 ParallelProgramming Introduction]
 
-xref:../attachments/Session2_ParallelProgramming_MPI.pdf[Session2 Parallel Programming MPI]
+xref:../assets/attachments/Session2_ParallelProgramming_MPI.pdf[Session2 Parallel Programming MPI]
 
-xref:../attachments/Session3_ParallelProgramming_HybridOpenMP_MPI.pdf[Session3 Parallel Programming Hybrid]
+xref:../assets/attachments/Session3_ParallelProgramming_HybridOpenMP_MPI.pdf[Session3 Parallel Programming Hybrid]
 
-xref:../attachments/Session4_ParallelProgramming_Cuda.pdf[Session4 Parallel Programming CUDA]
+xref:../assets/attachments/Session4_ParallelProgramming_Cuda.pdf[Session4 Parallel Programming CUDA]
 
-xref:../attachments/Session5_ParallelProgramming_HIP.pdf[Session5 Parallel Programming HIP]
+xref:../assets/attachments/Session5_ParallelProgramming_HIP.pdf[Session5 Parallel Programming HIP]
 
-xref:../attachments/Session6_ParallelProgramming_Specx.pdf[Session6 Parallel Programming Specx]
+xref:../assets/attachments/Session6_ParallelProgramming_Specx.pdf[Session6 Parallel Programming Specx]
 
 
-xref:version@component:module:attachment$file-coordinate-of-attachment.ext[optional link text]
+
+.HELLLLLLLLLLLLLLLLLOOO
+
+See the xref:attachment$Session1_ParallelProgramming_Introduction.pdf
 
 ****
 

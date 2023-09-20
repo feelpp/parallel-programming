@@ -1,14 +1,14 @@
 * xref:index.adoc[Introduction]
 
-* xref:PPChapter1.adoc[CPU, GPU, GPGPU Architecture]
+* xref:PPChapter1.adoc[CPU,GPU,GPGPU Architecture]
 
-* xref:PPChapter2.adoc[Programming interface for parallel computing]
+* xref:PPChapter2_MPI.adoc[MPI (Message Passing Interface)]
+
+* xref:PPChapter2_OpenMP.adoc[OpenMP (Open Multi-Processing)]
+
+* xref:PPChapter2_Hybrid.adoc[Hybrid MPI with OpenMP]
 
 * xref:PPChapter3.adoc[StarPU]
 
 * xref:PPChapter4.adoc[Specx]
-
-
-
-
 

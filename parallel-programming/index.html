@@ -210,49 +210,365 @@ MathJax.Hub.Config({
 <div class="content">
 <div class="title">DOCUMENTS</div>
 <div class="paragraph">
+<p>Parallel machines provide a wonderful opportunity for applications with large computational re-
+quirements. Effective use of these machines, though, requires a keen understanding of how they
+work.</p>
+</div>
+<div class="paragraph">
 <p><strong>What Is Parallel Computing?</strong></p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>Serial Computing *</p>
-</li>
-</ul>
+<div class="paragraph">
+<p><strong>Serial Computing</strong></p>
 </div>
 <div class="paragraph">
 <p>Traditionally, software has been written for serial computation:</p>
 </div>
-<div class="literalblock">
+<div class="ulist">
+<ul>
+<li>
+<p>A problem is broken into a discrete series of instructions</p>
+</li>
+<li>
+<p>Instructions are executed sequentially one after another</p>
+</li>
+<li>
+<p>Executed on a single processor</p>
+</li>
+<li>
+<p>Only one instruction may execute at any moment in time</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
 <div class="content">
-<pre>A problem is broken into a discrete series of instructions
-Instructions are executed sequentially one after another
-Executed on a single processor
-Only one instruction may execute at any moment in time</pre>
+<a class="image" href="#fragment_000_001"><img src="_images/serialProblem.gif" alt="serialProblem"></a>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Parallel Computing</strong></p>
+</div>
+<div class="paragraph">
+<p>In the simplest sense, parallel computing is the simultaneous use of multiple compute resources to solve a computational problem:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A problem is broken into discrete parts that can be solved concurrently</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Each part is further broken down to a series of instructions</p>
+</li>
+<li>
+<p>Instructions from each part execute simultaneously on different processors</p>
+</li>
+<li>
+<p>An overall control/coordination mechanism is employed</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="#fragment_000_002"><img src="_images/parallelProblem.gif" alt="parallelProblem"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>For example</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="#fragment_000_003"><img src="_images/parallelProblem2.gif" alt="parallelProblem2"></a>
 </div>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Parallel Computing *</p>
+<p>The computational problem should be able to:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Be broken apart into discrete pieces of work that can be solved simultaneously;</p>
+</li>
+<li>
+<p>Execute multiple program instructions at any moment in time;</p>
+</li>
+<li>
+<p>Be solved in less time with multiple compute resources than with a single compute resource.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>The compute resources are typically:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A single computer with multiple processors/cores</p>
+</li>
+<li>
+<p>An arbitrary number of such computers connected by a network</p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>In the simplest sense, parallel computing is the simultaneous use of multiple compute resources to solve a computational problem:</p>
+<p><strong>Parallel Computers</strong></p>
 </div>
-<div class="literalblock">
+<div class="paragraph">
+<p><strong>Virtually all stand-alone computers today are parallel from a hardware perspective:
+<strong> Multiple functional units (L1 cache, L2 cache, branch, prefetch, decode, floating-point, graphics processing (GPU), integer, etc.)
+</strong> Multiple execution units/cores
+*</strong> Multiple hardware threads</p>
+</div>
+<div class="imageblock">
 <div class="content">
-<pre>A problem is broken into discrete parts that can be solved concurrently
-Each part is further broken down to a series of instructions
-Instructions from each part execute simultaneously on different processors
-An overall control/coordination mechanism is employed</pre>
+<a class="image" href="#fragment_000_004"><img src="_images/bgqComputeChip.jpeg" alt="bgqComputeChip"></a>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Networks connect multiple stand-alone computers (nodes) to make larger parallel computer clusters.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="#fragment_000_005"><img src="_images/nodesNetwork.gif" alt="nodesNetwork"></a>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>For example, the schematic below shows a typical LLNL parallel computer cluster:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Each compute node is a multi-processor parallel computer in itself</p>
+</li>
+<li>
+<p>Multiple compute nodes are networked together with an Infiniband network</p>
+</li>
+<li>
+<p>Special purpose nodes, also multi-processor, are used for other purposes</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="#fragment_000_006"><img src="_images/parallelComputer1.gif" alt="parallelComputer1"></a>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The majority of the world&#8217;s large parallel computers (supercomputers) are clusters of hardware produced by a handful of (mostly) well known vendors.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Why Use Parallel Computing?</strong></p>
+</div>
+<div class="paragraph">
+<p>The Real World Is Massively Complex</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>In the natural world, many complex, interrelated events are happening at the same time, yet within a temporal sequence.</p>
+</li>
+<li>
+<p>Compared to serial computing, parallel computing is much better suited for modeling, simulating and understanding complex, real world phenomena.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Main Reasons for Using Parallel Programming</strong></p>
+</div>
+<div class="paragraph">
+<p>SAVE TIME AND/OR MONEY</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>In theory, throwing more resources at a task will shorten its time to completion, with potential cost savings.</p>
+</li>
+<li>
+<p>Parallel computers can be built from cheap, commodity components</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>SOLVE LARGER / MORE COMPLEX PROBLEMS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Many problems are so large and/or complex that it is impractical or impossible to solve them using a serial program, especially given limited computer memory.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>PROVIDE CONCURRENCY</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A single compute resource can only do one thing at a time. Multiple compute resources can do many things simultaneously.</p>
+</li>
+<li>
+<p>Example: Collaborative Networks provide a global venue where people from around the world can meet and conduct work "virtually."</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>TAKE ADVANTAGE OF NON-LOCAL RESOURCES</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Using compute resources on a wide area network, or even the Internet when local compute resources are scarce or insufficient.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>MAKE BETTER USE OF UNDERLYING PARALLEL HARDWARE</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Modern computers, even laptops, are parallel in architecture with multiple processors/cores.</p>
+</li>
+<li>
+<p>Parallel software is specifically intended for parallel hardware with multiple cores, threads, etc.</p>
+</li>
+<li>
+<p>In most cases, serial programs run on modern computers "waste" potential computing power.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Who Is Using Parallel Computing?</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Science and Engineering</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Historically, parallel computing has been considered to be "the high end of computing," and has been used to model difficult problems in many areas of science and engineering:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Atmosphere, Earth, Environment</p>
+</li>
+<li>
+<p>Physics - applied, nuclear, particle, condensed matter, high pressure, fusion, photonics</p>
+</li>
+<li>
+<p>Bioscience, Biotechnology, Genetics</p>
+</li>
+<li>
+<p>Chemistry, Molecular Sciences</p>
+</li>
+<li>
+<p>Geology, Seismology</p>
+</li>
+<li>
+<p>Mechanical Engineering - from prosthetics to spacecraft</p>
+</li>
+<li>
+<p>Electrical Engineering, Circuit Design, Microelectronics</p>
+</li>
+<li>
+<p>Computer Science, Mathematics</p>
+</li>
+<li>
+<p>Defense, Weapons</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="#fragment_000_007"><img src="_images/simulations01.jpeg" alt="simulations01"></a>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Industrial and Commercial</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Today, commercial applications provide an equal or greater driving force in the development of faster computers. These applications require the processing of large amounts of data in sophisticated ways. For example:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>"Big Data," databases, data mining</p>
+</li>
+<li>
+<p>Artificial Intelligence (AI)</p>
+</li>
+<li>
+<p>Oil exploration</p>
+</li>
+<li>
+<p>Web search engines, web based business services</p>
+</li>
+<li>
+<p>Medical imaging and diagnosis</p>
+</li>
+<li>
+<p>Pharmaceutical design</p>
+</li>
+<li>
+<p>Financial and economic modeling</p>
+</li>
+<li>
+<p>Management of national and multi-national corporations</p>
+</li>
+<li>
+<p>Advanced graphics and virtual reality, particularly in the entertainment industry</p>
+</li>
+<li>
+<p>Networked video and multi-media technologies</p>
+</li>
+<li>
+<p>Collaborative work environments</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="imageblock unresolved">
+<div class="content">
+<a class="image" href="#fragment_000_008"><img src="simulations03.jpeg" alt="simulations03"></a>
 </div>
 </div>
 </div>
 </div>
 <div class="sidebarblock">
 <div class="content">
-<div class="title">LINKS</div>
+<div class="title">DOCUMENTATIONS</div>
 <div class="paragraph">
 <p><a href="#../assets/attachments/Session1_ParallelProgramming_Introduction.pdf" class="xref unresolved">Session1 ParallelProgramming Introduction</a></p>
 </div>

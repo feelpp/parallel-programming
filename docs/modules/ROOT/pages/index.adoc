@@ -1,4 +1,4 @@
-= {project_name}
+= {Parallel Programming}
 
 
 ifeval::["{project_name}" == "Parallel Programming"]

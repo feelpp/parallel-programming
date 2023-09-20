@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Untitled :: Parallel Programming</title>
+    <link rel="canonical" href="https://feelpp.github.io/parallel-programming/parallel-programming/PPChapter2_MPI.html">
+    <meta name="generator" content="Antora 3.1.3">
+    <link rel="stylesheet" href="../_/css/site.css">
+<link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+<script>!function(l,p){if(l.protocol!==p&&l.host=="docs.antora.org"){l.protocol=p}else if(/\.gitlab\.io$/.test(l.host)){l.replace(p+"//docs.antora.org"+l.pathname.substr(l.pathname.indexOf("/",1))+l.search+l.hash)}}(location,"https:")</script>
+
+<script src="../_/js/vendor/tabs-block-extension.js"></script>
+<script src="../_/js/vendor/tabs-block-behavior.js"></script>
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\\[','\\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+
+  TeX: {
+      Macros: {
+      bold: ["{\\bf #1}",1],
+      calTh: "{\\mathcal{T}_h}",
+      card: ["{\\operatorname{card}(#1)}",1],
+      card: ["{\\operatorname{card}(#1)}",1],
+      Ck: ["{\\mathcal{C}^{#1}}",1],
+      deformt: ["{\\mathbf{\\varepsilon(#1)}}",1],
+      diam: "{\\operatorname{diam}}",
+      dim: ["{\\operatorname{dim}(#1)}",1],
+      disp: ["{\\mathbf{#1}}",1],
+      domain: "{\\Omega}",
+      ds: "",
+      essinf: "{\\operatorname{ess}\\, \\operatorname{inf}}",
+      F:"{\\mathcal{F}}",
+      geo: "{\\mathrm{geo}}",
+      Ich: ["{\\mathcal{I}^{#1}_{c,h}#2}",2],
+      Id: "{\\mathcal{I}}",
+      Ilag: ["{\\mathcal{I}^{\\mathrm{lag}}_{#1}}",1],
+      jump: ["{[\\![ #1 ]\\!]}",1],
+      n:"{\\mathbf{n}}",
+      Ne: "{N_{\\mathrm{e}}}",
+      Next: "{\\mathrm{n}}",
+      nf: "{n_f}",
+      ngeo: "{n_{\\mathrm{geo}}}",
+      Nma: "{N_{\\mathrm{ma}}}",
+      NN: "{\\mathbb N}",
+      Nno: "{N_{\\mathrm{no}}}",
+      Nso: "{N_{\\mathrm{so}}}",
+      opdim: "{\\operatorname{dim}}",
+      p: "{\\mathrm{p}}",
+      P:"{\\mathcal{P}}",
+      Pch: ["{P^{#1}_{c,h}}",1],
+      Pcho: ["{P^{#1}_{c,h,0}}",1],
+      Pk: ["{\\mathcal{P}^{#1}}",1],
+      poly: ["{\\mathbb{#1}",1],
+      poly: ["{\\mathbb{#1}}",1],
+      prect: ["{\\left\\(#1\\right\\)}",1],
+      q:"{\\mathbf{q}}",
+      Qch: ["{Q^{#1}_{c,h}}",1],
+      Qk: ["{\\mathcal{Q}^{#1}}",1],
+      R: ["{\\mathbb{R}^{#1}}",1],
+      RR: "{\\mathbb R}",
+      set: ["{\\left\\{#1\\right\\}}",1],
+      stresst: ["{\\mathbf{\\sigma(#1)}}",1],
+      T:"{\\mathcal{T}}",
+      tr: "{\\operatorname{tr}}",
+      v:"{\\mathbf{v}}",
+      vertiii: ["\\left\\vert\\kern-0.25ex\\left\\vert\\kern-0.25ex\\left\\vert #1 \\right\\vert\\kern-0.25ex\\right\\vert\\kern-0.25ex\\right\\vert",1]
+  },
+  extensions: ["mhchem.js"] 
+  }
+});
+</script>
+<!--<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>-->
+<!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML' async></script> -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_CHTML'></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.0/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>-->
+
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.css" integrity="sha384-TEMocfGvRuD1rIAacqrknm5BQZ7W7uWitoih+jMNFXQIbNl16bO8OZmylH/Vi/Ei" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.js" integrity="sha384-jmxIlussZWB7qCuB+PgKG1uLjjxbVVIayPJwi6cG6Zb4YKq0JIw+OMnkkEC7kYCq" crossorigin="anonymous"></script>-->
+<script>var uiRootPath = '../_'</script>
+
+  </head>
+  <body class="article">
+<header class="header">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark navbar-template-project" style="border-top: 4px solid #9E9E9E">
+        <div class="navbar-brand">
+            <div class="navbar-item feelpp-logo">
+                <a href="https://feelpp.github.io/parallel-programming">Parallel Programming</a>
+            </div>
+            <button class="navbar-burger" data-target="topbar-nav">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+
+        <div id="topbar-nav" class="navbar-menu">
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <a href="https://docs.feelpp.org/">Documentation Reference</a>
+                </div>
+                <div class="navbar-item has-dropdown is-hoverable download-item">
+                    <div class="navbar-item"><a href="https://docs.feelpp.org/user/latest/install/index.html" class="download-btn">Get Feel++</a></div>
+                </div>
+                <div class="navbar-item">
+                    <a class="navbar-brand"  href="https://www.cemosis.fr">
+                        <img class="cemosis-logo"  src="../_/img/cemosis-logo.svg" alt="Cemosis logo"/>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="body">
+<a href="#" class="menu-expand-toggle"></a>
+<div class="nav-container" data-component="parallel-programming" data-version="">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html">Template Project</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Introduction</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter1.html">CPU,GPU,GPGPU Architecture</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="PPChapter2_MPI.html">MPI (Message Passing Interface)</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter2_OpenMP.html">OpenMP (Open Multi-Processing)</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter2_Hybrid.html">Hybrid MPI with OpenMP</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter3.html">StarPU</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter4.html">Specx</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Template Project</span>
+    <span class="version"></span>
+  </div>
+  <ul class="components">
+      <li class="component">
+        <a class="title" href="../feelpp-antora-ui/index.html">Antora Feel++ UI</a>
+      </li>
+      <li class="component is-current">
+        <a class="title" href="index.html">Template Project</a>
+      </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+  <button class="nav-toggle"></button>
+    <a href="index.html" class="home-link"></a>
+  <nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Template Project</a></li>
+    <li><a href="PPChapter2_MPI.html">MPI (Message Passing Interface)</a></li>
+  </ul>
+</nav>
+
+  
+    <div class="edit-this-page"><a href="https://github.com/feelpp/parallel-programming/edit/lem/docs/modules/ROOT/pages/PPChapter2_MPI.adoc">Edit this Page</a></div>
+  
+  <div class="page-downloads">
+  <span class="label">Download as</span>
+  <ul class="download-options">
+    <li>
+      <a onclick="print(this)" href="#" data-toggle="tooltip" data-placement="left" title="Print to PDF"
+         class="pdf-download">
+        <img class="pdf-file-icon icon" src="../_/img/pdf.svg"/> .pdf
+      </a>
+    </li>
+  </ul>
+</div>
+</div>
+
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<div class="sect2">
+<h3 id="_2_programming_interface_for_parallel_computing"><a class="anchor" href="#_2_programming_interface_for_parallel_computing"></a>1. 2. Programming interface for parallel computing</h3>
+<div class="paragraph">
+<p><strong>MPI, OpenMP two complementary parallelization models.</strong></p>
+</div>
+<div class="paragraph">
+<p>– MPI is a multi-process model whose mode of communication between the
+processes is <strong>explicit</strong> (communication management is the responsibility
+of the user). MPI is generally used on multiprocessor machines with
+distributed memory. MPI is a library for passing messages between
+processes without sharing.</p>
+</div>
+<div class="paragraph">
+<p>– OpenMP is a multitasking model whose mode of communication between
+tasks is <strong>implicit</strong> (the management of communications is the
+responsibility of the compiler). OpenMP is used on shared-memory
+multiprocessor machines. It focuses on shared memory paradigms. It is a
+language extension for expressing data-parallel operations (usually
+parallelized arrays over loops).</p>
+</div>
+<div class="paragraph">
+<p>Note: on a cluster of independent shared-memory multiprocessor machines
+(nodes), the implementation of a two-level parallelization (MPI, OpenMP)
+in the same program can be a major advantage for the parallel
+performance of the code.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="#fragment7"><img src="_images/image7.png" alt="image7" width="581" height="336"></a>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>MPI vs. OpenMP</strong></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>MPI pos</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>OpenMP pos</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Portable to a distributed and shared memory machine.</p>
+</div>
+<div class="paragraph">
+<p>Scale beyond a node</p>
+</div>
+<div class="paragraph">
+<p>No data placement issues</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Easy to implement parallelism</p>
+</div>
+<div class="paragraph">
+<p>Implicit communications</p>
+</div>
+<div class="paragraph">
+<p>Low latency, high bandwidth</p>
+</div>
+<div class="paragraph">
+<p>Dynamic Load Balancing</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>MPI negative</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>OpenMP negative</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Explicit communication</p>
+</div>
+<div class="paragraph">
+<p>High latency, low bandwidth</p>
+</div>
+<div class="paragraph">
+<p>Difficult load balancing</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Only on nodes or shared memory machines</p>
+</div>
+<div class="paragraph">
+<p>Scale on Node</p>
+</div>
+<div class="paragraph">
+<p>Data placement problem</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>2.1 MPI (Message Passing Interface)</strong></p>
+</div>
+<div class="paragraph">
+<p><strong>Point-to-point communications</strong></p>
+</div>
+<div class="paragraph">
+<p><strong>General notions</strong></p>
+</div>
+<div class="paragraph">
+<p>The transmitter and the receiver are identified by their rank in the
+communicator. The entity passed between two processes is called a
+message .<br>
+A message is characterized by its envelope . This consists of:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the rank of the sending process;<br></p>
+</li>
+<li>
+<p>the rank of the receiving process;<br></p>
+</li>
+<li>
+<p>the label ( <em>tag</em> ) of the message;<br></p>
+</li>
+<li>
+<p>the communicator who defines the process group and the communication
+context.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The data exchanged is typed (integers, reals, etc. or personal derived
+types).</p>
+</div>
+<div class="paragraph">
+<p>In each case, there are several transfer modes , using different
+protocols.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int MPI_Send( *const void* *message, *int* length, MPI_Datatype
+type_message, *int* rank_dest, *int* label, MPI_Comm comm)</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int MPI_Recv ( *void* *message, *int* length, MPI_Datatype
+type_message, *int* rank_source, *int* label, MPI_Comm comm, MPI_Status
+*status)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note this operation is blocking.</p>
+</div>
+<div class="paragraph">
+<p><strong>Simultaneous send and receive operation</strong></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int MPI_Sendrecv ( *const void* *message_sent, *int*
+length_message_sent, +
+MPI_Datatype type_message_sent, *int* rank_dest, *int*
+label_message_sent, *void* *message_received , *int*
+length_message_received, +
+MPI_Datatype type_message_received, *int* rank_source, *int*
+label_message_received, MPI_Comm comm, MPI_Status *status)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Simultaneous send and receive operation</strong></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int MPI_Sendrecv_replace ( void * message, int length, MPI_Datatype
+type_message, int rank_dest, int label_message_sent, int* rank_source,
+int label_message_recu, MPI_Comm comm, MPI_Status *status)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Collective communications</strong></p>
+</div>
+<div class="paragraph">
+<p><strong>General notions</strong></p>
+</div>
+<div class="paragraph">
+<p>Collective communications allow a series of point-to-point
+communications to be made in a single operation.</p>
+</div>
+<div class="paragraph">
+<p>A collective communication always concerns all the processes of the
+indicated communicator .</p>
+</div>
+<div class="paragraph">
+<p>For each of the processes, the call ends when the latter&#8217;s participation
+in the collective operation is completed, in the sense of point-to-point
+communications (thus when the memory zone concerned can be modified).</p>
+</div>
+<div class="paragraph">
+<p>The management of labels in these communications is transparent and at
+the expense of the system. They are therefore never explicitly defined
+during the call to these subroutines. One of the advantages of this is
+that collective communications never interfere with point-to-point
+communications.</p>
+</div>
+<div class="paragraph">
+<p><strong>Types of collective communications</strong></p>
+</div>
+<div class="paragraph">
+<p>There are three types of subroutines:<br>
+<strong>1.</strong> the one that ensures global synchronizations: MPI_Barrier() .</p>
+</div>
+<div class="paragraph">
+<p><strong>2.</strong> those that only transfer data:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>global data broadcasting: MPI_Bcast();<br></p>
+</li>
+<li>
+<p>selective diffusion of data: MPI_Scatter();<br></p>
+</li>
+<li>
+<p>distributed data collection: MPI_Gather();<br></p>
+</li>
+<li>
+<p>collection by all distributed data processes: MPI_Allgather(); •
+selective collection and dissemination, by all processes, of distributed
+data: MPI_Alltoall() .</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>3.</strong> those who, in addition to managing communications, perform
+operations on the transferred data:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p></p>
+<div class="paragraph">
+<p>reduction operations (sum, product, maximum, minimum, etc.), whether of
+a predefined type or of a personal type: MPI_Reduce();</p>
+</div>
+</li>
+<li>
+<p></p>
+<div class="paragraph">
+<p>reduction operations with distribution of the result (equivalent to an
+MPI_Reduce() followed by an MPI_Bcast()): MPI_Allreduce().</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Global synchronization</strong></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int MPI_Barrier ( MPI_Comm comm)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>General distribution</strong></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int MPI_Bcast( void *message, int length, MPI_Datatype,
+type_message, *int* rank_source, MPI_Comm comm)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Selective dissemination</strong></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int MPI_Scatter ( const void *message_to_be restarted, int
+length_message_sent, MPI_Datatype type_message_sent, void
+*message_received, int length_message_recu, MPI_Datatype type_message_recu, int
+rank_source, MPI_Comm comm)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Collection</strong></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int MPI_Gather ( const void *message_sent, int
+length_message_sent, MPI_Datatype type_message_sent, void
+*message_received, int length_message_received, MPI_Datatype
+type_message_received, *int* rank_dest, MPI_Comm comm)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>General collection</strong></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int MPI_Allgather ( const void *message_sent, int
+length_message_sent, MPI_Datatype type_message_sent, void
+*message_received, int length_message_received, MPI_Datatype
+type_message_received, MPI_Comm comm)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>"Variable" collection</strong></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int MPI_Gatherv ( const void *message_sent, int
+length_message_sent, MPI_Datatype type_message_sent, void
+*message_received, const int *nb_elts_recus, const int *deplts,
+MPI_Datatype type_message_recu, *int* rang_dest, MPI_Comm comm)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Selective collections and distributions</strong></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int MPI_Alltoall ( const void *message_sent, int
+length_message_sent, MPI_Datatype type_message_sent, void
+*message_received, int length_message_received, MPI_Datatype
+type_message_received, MPI_Comm comm)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Distributed reductions</strong></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int MPI_Reduce ( const void *message_sent, void *message_received,
+int length, MPI_Datatype type_message, MPI_Op operation, int rank_dest,*
+MPI_Comm comm)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Distributed reductions with distribution of the result</strong></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int MPI_Allreduce ( const void *message_sent, void *message_received, *int* length, MPI_Datatype, type_message, MPI_Op operation, MPI_Comm comm)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Communication models</strong></p>
+</div>
+<div class="paragraph">
+<p><strong>Point-to-point sending modes</strong></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>_Blocking and Non-blocking mode_</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Standard sending MPI_Send() MPI_Isend()</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Synchronous send MPI_Ssend() MPI_Issend()</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>_Buffered_ send MPI_Bsend() MPI_Ibsend()</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Receive MPI_Recv() MPI_Irecv()</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong><em>Blocking calls</em></strong></p>
+</div>
+<div class="paragraph">
+<p>A call is blocking if the memory space used for communication can be
+reused immediately after the call exits.</p>
+</div>
+<div class="paragraph">
+<p>The data sent can be modified after the blocking call.</p>
+</div>
+<div class="paragraph">
+<p>The received data can be read after the blocking call.</p>
+</div>
+<div class="paragraph">
+<p><strong>Synchronous sends</strong></p>
+</div>
+<div class="paragraph">
+<p>A synchronous send involves synchronization between the processes
+involved. A shipment can only begin when its receipt is posted. There
+can only be communication if both processes are willing to communicate.</p>
+</div>
+<div class="paragraph">
+<p><strong>int</strong> MPI_Ssend( <strong>const void</strong> * values, <strong>int</strong> size, MPI_Datatype
+message_type, <strong>int</strong> dest, <strong>int</strong> label, MPI_Comm comm)</p>
+</div>
+<div class="paragraph">
+<p><strong>Benefits</strong></p>
+</div>
+<div class="paragraph">
+<p>Consume few resources (no <em>buffer</em> )<br>
+Fast if the receiver is ready (no copying into a <em>buffer</em> ) Recognition
+of reception thanks to synchronization</p>
+</div>
+<div class="paragraph">
+<p><strong>Disadvantages</strong></p>
+</div>
+<div class="paragraph">
+<p>Waiting time if the receiver is not there/not ready Risks of deadlock</p>
+</div>
+<div class="paragraph">
+<p><strong>_Buffered<br>
+_</strong>sends A buffered send involves the copying of data into an
+intermediate memory space. There is then no coupling between the two
+communication processes. The output of this type of sending therefore
+does not mean that the reception has taken place.</p>
+</div>
+<div class="paragraph">
+<p>Buffers must be managed manually (with calls to MPI_Buffer_attach( <em>)</em>
+and MPI_Buffer_detach()). They must be allocated taking into account the
+memory overhead of the messages (by adding the MPI_BSEND_OVERHEAD
+constant for each message instance).</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int MPI_Buffer_attach ( void *buf, int size_buf)
+int MPI_Buffer_detach ( void *buf, int size_buf)
+int MPI_Bsend( const void *values, int size, MPI_Datatype type_message, int dest, int label, MPI_Comm comm)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Advantages of buffered mode</strong></p>
+</div>
+<div class="paragraph">
+<p>No need to wait for the receiver (recopy in a <em>buffer</em> ) No risk of
+blocking ( <em>deadlocks</em> )</p>
+</div>
+<div class="paragraph">
+<p><strong>Disadvantages of buffered mode</strong></p>
+</div>
+<div class="paragraph">
+<p>Consume more resources (memory occupation by <em>buffers</em> with risk of
+saturation)</p>
+</div>
+<div class="paragraph">
+<p>Send buffers must be managed manually (often difficult to choose an
+appropriate size <em>)</em></p>
+</div>
+<div class="paragraph">
+<p>A bit slower than synchronous sends if the receiver is ready</p>
+</div>
+<div class="paragraph">
+<p>No knowledge of the reception (send-receive decoupling)</p>
+</div>
+<div class="paragraph">
+<p>Risk of wasting memory space if the <em>buffers</em> are too oversized</p>
+</div>
+<div class="paragraph">
+<p>The application crashes if the <em>buffers</em> are too small</p>
+</div>
+<div class="paragraph">
+<p>There are also often hidden <em>buffers</em> managed by the MPI implementation
+on the sender and/or receiver side (and consuming memory resources)</p>
+</div>
+<div class="paragraph">
+<p><strong>Standard shipments</strong></p>
+</div>
+<div class="paragraph">
+<p>MPI_Send() subroutine . In most implementations, this mode switches from
+buffered <em>(</em> eager <em>)</em> to synchronous mode as message sizes grow.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int MPI_Send( const void *values, int size, MPI_Datatype type_message, int dest, int label, MPI_Comm comm)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Benefits of standard mode</strong></p>
+</div>
+<div class="paragraph">
+<p>&#8658; Often the most efficient (choice of the most suitable mode by the
+manufacturer)</p>
+</div>
+<div class="paragraph">
+<p><strong>Disadvantages of standard mode</strong></p>
+</div>
+<div class="paragraph">
+<p>&#8658; Little control over the mode actually used (often accessible via
+environment variables)</p>
+</div>
+<div class="paragraph">
+<p>Risk of <em>deadlock</em> depending on the real mode<br>
+Behavior may vary depending on the architecture and the size of the
+problem</p>
+</div>
+<div class="paragraph">
+<p><strong>Non-blocking calls</strong></p>
+</div>
+<div class="paragraph">
+<p>non-blocking call returns control very quickly, but does not allow the
+immediate reuse of the memory space used in the call. It is necessary to
+ensure that the communication is indeed terminated (with MPI_Wait() for
+example) before using it again.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int MPI_Isend( const void *values, int size, MPI_Datatype
+message_type, int dest, int label, MPI_Comm comm, MPI_Request *req)</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int MPI_Issend ( const void* values, int size, MPI_Datatype
+message_type, int dest, int label, MPI_Comm comm, MPI_Request *req)</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int MPI_Ibsend( const void* values, int size, MPI_Datatype
+message_type, int dest, int label, MPI_Comm comm, MPI_Request *req)</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int MPI_Irecv( void *values, int size, MPI_Datatype type_message,
+int* source, int label, MPI_Comm comm, MPI_Request *req)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Benefits of non-blocking calls</strong></p>
+</div>
+<div class="paragraph">
+<p>Ability to hide all or part of the communication costs (if the
+architecture allows it)</p>
+</div>
+<div class="paragraph">
+<p>No risk of <em>deadlock</em></p>
+</div>
+<div class="paragraph">
+<p><strong>Disadvantages of non-blocking calls</strong></p>
+</div>
+<div class="paragraph">
+<p>Higher additional costs (several calls for a single send or receive,
+request management)</p>
+</div>
+<div class="paragraph">
+<p>Higher complexity and more complicated maintenance</p>
+</div>
+<div class="paragraph">
+<p>Risk of loss of performance on the calculation cores (for example
+differentiated management between the zone close to the border of a
+domain and the interior zone resulting in less good use of memory
+caches)</p>
+</div>
+<div class="paragraph">
+<p>Limited to point-to-point communications (has been extended to
+collectives in MPI 3.0)</p>
+</div>
+<div class="paragraph">
+<p><strong>interfaces</strong></p>
+</div>
+<div class="paragraph">
+<p>MPI_Wait() waits for the end of a communication. MPI_Test() is the
+non-blocking version.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int MPI_Wait ( MPI_Request *req, MPI_Status *status)
+int MPI_Test( MPI_Request *req, int *flag, MPI_Status *status)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>MPI_Waitall() waits for all communications to end. MPI_Testall() is the
+non-blocking version.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int MPI_Waitall ( int size, MPI_Request reqs[], MPI_Status statuses[])
+int* MPI_Testall ( int size, MPI_Request reqs[], int *flag, MPI_Status statuses[])</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>MPI_Waitany waits for the end of one communication among several.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int MPI_Waitany ( int size, MPI_Request reqs[], int *index,MPI_Status *status)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>MPI_Testany is the non-blocking version.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int* MPI_Testany( int size, MPI_Request reqs[], int *index, int *flag, MPI_Status *status)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>MPI_Waitsome is waiting for the end of one or more communications.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int MPI_Waitsome( int size, MPI_Request reqs[], int *endcount,int *indexes, MPI_Status *status)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>MPI_Testsome is the non-blocking version.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int MPI_Testsome( int size, MPI_Request reqs[], int *endcount,int *indexes, MPI_Status *status)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Memory-to-memory communications (RMA)</strong></p>
+</div>
+<div class="paragraph">
+<p>Memory-to-memory communications (or RMA for <em>Remote Memory Access</em> or
+<em>one-sided communications</em> ) consist of accessing the memory of a remote
+process in write or read mode without the latter having to manage this
+access explicitly. The target process therefore does not intervene
+during the transfer.</p>
+</div>
+<div class="paragraph">
+<p><strong>RMA - General Approach</strong></p>
+</div>
+<div class="paragraph">
+<p>Creation of a memory window with MPI_Win_create() to authorize RMA
+transfers in this area.</p>
+</div>
+<div class="paragraph">
+<p>Remote read or write access by calling MPI_Put(), MPI_Get(),
+MPI_Accumulate(), , MPI_Get_accumulate() and MPI_Compare_and_swap()</p>
+</div>
+<div class="paragraph">
+<p>Freeing the memory window with M PI_Win_free() .</p>
+</div>
+<div class="paragraph">
+<p><strong>RMA - Synchronization Methods</strong></p>
+</div>
+<div class="paragraph">
+<p>To ensure correct operation, it is mandatory to carry out certain
+synchronizations. 3 methods are available:</p>
+</div>
+<div class="paragraph">
+<p>Active target communication with global synchronization (
+MPI_Win_fence() );</p>
+</div>
+<div class="paragraph">
+<p>Communication with active target with pair synchronization
+(MPI_Win_start() and MPI_Win_complete() for the origin process;
+MPI_Win-post() and MPI_Win_wait() for the target process);</p>
+</div>
+<div class="paragraph">
+<p>Passive target communication without target intervention (MPI_Win_lock()
+and MPI_Win_unlock()).</p>
+</div>
+<div class="paragraph">
+<p><strong>Benefits of RMAs</strong></p>
+</div>
+<div class="paragraph">
+<p>Allows you to implement certain algorithms more efficiently.</p>
+</div>
+<div class="paragraph">
+<p>More efficient than point-to-point communications on some machines (use
+of specialized hardware such as DMA engine, coprocessor, specialized
+memory, etc.).</p>
+</div>
+<div class="paragraph">
+<p>Ability for the implementation to group multiple operations.</p>
+</div>
+<div class="paragraph">
+<p><strong>Disadvantages of RMAs</strong></p>
+</div>
+<div class="paragraph">
+<p>Synchronization management is tricky.</p>
+</div>
+<div class="paragraph">
+<p>Complexity and high risk of error.</p>
+</div>
+<div class="paragraph">
+<p>For passive target synchronizations, obligation to allocate memory with
+MPI_Alloc_mem() which does not respect the Fortran standard (use of Cray
+pointers not supported by some compilers).</p>
+</div>
+<div class="paragraph">
+<p>Less efficient than point-to-point communications on some machines.</p>
+</div>
+<div class="paragraph">
+<p><strong>Derived data types</strong></p>
+</div>
+<div class="paragraph">
+<p>In the communications, the data exchanged are typed: MPI_INTEGER,
+MPI_REAL, MPI_COMPLEX, etc .</p>
+</div>
+<div class="paragraph">
+<p>More complex data structures can be created using subroutines such as
+MPI_Type_contiguous(), MPI_Type_vector(), MPI_Type_Indexed() , or
+MPI_Type_create_struct()</p>
+</div>
+<div class="paragraph">
+<p>The derived types notably allow the exchange of non-contiguous or
+non-homogeneous data in memory and to limit the number of calls to the
+communications subroutines.</p>
+</div>
+<div class="paragraph">
+<p><strong>MPI keywords</strong></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>1 environment</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>MPI Init: Initialization of the MPI environment</p>
+</li>
+<li>
+<p>MPI Comm rank: Rank of the process</p>
+</li>
+<li>
+<p>MPI Comm size: Number of processes</p>
+</li>
+<li>
+<p>MPI Finalize: Deactivation of the MPI environment</p>
+</li>
+<li>
+<p>MPI Abort:Stopping of an MPI program</p>
+</li>
+<li>
+<p>MPI Wtime: Time taking</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>2 Point-to-point communications</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>MPI Send: Send message</p>
+</li>
+<li>
+<p>MPI Isend: Non-blocking message sending</p>
+</li>
+<li>
+<p>MPI Recv: Message received</p>
+</li>
+<li>
+<p>MPI Irecv: Non-blocking message reception</p>
+</li>
+<li>
+<p>MPI Sendrecv and MPI Sendrecv replace: Sending and receiving messages</p>
+</li>
+<li>
+<p>MPI Wait: Waiting for the end of a non-blocking communication</p>
+</li>
+<li>
+<p>MPI Wait all: Wait for the end of all non-blocking communications</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>3 Collective communications</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>MPI Bcast: General broadcast</p>
+</li>
+<li>
+<p>MPI Scatter: Selective spread</p>
+</li>
+<li>
+<p>MPI Gather and MPI Allgather: Collecting</p>
+</li>
+<li>
+<p>MPI Alltoall: Collection and distribution</p>
+</li>
+<li>
+<p>MPI Reduce and MPI Allreduce: Reduction</p>
+</li>
+<li>
+<p>MPI Barrier: Global synchronization</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>4 Derived Types</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>MPI Contiguous type: Contiguous types</p>
+</li>
+<li>
+<p>MPI Type vector and MPI Type create hvector: Types with a con-standing</p>
+</li>
+<li>
+<p>MPI Type indexed: Variable pitch types</p>
+</li>
+<li>
+<p>MPI Type create subarray: Sub-array types</p>
+</li>
+<li>
+<p>MPI Type create struct: H and erogenous types</p>
+</li>
+<li>
+<p>MPI Type commit: Type commit</p>
+</li>
+<li>
+<p>MPI Type get extent: Recover the extent</p>
+</li>
+<li>
+<p>MPI Type create resized: Change of scope</p>
+</li>
+<li>
+<p>MPI Type size: Size of a type</p>
+</li>
+<li>
+<p>MPI Type free: Release of a type</p>
+</li>
+</ul>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>5 Communicator</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>MPI Comm split: Partitioning of a communicator</p>
+</li>
+<li>
+<p>MPI Dims create: Distribution of processes</p>
+</li>
+<li>
+<p>MPI Cart create: Creation of a Cart ́esian topology</p>
+</li>
+<li>
+<p>MPI Cart rank: Rank of a process in the Cart ́esian topology</p>
+</li>
+<li>
+<p>MPI Cart coordinates: Coordinates of a process in the Cart ́esian
+topology</p>
+</li>
+<li>
+<p>MPI Cart shift: Rank of the neighbors in the Cart ́esian topology</p>
+</li>
+<li>
+<p>MPI Comm free: Release of a communicator</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>6 MPI-IO</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>MPI File open: Opening a file</p>
+</li>
+<li>
+<p>MPI File set view: Changing the view • MPI File close: Closing a file</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>6.1 Explicit addresses</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>MPI File read at: Reading</p>
+</li>
+<li>
+<p>MPI File read at all: Collective reading</p>
+</li>
+<li>
+<p>MPI File write at: Writing</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>6.2 Individual pointers</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>MPI File read: Reading</p>
+</li>
+<li>
+<p>MPI File read all: collective reading</p>
+</li>
+<li>
+<p>MPI File write: Writing</p>
+</li>
+<li>
+<p>MPI File write all: collective writing</p>
+</li>
+<li>
+<p>MPI File seek: Pointer positioning</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>6.3 Shared pointers</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>MPI File read shared: Read</p>
+</li>
+<li>
+<p>MPI File read ordered: Collective reading</p>
+</li>
+<li>
+<p>MPI File seek shared: Pointer positioning</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>7.0 Symbolic constants</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>MPI COMM WORLD, MPI SUCCESS</p>
+</li>
+<li>
+<p>MPI STATUS IGNORE, MPI PROC NULL</p>
+</li>
+<li>
+<p>MPI INTEGER, MPI REAL, MPI DOUBLE PRECISION</p>
+</li>
+<li>
+<p>MPI ORDER FORTRAN, MPI ORDER C</p>
+</li>
+<li>
+<p>MPI MODE CREATE,MPI MODE RONLY,MPI MODE WRONLY</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer" style="border-top: 2px solid #e9e9e9; background-color: #fafafa; padding-bottom: 2em; padding-top: 2em;">
+    <div class="container" style="display: flex; flex-direction: column; align-items: center; gap: 0.5em;">
+        <div>
+            <a href="https://www.cemosis.fr">
+                <img src="../_/img/cemosis-logo.svg" alt="Cemosis logo" height="50">
+            </a>
+        </div>
+        <span style="font-size: 0.8rem; color: #9e9e9e">© 2023 <a href="https://www.cemosis.fr" style="text-decoration: underline;">Cemosis</a>, Université de Strasbourg</span>
+    </div>
+</footer>
+<script id="site-script" src="../_/js/site.js" data-ui-root-path="../_"></script>
+
+
+<script async src="../_/js/vendor/fontawesome-icon-defs.js"></script>
+<script async src="../_/js/vendor/fontawesome.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+
+
+<script type="text/javascript">
+function toggleFullScreen() {
+   var doc = window.document;
+   var docEl = doc.documentElement;
+
+   var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+   var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+   if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+       requestFullScreen.call(docEl);
+   }
+   else {
+       cancelFullScreen.call(doc);
+   }
+}
+</script>
+  </body>
+</html>

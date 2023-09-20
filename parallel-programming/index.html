@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>{Parallel Programming} :: Parallel Programming</title>
+    <title>Untitled :: Parallel Programming</title>
     <link rel="canonical" href="https://feelpp.github.io/parallel-programming/parallel-programming/index.html">
     <meta name="generator" content="Antora 3.1.3">
     <link rel="stylesheet" href="../_/css/site.css">
@@ -140,10 +140,16 @@ MathJax.Hub.Config({
     <a class="nav-link" href="index.html">Introduction</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="PPChapter1.html">CPU, GPU, GPGPU Architecture</a>
+    <a class="nav-link" href="PPChapter1.html">CPU,GPU,GPGPU Architecture</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="PPChapter2.html">Programming interface for parallel computing</a>
+    <a class="nav-link" href="PPChapter2_MPI.html">MPI (Message Passing Interface)</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter2_OpenMP.html">OpenMP (Open Multi-Processing)</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter2_Hybrid.html">Hybrid MPI with OpenMP</a>
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="PPChapter3.html">StarPU</a>
@@ -205,10 +211,14 @@ MathJax.Hub.Config({
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">{Parallel Programming}</h1>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="#fragment_000_000"><img src="_images/Begin001.jpg" alt="Begin001"></a>
+</div>
+</div>
 <div class="sidebarblock lead examp">
 <div class="content">
-<div class="title">DOCUMENTS</div>
+<div class="title">INTRODUCTION</div>
 <div class="paragraph">
 <p>In many applications today, software needs to make decisions quickly. And the best way to do that is through parallel programming in C/C++ and multithreading (multithreaded programming). Parallel programming is a broad concept. It can describe many types of processes running on the same machine or on different machines. Parallel machines provide a wonderful opportunity for applications with large computational requirements. Effective use of these machines, though, requires a keen understanding of how they work.</p>
 </div>
@@ -559,45 +569,94 @@ MathJax.Hub.Config({
 </div>
 <div class="imageblock">
 <div class="content">
-<a class="image" href="#fragment_000_008"><img src="_images/simulations03.jpg" alt="simulations03"></a>
+<a class="image" href="#fragment_000_008"><img src="_images/simulations03.jpeg" alt="simulations03"></a>
 </div>
 </div>
 </div>
 </div>
 <div class="sidebarblock">
 <div class="content">
-<div class="title">DOCUMENTATIONS</div>
+<div class="title">DOCUMENTATIONS POWERPOINTS</div>
 <div class="paragraph">
-<p><a href="#../assets/attachments/Session1_ParallelProgramming_Introduction.pdf" class="xref unresolved">Session1 ParallelProgramming Introduction</a></p>
+<p><a href="../assets/attachments/Session1_ParallelProgramming_Introduction.pdf">Introduction Parallel Programming</a></p>
 </div>
 <div class="paragraph">
-<p><a href="#../assets/attachments/Session2_ParallelProgramming_MPI.pdf" class="xref unresolved">Session2 Parallel Programming MPI</a></p>
+<p><a href="../assets/attachments/Session2_ParallelProgramming_MPI.pdf">MPI</a></p>
 </div>
 <div class="paragraph">
-<p><a href="#../assets/attachments/Session3_ParallelProgramming_HybridOpenMP_MPI.pdf" class="xref unresolved">Session3 Parallel Programming Hybrid</a></p>
+<p><a href="../assets/attachments/Session1_ParallelProgramming_OpenMP.pdf">OpenMP</a></p>
 </div>
 <div class="paragraph">
-<p><a href="#../assets/attachments/Session4_ParallelProgramming_Cuda.pdf" class="xref unresolved">Session4 Parallel Programming CUDA</a></p>
+<p><a href="../assets/attachments/Session3_ParallelProgramming_HybridOpenMP_MPI.pdf">Hybrid</a></p>
 </div>
 <div class="paragraph">
-<p><a href="#../assets/attachments/Session5_ParallelProgramming_HIP.pdf" class="xref unresolved">Session5 Parallel Programming HIP</a></p>
+<p><a href="../assets/attachments/Session4_ParallelProgramming_Cuda.pdf">CUDA</a></p>
 </div>
 <div class="paragraph">
-<p><a href="#../assets/attachments/Session6_ParallelProgramming_Specx.pdf" class="xref unresolved">Session6 Parallel Programming Specx</a></p>
+<p><a href="../assets/attachments/Session5_ParallelProgramming_HIP.pdf">HIP</a></p>
+</div>
+<div class="paragraph">
+<p><a href="../assets/attachments/Session6_ParallelProgramming_Specx.pdf">SPECX</a></p>
+</div>
+<div class="paragraph">
+<p><a href="parallel-programming/index.html#/assets/attachments/Session1_ParallelProgramming_Introduction.pdf">Introduction</a></p>
+</div>
+</div>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">Brief Introduction to Relevant Vocabulary</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Computer Hardware (CPUs, GPUs, and Memory)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>CPU-chip – CPU stands for Central Processing Unit. This is the computer&#8217;s main processing unit; you can think of it as the 'brain' of the computer. This is the piece of hardware that performs calculations, moves data around, has access to the memory, etc. In systems such as Princeton&#8217;s High Performance Computing clusters, CPU-chips are made of multiple CPU-cores.</p>
+</li>
+<li>
+<p>CPU-core – A microprocessing unit on a CPU-chip. Each CPU-core can execute an independent set of instructions from the computer.</p>
+</li>
+<li>
+<p>GPU – GPU stands for the Graphics Processing Unit. Originally intended to process graphics, in the context of parallel programming this unit can do a large number of simple arithmetic computations.</p>
+</li>
+<li>
+<p>Memory – In this guide memory refers to Random-Access Memory, or RAM. The RAM unit stores the data that the CPU is actively working on.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Additional Parallelism Terminology</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An understanding of threads and processes is also useful when discussing parallel programming concepts.</p>
+</li>
+<li>
+<p>If you consider the code you need to run as one big job, to run that code in parallel you&#8217;ll want to divide that one big job into several, smaller tasks^[Note that in SLURM scripts, the word task can be used to refer to a process.] that can be run at the same time. This is the general idea behind parallel programming.</p>
+</li>
+<li>
+<p>When tasks are run as threads, the tasks all share direct access to a common region of memory. The mulitple threads are considered to belong to one process.</p>
+</li>
+<li>
+<p>When tasks run as distinct processes, each process gets its own individual region of memory–even if run on the same computer.</p>
+</li>
+<li>
+<p>To put it even more simply, processes have their own memory, while threads belong to a process and share memory with all of the other threads belonging to that process.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
 </div>
 </div>
 </div>
 <div class="sidebarblock examp">
 <div class="content">
 <div class="title">Coding with Feel++ in C++ or Python</div>
-<div class="paragraph">
-<p>Update 10:45</p>
-</div>
-<div class="imageblock unresolved">
-<div class="content">
-<a class="image" href="#fragment"><img src="Session1_ParallelProgramming_Introduction.pdf" alt="Session1 ParallelProgramming Introduction"></a>
-</div>
-</div>
+
 </div>
 </div>
 </article>

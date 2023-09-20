@@ -9,10 +9,7 @@ endif::[]
 [.examp]
 ****
 
-
-Parallel machines provide a wonderful opportunity for applications with large computational re-
-quirements. Effective use of these machines, though, requires a keen understanding of how they
-work. 
+In many applications today, software needs to make decisions quickly. And the best way to do that is through parallel programming in C/C++ and multithreading (multithreaded programming). Parallel programming is a broad concept. It can describe many types of processes running on the same machine or on different machines. Parallel machines provide a wonderful opportunity for applications with large computational requirements. Effective use of these machines, though, requires a keen understanding of how they work. 
 
 
 *What Is Parallel Computing?*
@@ -154,7 +151,7 @@ image::simulations01.jpeg[xref=#fragment_000_007,scaledwidth=20%]
 *** Networked video and multi-media technologies
 *** Collaborative work environments
 
-image::simulations03.jpeg[xref=#fragment_000_008,scaledwidth=20%]
+image::simulations03.jpg[xref=#fragment_000_008,scaledwidth=20%]
 
 
 

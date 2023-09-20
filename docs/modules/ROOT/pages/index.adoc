@@ -32,11 +32,7 @@ xref:../assets/attachments/Session5_ParallelProgramming_HIP.pdf[Session5 Paralle
 
 xref:../assets/attachments/Session6_ParallelProgramming_Specx.pdf[Session6 Parallel Programming Specx]
 
-
-
-.HELLLLLLLLLLLLLLLLLOOO
-
-See the xref:attachment$Session1_ParallelProgramming_Introduction.pdf
+Update 10:45
 
 ****
 

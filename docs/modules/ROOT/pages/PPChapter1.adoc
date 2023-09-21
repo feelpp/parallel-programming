@@ -1,4 +1,4 @@
-==== CPU
+= *CPU*
 
 The CPU basically consists of three parts:
 
@@ -108,7 +108,7 @@ dataflow: data is active unlike other architectures.
 To further improve the *performance of this processor,* developers can
 add so-called SIMD Supplemental Instruction Sets.
 
-*1. 2 GPU (Graphics Processing Unit is a graphics (co-)processor)*
+=== GPU (Graphics Processing Unit is a graphics (co-)processor)
 
 Graphics Processing Unit is a graphics (co-)processor capable of very
 efficiently performing calculations on images (2D, 3D, videos, etc.).
@@ -325,7 +325,7 @@ between CPU memory and GPU memory.
 https://blog.octo.com/la-technologie-gpgpu-1ere-partie-le-cote-obscur-de-la-geforce/
 )
 
-*SIMD (Single Instruction Multiple Data)*
+== *SIMD (Single Instruction Multiple Data)*
 
 SIMD is a computer technique that allows several data elements to be
 exploited at the same time.
@@ -367,9 +367,9 @@ is because SIMD allows the same instruction to be applied to multiple
 data items in parallel, allowing the programmer to customize the code
 according to application requirements.
 
-*AMD ROCm Platform, CUDA*
+== AMD ROCm Platform,CUDA
 
-*1.5.1 AMD ROC platform*
+=== AMD ROC platform
 
 ROCm™ is a collection of drivers , development tools, and APIs that
 enable GPU programming from low-level kernel to end-user applications
@@ -459,7 +459,7 @@ pair of research groups independently discovered GPU-based approaches
 for solving general linear algebra problems on working GPUs faster than
 on CPUs.
 
-*1.6 GPGPU Evolution*
+=== GPGPU Evolution
 
 Early efforts to use GPUs as general-purpose processors required
 reframing computational problems in terms of graphics primitives, which
@@ -621,13 +621,14 @@ New containers are continually being added to the hub.
 
 
 
-=== AMD Fusion System Architecture 
+== AMD Fusion System Architecture 
+
 === Moves to Unify CPUs and GPUs
 
 image:image6.png[xref=#fragment6,width=511,height=287]
 
 
-*TPU (Tensor Processing Unit) form Google*
+== TPU (Tensor Processing Unit) form Google
 
 A Tensor Processing Unit (TPU) is a specialized hardware processor
 developed by Google to accelerate machine learning. Unlike traditional

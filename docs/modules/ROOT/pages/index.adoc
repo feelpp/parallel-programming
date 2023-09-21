@@ -120,36 +120,36 @@ The Real World Is Massively Complex
 
 *Main Reasons for Using Parallel Programming*
 
-SAVE TIME AND/OR MONEY
+** Save time and or money
 
-* In theory, throwing more resources at a task will shorten its time to completion, with potential cost savings.
-* Parallel computers can be built from cheap, commodity components
-
-
-SOLVE LARGER / MORE COMPLEX PROBLEMS
-
-* Many problems are so large and/or complex that it is impractical or impossible to solve them using a serial program, especially given limited computer memory.
+*** In theory, throwing more resources at a task will shorten its time to completion, with potential cost savings.
+*** Parallel computers can be built from cheap, commodity components
 
 
-PROVIDE CONCURRENCY
+** Solver large/ More complex problems
 
-* A single compute resource can only do one thing at a time. Multiple compute resources can do many things simultaneously.
-* Example: Collaborative Networks provide a global venue where people from around the world can meet and conduct work "virtually."
+*** Many problems are so large and/or complex that it is impractical or impossible to solve them using a serial program, especially given limited computer memory.
 
-TAKE ADVANTAGE OF NON-LOCAL RESOURCES
 
-* Using compute resources on a wide area network, or even the Internet when local compute resources are scarce or insufficient.
+** Provide concurency
 
-MAKE BETTER USE OF UNDERLYING PARALLEL HARDWARE
+*** A single compute resource can only do one thing at a time. Multiple compute resources can do many things simultaneously.
+*** Example: Collaborative Networks provide a global venue where people from around the world can meet and conduct work "virtually."
 
-* Modern computers, even laptops, are parallel in architecture with multiple processors/cores.
-* Parallel software is specifically intended for parallel hardware with multiple cores, threads, etc.
-* In most cases, serial programs run on modern computers "waste" potential computing power.
+** Take advantage of non-local resources
+
+*** Using compute resources on a wide area network, or even the Internet when local compute resources are scarce or insufficient.
+
+** Make better use of underlying parallel hardware
+
+*** Modern computers, even laptops, are parallel in architecture with multiple processors/cores.
+*** Parallel software is specifically intended for parallel hardware with multiple cores, threads, etc.
+*** In most cases, serial programs run on modern computers "waste" potential computing power.
 
 
 *Who Is Using Parallel Computing?*
 
-* Science and Engineering
+* *Science and Engineering*
 
 ** Historically, parallel computing has been considered to be "the high end of computing," and has been used to model difficult problems in many areas of science and engineering:
 
@@ -166,7 +166,7 @@ MAKE BETTER USE OF UNDERLYING PARALLEL HARDWARE
 image::simulations01.jpeg[xref=#fragment_000_007,scaledwidth=20%]
 
 
-* Industrial and Commercial
+* *Industrial and Commercial*
 
 ** Today, commercial applications provide an equal or greater driving force in the development of faster computers. These applications require the processing of large amounts of data in sophisticated ways. For example:
 
@@ -189,49 +189,32 @@ image::simulations03.jpeg[xref=#fragment_000_008,scaledwidth=20%]
 ****
 
 
-.DOCUMENTATIONS POWERPOINTS
+.*DOCUMENTATIONS POWERPOINTS*
+****
+xref:ROOT:attachment$Session1_ParallelProgramming_Introduction.pdf[OVERVIEW],
+xref:ROOT:attachment$Session2_ParallelProgramming_MPI.pdf[MPI],
+xref:ROOT:attachment$Session3_ParallelProgramming_OpenMP.pdf[OpenMP],
+xref:ROOT:attachment$Session4_ParallelProgramming_Cuda.pdf[CUDA],
+xref:ROOT:attachment$Session5_ParallelProgramming_HIP.pdf[HIP],
+xref:ROOT:attachment$Session6_ParallelProgramming_Specx.pdf[HIP],...
 ****
 
 
-
-link:../assets/attachments/Session1_ParallelProgramming_Introduction.pdf[Introduction Parallel Programming]
-
-link:../assets/attachments/Session2_ParallelProgramming_MPI.pdf[MPI]
-
-link:../assets/attachments/Session1_ParallelProgramming_OpenMP.pdf[OpenMP]
-
-link:../assets/attachments/Session3_ParallelProgramming_HybridOpenMP_MPI.pdf[Hybrid]
-
-link:../assets/attachments/Session4_ParallelProgramming_Cuda.pdf[CUDA]
-
-link:../assets/attachments/Session5_ParallelProgramming_HIP.pdf[HIP]
-
-link:../assets/attachments/Session6_ParallelProgramming_Specx.pdf[SPECX]
-
-
-
-link:parallel-programming/index.html#/assets/attachments/Session1_ParallelProgramming_Introduction.pdf[Introduction]
-
+.*RELEVANT VOCABULARY*
 ****
+* *Computer Hardware (CPUs, GPUs, and Memory)*
 
+** *CPU-chip* – CPU stands for Central Processing Unit. This is the computer's main processing unit; you can think of it as the 'brain' of the computer. This is the piece of hardware that performs calculations, moves data around, has access to the memory, etc. In systems such as Princeton's High Performance Computing clusters, CPU-chips are made of multiple CPU-cores.
 
-.Brief Introduction to Relevant Vocabulary
-****
+** *CPU-core* – A microprocessing unit on a CPU-chip. Each CPU-core can execute an independent set of instructions from the computer.
 
+** *GPU* –GPU stands for the Graphics Processing Unit. Originally intended to process graphics, in the context of parallel programming this unit can do a large number of simple arithmetic computations.
 
-* Computer Hardware (CPUs, GPUs, and Memory)
-
-** CPU-chip – CPU stands for Central Processing Unit. This is the computer's main processing unit; you can think of it as the 'brain' of the computer. This is the piece of hardware that performs calculations, moves data around, has access to the memory, etc. In systems such as Princeton's High Performance Computing clusters, CPU-chips are made of multiple CPU-cores.
-
-** CPU-core – A microprocessing unit on a CPU-chip. Each CPU-core can execute an independent set of instructions from the computer.
-
-** GPU – GPU stands for the Graphics Processing Unit. Originally intended to process graphics, in the context of parallel programming this unit can do a large number of simple arithmetic computations.
-
-** Memory – In this guide memory refers to Random-Access Memory, or RAM. The RAM unit stores the data that the CPU is actively working on.
+** *MEMORY* – In this guide memory refers to Random-Access Memory, or RAM. The RAM unit stores the data that the CPU is actively working on.
 
 
 
-* Additional Parallelism Terminology
+* *Additional Parallelism Terminology*
 
 ** An understanding of threads and processes is also useful when discussing parallel programming concepts.
 
@@ -242,8 +225,6 @@ link:parallel-programming/index.html#/assets/attachments/Session1_ParallelProgra
 ** When tasks run as distinct processes, each process gets its own individual region of memory–even if run on the same computer.
 
 ** To put it even more simply, processes have their own memory, while threads belong to a process and share memory with all of the other threads belonging to that process.
-
-
 ****
 
 

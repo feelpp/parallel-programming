@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>AMD ROCm Platform,CUDA :: Parallel Programming</title>
+    <link rel="canonical" href="https://feelpp.github.io/parallel-programming/parallel-programming/PPChapter1_AMD_CUDA.html">
+    <meta name="generator" content="Antora 3.1.3">
+    <link rel="stylesheet" href="../_/css/site.css">
+<link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+<script>!function(l,p){if(l.protocol!==p&&l.host=="docs.antora.org"){l.protocol=p}else if(/\.gitlab\.io$/.test(l.host)){l.replace(p+"//docs.antora.org"+l.pathname.substr(l.pathname.indexOf("/",1))+l.search+l.hash)}}(location,"https:")</script>
+
+<script src="../_/js/vendor/tabs-block-extension.js"></script>
+<script src="../_/js/vendor/tabs-block-behavior.js"></script>
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\\[','\\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+
+  TeX: {
+      Macros: {
+      bold: ["{\\bf #1}",1],
+      calTh: "{\\mathcal{T}_h}",
+      card: ["{\\operatorname{card}(#1)}",1],
+      card: ["{\\operatorname{card}(#1)}",1],
+      Ck: ["{\\mathcal{C}^{#1}}",1],
+      deformt: ["{\\mathbf{\\varepsilon(#1)}}",1],
+      diam: "{\\operatorname{diam}}",
+      dim: ["{\\operatorname{dim}(#1)}",1],
+      disp: ["{\\mathbf{#1}}",1],
+      domain: "{\\Omega}",
+      ds: "",
+      essinf: "{\\operatorname{ess}\\, \\operatorname{inf}}",
+      F:"{\\mathcal{F}}",
+      geo: "{\\mathrm{geo}}",
+      Ich: ["{\\mathcal{I}^{#1}_{c,h}#2}",2],
+      Id: "{\\mathcal{I}}",
+      Ilag: ["{\\mathcal{I}^{\\mathrm{lag}}_{#1}}",1],
+      jump: ["{[\\![ #1 ]\\!]}",1],
+      n:"{\\mathbf{n}}",
+      Ne: "{N_{\\mathrm{e}}}",
+      Next: "{\\mathrm{n}}",
+      nf: "{n_f}",
+      ngeo: "{n_{\\mathrm{geo}}}",
+      Nma: "{N_{\\mathrm{ma}}}",
+      NN: "{\\mathbb N}",
+      Nno: "{N_{\\mathrm{no}}}",
+      Nso: "{N_{\\mathrm{so}}}",
+      opdim: "{\\operatorname{dim}}",
+      p: "{\\mathrm{p}}",
+      P:"{\\mathcal{P}}",
+      Pch: ["{P^{#1}_{c,h}}",1],
+      Pcho: ["{P^{#1}_{c,h,0}}",1],
+      Pk: ["{\\mathcal{P}^{#1}}",1],
+      poly: ["{\\mathbb{#1}",1],
+      poly: ["{\\mathbb{#1}}",1],
+      prect: ["{\\left\\(#1\\right\\)}",1],
+      q:"{\\mathbf{q}}",
+      Qch: ["{Q^{#1}_{c,h}}",1],
+      Qk: ["{\\mathcal{Q}^{#1}}",1],
+      R: ["{\\mathbb{R}^{#1}}",1],
+      RR: "{\\mathbb R}",
+      set: ["{\\left\\{#1\\right\\}}",1],
+      stresst: ["{\\mathbf{\\sigma(#1)}}",1],
+      T:"{\\mathcal{T}}",
+      tr: "{\\operatorname{tr}}",
+      v:"{\\mathbf{v}}",
+      vertiii: ["\\left\\vert\\kern-0.25ex\\left\\vert\\kern-0.25ex\\left\\vert #1 \\right\\vert\\kern-0.25ex\\right\\vert\\kern-0.25ex\\right\\vert",1]
+  },
+  extensions: ["mhchem.js"] 
+  }
+});
+</script>
+<!--<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>-->
+<!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML' async></script> -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_CHTML'></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.0/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>-->
+
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.css" integrity="sha384-TEMocfGvRuD1rIAacqrknm5BQZ7W7uWitoih+jMNFXQIbNl16bO8OZmylH/Vi/Ei" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.js" integrity="sha384-jmxIlussZWB7qCuB+PgKG1uLjjxbVVIayPJwi6cG6Zb4YKq0JIw+OMnkkEC7kYCq" crossorigin="anonymous"></script>-->
+<script>var uiRootPath = '../_'</script>
+
+  </head>
+  <body class="article">
+<header class="header">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark navbar-template-project" style="border-top: 4px solid #9E9E9E">
+        <div class="navbar-brand">
+            <div class="navbar-item feelpp-logo">
+                <a href="https://feelpp.github.io/parallel-programming">Parallel Programming</a>
+            </div>
+            <button class="navbar-burger" data-target="topbar-nav">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+
+        <div id="topbar-nav" class="navbar-menu">
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <a href="https://docs.feelpp.org/">Documentation Reference</a>
+                </div>
+                <div class="navbar-item has-dropdown is-hoverable download-item">
+                    <div class="navbar-item"><a href="https://docs.feelpp.org/user/latest/install/index.html" class="download-btn">Get Feel++</a></div>
+                </div>
+                <div class="navbar-item">
+                    <a class="navbar-brand"  href="https://www.cemosis.fr">
+                        <img class="cemosis-logo"  src="../_/img/cemosis-logo.svg" alt="Cemosis logo"/>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="body">
+<a href="#" class="menu-expand-toggle"></a>
+<div class="nav-container" data-component="parallel-programming" data-version="">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html">Template Project</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Introduction</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter1_CPU.html">CPU Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter1_GPU.html">GPU Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter1_GPGPU.html">GPGPU Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter1_TPU.html">TPU Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter2_MPI.html">MPI (Message Passing Interface)</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter2_OpenMP.html">OpenMP (Open Multi-Processing)</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter2_Hybrid.html">Hybrid MPI with OpenMP</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter3.html">StarPU</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter4.html">Specx</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Template Project</span>
+    <span class="version"></span>
+  </div>
+  <ul class="components">
+      <li class="component">
+        <a class="title" href="../feelpp-antora-ui/index.html">Antora Feel++ UI</a>
+      </li>
+      <li class="component is-current">
+        <a class="title" href="index.html">Template Project</a>
+      </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+  <button class="nav-toggle"></button>
+    <a href="index.html" class="home-link"></a>
+  <nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Template Project</a></li>
+    <li><a href="PPChapter1_AMD_CUDA.html">AMD ROCm Platform,CUDA</a></li>
+  </ul>
+</nav>
+
+  
+    <div class="edit-this-page"><a href="https://github.com/feelpp/parallel-programming/edit/lem/docs/modules/ROOT/pages/PPChapter1_AMD_CUDA.adoc">Edit this Page</a></div>
+  
+  <div class="page-downloads">
+  <span class="label">Download as</span>
+  <ul class="download-options">
+    <li>
+      <a onclick="print(this)" href="#" data-toggle="tooltip" data-placement="left" title="Print to PDF"
+         class="pdf-download">
+        <img class="pdf-file-icon icon" src="../_/img/pdf.svg"/> .pdf
+      </a>
+    </li>
+  </ul>
+</div>
+</div>
+
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">AMD ROCm Platform,CUDA</h1>
+<div class="sect1">
+<h2 id="_amd_roc_platform"><a class="anchor" href="#_amd_roc_platform"></a>1. AMD ROC platform</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>ROCm™ is a collection of drivers , development tools, and APIs that
+enable GPU programming from low-level kernel to end-user applications
+<strong>.</strong> ROCm is powered by AMD&#8217;s Heterogeneous Computing Interface for
+Portability , an OSS C++ GPU programming environment and its
+corresponding runtime environment <strong>.</strong> HIP enables ROCm developers to
+build portable applications across different platforms by deploying code
+on a range of platforms , from dedicated gaming GPUs to exascale HPC
+clusters <strong>.</strong></p>
+</div>
+<div class="paragraph">
+<p>ROCm supports programming models such as OpenMP and OpenCL , and
+includes all necessary compilers , debuggers and OSS libraries <strong>.</strong> ROCm
+is fully integrated with ML frameworks such as PyTorch and TensorFlow
+<strong>.</strong> ROCm can be deployed in several ways , including through the use of
+containers such as Docker , Spack, and your own build from source <strong>.</strong></p>
+</div>
+<div class="paragraph">
+<p>ROCm is designed to help develop , test, and deploy GPU-accelerated HPC
+, AI , scientific computing , CAD, and other applications in a free ,
+open-source , integrated, and secure software ecosystem <strong>.</strong></p>
+</div>
+<div class="paragraph">
+<p><strong>CUDA Platform</strong></p>
+</div>
+<div class="paragraph">
+<p>CUDA® is a parallel computing platform and programming model developed
+by NVIDIA for general computing on graphics processing units (GPUs).
+With CUDA, developers can dramatically speed up computing applications
+by harnessing the power of GPUs.</p>
+</div>
+<div class="paragraph">
+<p>The CUDA architecture is based on a three-level hierarchy of cores,
+threads, and blocks. Cores are the basic unit of computation while
+threads are the individual pieces of work that the cores work on. Blocks
+are collections of threads that are grouped together and can be run
+together. This architecture enables efficient use of GPU resources and
+makes it possible to run multiple applications at once.</p>
+</div>
+<div class="paragraph">
+<p>The NVIDIA CUDA-X platform, which is built on CUDA®, brings together a
+collection of libraries, tools, and technologies that deliver
+significantly higher performance than competing solutions in multiple
+application areas ranging from artificial intelligence to high
+performance computing.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><strong>GPUs</strong></th>
+<th class="tableblock halign-left valign-top"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>CUDA ( Compute Unified Device Architecture)</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>HIP
+("Heterogeneous-Compute Interface for Portability")</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Has been the de facto standard for native GPU code for years</p>
+</div>
+<div class="paragraph">
+<p>Huge set of optimized libraries available</p>
+</div>
+<div class="paragraph">
+<p>Custom syntax (extension of C++) supported only by CUDA compilers</p>
+</div>
+<div class="paragraph">
+<p>Support for NVIDIA devices only</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>AMD&#8217;s effort to offer a common programming interface that works on both
+CUDA and ROCm devices</p>
+</div>
+<div class="paragraph">
+<p>Standard C++ syntax, uses the nvcc/hcc compiler in the background</p>
+</div>
+<div class="paragraph">
+<p>Almost an individual CUDA clone from the user&#8217;s perspective</p>
+</div>
+<div class="paragraph">
+<p>The ecosystem is new and growing rapidly</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>1.5.3 What is the difference between CUDA and ROCm for GPGPU
+applications?</strong></p>
+</div>
+<div class="paragraph">
+<p>NVIDIA&#8217;s CUDA and AMD&#8217;s ROCm provide frameworks to take advantage of the
+respective GPU platforms.</p>
+</div>
+<div class="paragraph">
+<p>Graphics processing units (GPUs) are traditionally designed to handle
+graphics computing tasks, such as image and video processing and
+rendering, 2D and 3D graphics, vectorization, etc. General purpose
+computing on GPUs became more practical and popular after 2001, with the
+advent of programmable shaders and floating point support on graphics
+processors.</p>
+</div>
+<div class="paragraph">
+<p>Notably, it involved problems with matrices and vectors, including two-,
+three-, or four-dimensional vectors. These were easily translated to
+GPU, which acts with native speed and support on these types. A
+milestone for general purpose GPUs (GPGPUs) was the year 2003, when a
+pair of research groups independently discovered GPU-based approaches
+for solving general linear algebra problems on working GPUs faster than
+on CPUs.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_gpgpu_evolution"><a class="anchor" href="#_gpgpu_evolution"></a>2. GPGPU Evolution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Early efforts to use GPUs as general-purpose processors required
+reframing computational problems in terms of graphics primitives, which
+were supported by two major APIs for graphics processors: OpenGL and
+DirectX.</p>
+</div>
+<div class="paragraph">
+<p>These were soon followed by NVIDIA&#8217;s CUDA, which allowed programmers to
+abandon underlying graphics concepts for more common high-performance
+computing concepts, such as OpenCL and other high-end frameworks. This
+meant that modern GPGPU pipelines could take advantage of the speed of a
+GPU without requiring a complete and explicit conversion of the data to
+a graphical form.</p>
+</div>
+<div class="paragraph">
+<p>NVIDIA describes CUDA as a parallel computing platform and application
+programming interface (API) that allows software to use specific GPUs
+for general-purpose processing. CUDA is a software layer that provides
+direct access to the GPU&#8217;s virtual instruction set and parallel
+computing elements for running compute cores.</p>
+</div>
+<div class="paragraph">
+<p>Not to be outdone, AMD launched its own general-purpose computing
+platform in 2016, dubbed the Radeon Open Compute Ecosystem (ROCm). ROCm
+is primarily intended for discrete professional GPUs, such as AMD&#8217;s
+Radeon Pro line. However, official support is more extensive and extends
+to consumer products, including gaming GPUs.</p>
+</div>
+<div class="paragraph">
+<p>Unlike CUDA, the ROCm software stack can take advantage of multiple
+areas, such as general-purpose GPGPU, high-performance computing (HPC),
+and heterogeneous computing. It also offers several programming models,
+such as HIP (GPU kernel-based programming), OpenMP/Message Passing
+Interface (MPI), and OpenCL. These also support microarchitectures,
+including RDNA and CDNA, for a myriad of applications ranging from AI
+and edge computing to IoT/IIoT.</p>
+</div>
+<div class="paragraph">
+<p><strong>NVIDIA&#8217;s CUDA</strong></p>
+</div>
+<div class="paragraph">
+<p>Most of NVIDIA&#8217;s Tesla and RTX series cards come with a series of CUDA
+cores designed to perform multiple calculations at the same time. These
+cores are similar to CPU cores, but they are integrated into the GPU and
+can process data in parallel. There can be thousands of these cores
+embedded in the GPU, making for incredibly efficient parallel systems
+capable of offloading CPU-centric tasks directly to the GPU.</p>
+</div>
+<div class="paragraph">
+<p>Parallel computing is described as the process of breaking down larger
+problems into smaller, independent parts that can be executed
+simultaneously by multiple processors communicating through shared
+memory. These are then combined at the end as part of an overall
+algorithm. The primary purpose of parallel computing is to increase
+available computing power to speed up application processing and problem
+solving.</p>
+</div>
+<div class="paragraph">
+<p>To this end, the CUDA architecture is designed to work with programming
+languages such as C, C++ and Fortran, allowing parallel programmers to
+more easily utilize GPU resources. This contrasts with previous APIs
+such as Direct3D and OpenGL, which required advanced graphics
+programming skills. CUDA-powered GPUs also support programming
+frameworks such as OpenMP, OpenACC, OpenCL, and HIP by compiling this
+code on CUDA.</p>
+</div>
+<div class="paragraph">
+<p>As with most APIs, software development kits (SDKs), and software
+stacks, NVIDIA provides libraries, compiler directives, and extensions
+for the popular programming languages mentioned earlier, making
+programming easier and more effective. These include cuSPARCE, NVRTC
+runtime compilation, GameWorks Physx, MIG multi-instance GPU support,
+cuBLAS and many more.</p>
+</div>
+<div class="paragraph">
+<p>A good portion of these software stacks are designed to handle AI-based
+applications, including machine learning and deep learning, computer
+vision, conversational AI, and recommender systems.</p>
+</div>
+<div class="paragraph">
+<p>Computer vision applications use deep learning to acquire knowledge from
+digital images and videos. Conversational AI applications help computers
+understand and communicate through natural language. Recommender systems
+use a user&#8217;s images, language, and interests to deliver meaningful and
+relevant search results and services.</p>
+</div>
+<div class="paragraph">
+<p>GPU-accelerated deep learning frameworks provide a level of flexibility
+to design and train custom neural networks and provide interfaces for
+commonly used programming languages. All major deep learning frameworks,
+such as TensorFlow, PyTorch, and others, are already GPU-accelerated, so
+data scientists and researchers can upgrade without GPU programming.</p>
+</div>
+<div class="paragraph">
+<p>Current use of the CUDA architecture that goes beyond AI includes
+bioinformatics, distributed computing, simulations, molecular dynamics,
+medical analytics (CTI, MRI and other scanning imaging applications ),
+encryption, etc.</p>
+</div>
+<div class="paragraph">
+<p><strong>AMD&#8217;s ROCm Software Stack</strong></p>
+</div>
+<div class="paragraph">
+<p>AMD&#8217;s ROCm software stack is similar to the CUDA platform, except it&#8217;s
+open source and uses the company&#8217;s GPUs to speed up computational tasks.
+The latest Radeon Pro W6000 and RX6000 series cards are equipped with
+compute cores, ray accelerators (ray tracing) and stream processors that
+take advantage of RDNA architecture for parallel processing, including
+GPGPU, HPC, HIP (CUDA-like programming model), MPI and OpenCL.</p>
+</div>
+<div class="paragraph">
+<p>Since the ROCm ecosystem is composed of open technologies, including
+frameworks (TensorFlow/PyTorch), libraries (MIOpen/Blas/RCCL),
+programming models (HIP), interconnects (OCD), and support upstream
+Linux kernel load, the platform is regularly optimized. for performance
+and efficiency across a wide range of programming languages.</p>
+</div>
+<div class="paragraph">
+<p>AMD&#8217;s ROCm is designed to scale, meaning it supports multi-GPU computing
+in and out of server-node communication via Remote Direct Memory Access
+(RDMA), which offers the ability to directly access host memory without
+CPU intervention. Thus, the more RAM the system has, the greater the
+processing loads that can be handled by ROCm.</p>
+</div>
+<div class="paragraph">
+<p>ROCm also simplifies the stack when the driver directly integrates
+support for RDMA peer synchronization, making application development
+easier. Additionally, it includes ROCr System Runtime, which is language
+independent and leverages the HAS (Heterogeneous System Architecture)
+Runtime API, providing a foundation for running programming languages
+such as HIP and OpenMP.</p>
+</div>
+<div class="paragraph">
+<p>As with CUDA, ROCm is an ideal solution for AI applications, as some
+deep learning frameworks already support a ROCm backend (e.g.
+TensorFlow, PyTorch, MXNet, ONNX, CuPy, etc.). According to AMD, any
+CPU/GPU vendor can take advantage of ROCm, as it is not a proprietary
+technology. This means that code written in CUDA or another platform can
+be ported to vendor-neutral HIP format, and from there users can compile
+code for the ROCm platform.</p>
+</div>
+<div class="paragraph">
+<p>The company offers a series of libraries, add-ons and extensions to
+deepen the functionality of ROCm, including a solution (HCC) for the C++
+programming language that allows users to integrate CPU and GPU in a
+single file.</p>
+</div>
+<div class="paragraph">
+<p>The feature set for ROCm is extensive and incorporates multi-GPU support
+for coarse-grained virtual memory, the ability to handle concurrency and
+preemption, HSA and atomic signals, DMA and queues in user mode. It also
+offers standardized loader and code object formats, dynamic and offline
+compilation support, P2P multi-GPU operation with RDMA support, event
+tracking and collection API, as well as APIs and system management
+tools. On top of that, there is a growing third-party ecosystem that
+bundles custom ROCm distributions for a given application across a host
+of Linux flavors.</p>
+</div>
+<div class="paragraph">
+<p>To further enhance the capability of exascale systems, AMD also
+announced the availability of its open source platform, AMD ROCm, which
+enables researchers to harness the power of AMD Instinct accelerators
+and drive scientific discovery. Built on the foundation of portability,
+the ROCm platform is capable of supporting environments from multiple
+vendors and accelerator architectures.</p>
+</div>
+<div class="paragraph">
+<p>And with ROCm5.0, AMD extends its open platform powering the best HPC
+and AI applications with AMD Instinct MI200 series accelerators,
+increasing ROCm accessibility for developers and delivering
+industry-leading performance on workloads keys. And with AMD Infinity
+Hub, researchers, data scientists, and end users can easily find,
+download, and install containerized HPC applications and ML frameworks
+optimized and supported on AMD Instinct and ROCm.</p>
+</div>
+<div class="paragraph">
+<p>The hub currently offers a range of containers supporting Radeon
+Instinct™ MI50, AMD Instinct™ MI100, or AMD Instinct MI200 accelerators,
+including several applications such as Chroma, CP2k, LAMMPS, NAMD,
+OpenMM, etc., as well as frameworks Popular TensorFlow and PyTorch MLs.
+New containers are continually being added to the hub.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_amd_fusion_system_architecture"><a class="anchor" href="#_amd_fusion_system_architecture"></a>3. AMD Fusion System Architecture</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_moves_to_unify_cpus_and_gpus"><a class="anchor" href="#_moves_to_unify_cpus_and_gpus"></a>3.1. Moves to Unify CPUs and GPUs</h3>
+<div class="paragraph">
+<p><span class="image"><a class="image" href="#fragment6"><img src="_images/image6.png" alt="image6" width="511" height="287"></a></span></p>
+</div>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer" style="border-top: 2px solid #e9e9e9; background-color: #fafafa; padding-bottom: 2em; padding-top: 2em;">
+    <div class="container" style="display: flex; flex-direction: column; align-items: center; gap: 0.5em;">
+        <div>
+            <a href="https://www.cemosis.fr">
+                <img src="../_/img/cemosis-logo.svg" alt="Cemosis logo" height="50">
+            </a>
+        </div>
+        <span style="font-size: 0.8rem; color: #9e9e9e">© 2023 <a href="https://www.cemosis.fr" style="text-decoration: underline;">Cemosis</a>, Université de Strasbourg</span>
+    </div>
+</footer>
+<script id="site-script" src="../_/js/site.js" data-ui-root-path="../_"></script>
+
+
+<script async src="../_/js/vendor/fontawesome-icon-defs.js"></script>
+<script async src="../_/js/vendor/fontawesome.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+
+
+<script type="text/javascript">
+function toggleFullScreen() {
+   var doc = window.document;
+   var docEl = doc.documentElement;
+
+   var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+   var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+   if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+       requestFullScreen.call(docEl);
+   }
+   else {
+       cancelFullScreen.call(doc);
+   }
+}
+</script>
+  </body>
+</html>

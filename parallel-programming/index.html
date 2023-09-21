@@ -140,7 +140,16 @@ MathJax.Hub.Config({
     <a class="nav-link" href="index.html">Introduction</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="PPChapter1.html">CPU,GPU,GPGPU Architecture</a>
+    <a class="nav-link" href="PPChapter1_CPU.html">CPU Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter1_GPU.html">GPU Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter1_GPGPU.html">GPGPU Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter1_TPU.html">TPU Architecture</a>
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="PPChapter2_MPI.html">MPI (Message Passing Interface)</a>
@@ -622,6 +631,11 @@ graphics processing.</p>
 <div class="sidebarblock">
 <div class="content">
 <div class="title"><strong>DOCUMENTATIONS POWERPOINTS</strong></div>
+<div class="imageblock left">
+<div class="content">
+<img src="_images/PowerPointLogo.png" alt="Img1" width="50" height="50">
+</div>
+</div>
 <div class="paragraph">
 <p><a href="_attachments/Session1_ParallelProgramming_Introduction.pdf" class="xref attachment">OVERVIEW</a>,
 <a href="_attachments/Session2_ParallelProgramming_MPI.pdf" class="xref attachment">MPI</a>,
@@ -635,6 +649,11 @@ graphics processing.</p>
 <div class="sidebarblock">
 <div class="content">
 <div class="title"><strong>RELEVANT VOCABULARY</strong></div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/CPU1.jpeg" alt="Img2">
+</div>
+</div>
 <div class="ulist">
 <ul>
 <li>
@@ -656,6 +675,15 @@ graphics processing.</p>
 </ul>
 </div>
 </li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/ParallelProgramming1.jpeg" alt="Img3">
+</div>
+</div>
+<div class="ulist">
+<ul>
 <li>
 <p><strong>Additional Parallelism Terminology</strong></p>
 <div class="ulist">
@@ -664,7 +692,7 @@ graphics processing.</p>
 <p>An understanding of threads and processes is also useful when discussing parallel programming concepts.</p>
 </li>
 <li>
-<p>If you consider the code you need to run as one big job, to run that code in parallel you&#8217;ll want to divide that one big job into several, smaller tasks^[Note that in SLURM scripts, the word task can be used to refer to a process.] that can be run at the same time. This is the general idea behind parallel programming.</p>
+<p>If you consider the code you need to run as one big job, to run that code in parallel you&#8217;ll want to divide that one big job into several, smaller tasks that can be run at the same time. This is the general idea behind parallel programming.</p>
 </li>
 <li>
 <p>When tasks are run as threads, the tasks all share direct access to a common region of memory. The mulitple threads are considered to belong to one process.</p>
@@ -684,7 +712,7 @@ graphics processing.</p>
 </div>
 <div class="sidebarblock examp">
 <div class="content">
-<div class="title">Coding with Feel++ in C++ or Python</div>
+<div class="title">Coding {c,c++,cu}</div>
 
 </div>
 </div>

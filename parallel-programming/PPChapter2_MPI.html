@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Untitled :: Parallel Programming</title>
+    <title>Programming interface for parallel computing :: Parallel Programming</title>
     <link rel="canonical" href="https://feelpp.github.io/parallel-programming/parallel-programming/PPChapter2_MPI.html">
     <meta name="generator" content="Antora 3.1.3">
     <link rel="stylesheet" href="../_/css/site.css">
@@ -140,7 +140,16 @@ MathJax.Hub.Config({
     <a class="nav-link" href="index.html">Introduction</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="PPChapter1.html">CPU,GPU,GPGPU Architecture</a>
+    <a class="nav-link" href="PPChapter1_CPU.html">CPU Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter1_GPU.html">GPU Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter1_GPGPU.html">GPGPU Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter1_TPU.html">TPU Architecture</a>
   </li>
   <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="PPChapter2_MPI.html">MPI (Message Passing Interface)</a>
@@ -211,31 +220,18 @@ MathJax.Hub.Config({
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<div class="sect2">
-<h3 id="_2_programming_interface_for_parallel_computing"><a class="anchor" href="#_2_programming_interface_for_parallel_computing"></a>1. 2. Programming interface for parallel computing</h3>
+<h1 class="page">Programming interface for parallel computing</h1>
 <div class="paragraph">
 <p><strong>MPI, OpenMP two complementary parallelization models.</strong></p>
 </div>
 <div class="paragraph">
-<p>– MPI is a multi-process model whose mode of communication between the
-processes is <strong>explicit</strong> (communication management is the responsibility
-of the user). MPI is generally used on multiprocessor machines with
-distributed memory. MPI is a library for passing messages between
-processes without sharing.</p>
+<p>– MPI is a multi-process model whose mode of communication between the processes is <strong>explicit</strong> (communication management is the responsibility of the user). MPI is generally used on multiprocessor machines with distributed memory. MPI is a library for passing messages between processes without sharing.</p>
 </div>
 <div class="paragraph">
-<p>– OpenMP is a multitasking model whose mode of communication between
-tasks is <strong>implicit</strong> (the management of communications is the
-responsibility of the compiler). OpenMP is used on shared-memory
-multiprocessor machines. It focuses on shared memory paradigms. It is a
-language extension for expressing data-parallel operations (usually
-parallelized arrays over loops).</p>
+<p>– OpenMP is a multitasking model whose mode of communication between tasks is <strong>implicit</strong> (the management of communications is the responsibility of the compiler). OpenMP is used on shared-memory multiprocessor machines. It focuses on shared memory paradigms. It is a language extension for expressing data-parallel operations (usually parallelized arrays over loops).</p>
 </div>
 <div class="paragraph">
-<p>Note: on a cluster of independent shared-memory multiprocessor machines
-(nodes), the implementation of a two-level parallelization (MPI, OpenMP)
-in the same program can be a major advantage for the parallel
-performance of the code.</p>
+<p>Note: on a cluster of independent shared-memory multiprocessor machines (nodes), the implementation of a two-level parallelization (MPI, OpenMP) in the same program can be a major advantage for the parallel performance of the code.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -347,15 +343,12 @@ protocols.</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>int MPI_Send( *const void* *message, *int* length, MPI_Datatype
-type_message, *int* rank_dest, *int* label, MPI_Comm comm)</pre>
+<pre>int MPI_Send( *const void* *message, *int* length, MPI_Datatype type_message, *int* rank_dest, *int* label, MPI_Comm comm)</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>int MPI_Recv ( *void* *message, *int* length, MPI_Datatype
-type_message, *int* rank_source, *int* label, MPI_Comm comm, MPI_Status
-*status)</pre>
+<pre>int MPI_Recv ( *void* *message, *int* length, MPI_Datatype type_message, *int* rank_source, *int* label, MPI_Comm comm, MPI_Status *status)</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -396,20 +389,13 @@ int label_message_recu, MPI_Comm comm, MPI_Status *status)</pre>
 communications to be made in a single operation.</p>
 </div>
 <div class="paragraph">
-<p>A collective communication always concerns all the processes of the
-indicated communicator .</p>
+<p>A collective communication always concerns all the processes of the indicated communicator.</p>
 </div>
 <div class="paragraph">
-<p>For each of the processes, the call ends when the latter&#8217;s participation
-in the collective operation is completed, in the sense of point-to-point
-communications (thus when the memory zone concerned can be modified).</p>
+<p>For each of the processes, the call ends when the latter&#8217;s participation in the collective operation is completed, in the sense of point-to-point communications (thus when the memory zone concerned can be modified).</p>
 </div>
 <div class="paragraph">
-<p>The management of labels in these communications is transparent and at
-the expense of the system. They are therefore never explicitly defined
-during the call to these subroutines. One of the advantages of this is
-that collective communications never interfere with point-to-point
-communications.</p>
+<p>The management of labels in these communications is transparent and at the expense of the system. They are therefore never explicitly defined during the call to these subroutines. One of the advantages of this is that collective communications never interfere with point-to-point communications.</p>
 </div>
 <div class="paragraph">
 <p><strong>Types of collective communications</strong></p>
@@ -1162,7 +1148,6 @@ topology</p>
 </tr>
 </tbody>
 </table>
-</div>
 </article>
   </div>
 </main>

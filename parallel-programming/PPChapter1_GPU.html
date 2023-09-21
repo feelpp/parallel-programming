@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Renaming the project :: Parallel Programming</title>
-    <link rel="canonical" href="https://feelpp.github.io/parallel-programming/parallel-programming/rename.html">
+    <title>GPU (Graphics Processing Unit is a graphics (co-)processor) :: Parallel Programming</title>
+    <link rel="canonical" href="https://feelpp.github.io/parallel-programming/parallel-programming/PPChapter1_GPU.html">
     <meta name="generator" content="Antora 3.1.3">
     <link rel="stylesheet" href="../_/css/site.css">
 <link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
@@ -142,7 +142,7 @@ MathJax.Hub.Config({
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="PPChapter1_CPU.html">CPU Architecture</a>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="PPChapter1_GPU.html">GPU Architecture</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -195,12 +195,12 @@ MathJax.Hub.Config({
   <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Template Project</a></li>
-    <li><a href="rename.html">Renaming the project</a></li>
+    <li><a href="PPChapter1_GPU.html">GPU Architecture</a></li>
   </ul>
 </nav>
 
   
-    <div class="edit-this-page"><a href="https://github.com/feelpp/parallel-programming/edit/lem/docs/modules/ROOT/pages/rename.adoc">Edit this Page</a></div>
+    <div class="edit-this-page"><a href="https://github.com/feelpp/parallel-programming/edit/lem/docs/modules/ROOT/pages/PPChapter1_GPU.adoc">Edit this Page</a></div>
   
   <div class="page-downloads">
   <span class="label">Download as</span>
@@ -220,13 +220,131 @@ MathJax.Hub.Config({
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Renaming the project</h1>
+<h1 class="page">GPU (Graphics Processing Unit is a graphics (co-)processor)</h1>
 <div class="paragraph">
-<p>The script <code>rename.sh</code> renames the project.</p>
+<p>Graphics Processing Unit is a graphics (co-)processor capable of very
+efficiently performing calculations on images (2D, 3D, videos, etc.).
+The raw computing power offered is higher due to the large number of
+processors present on these cards. This is why it is not uncommon to
+obtain large acceleration factors between CPU and GPU for the same
+application.</p>
 </div>
 <div class="paragraph">
-<p>You have to answer a few questions to setup a new project out of this template.</p>
+<p>Explicit code targeting GPUs: CUDA, HIP, SYCL, Kokkos, RAJA,&#8230;&#8203;</p>
 </div>
+<div class="paragraph">
+<p><span class="image"><a class="image" href="#fragment2"><img src="_images/image2.png" alt="image2" width="488" height="342"></a></span></p>
+</div>
+<div class="paragraph">
+<p><em>Fig: illustrates the main hardware architecture differences between
+CPUs and GPUs. The transistor counts associated with various functions
+are represented abstractly by the relative sizes of the various shaded
+areas. In the figure, the green corresponds to the calculation; gold is
+instruction processing; purple is the L1 cache; blue is top level cache
+and orange is memory (DRAM, which really should be thousands of times
+larger than caches).</em></p>
+</div>
+<div class="paragraph">
+<p>GPUs were originally designed to render graphics. They work great for
+shading, texturing, and rendering the thousands of independent polygons
+that make up a 3D object. CPUs, on the other hand, are meant to control
+the logical flow of any general-purpose program, where a lot of digit
+manipulation may (or may not) be involved. Due to these very different
+roles, GPUs are characterized by having many more processing units and
+higher overall memory bandwidth, while CPUs offer more sophisticated
+instruction processing and faster clock speed.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 23%;">
+<col style="width: 44%;">
+<col style="width: 33%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"></th>
+<th class="tableblock halign-left valign-top"><strong>CPU: Latency-oriented design</strong></th>
+<th class="tableblock halign-left valign-top"><strong>GPU: Throughput Oriented Design</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Clock</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">High clock frequency</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Moderate clock frequency</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Caches</strong></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Large sizes</p>
+</div>
+<div class="paragraph">
+<p>Converts high latency accesses in memory to low latency accesses in
+cache</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Small caches</p>
+</div>
+<div class="paragraph">
+<p>To maximize memory throughput</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Control</strong></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Sophisticated control system</p>
+</div>
+<div class="paragraph">
+<p>Branch prediction to reduce latency due to branching<br>
+Data loading to reduce latency due to data access</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Single controlled</p>
+</div>
+<div class="paragraph">
+<p>No branch prediction</p>
+</div>
+<div class="paragraph">
+<p>No data loading</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Powerful Arithmetic Logic Unit (ALU)</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Reduced operation latency</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numerous, high latency but heavily pipelined for high throughput</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Other aspects</strong></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Lots of space devoted to caching and control logic. Multi-level caches
+used to avoid latency</p>
+</div>
+<div class="paragraph">
+<p>Limited number of registers due to fewer active threads</p>
+</div>
+<div class="paragraph">
+<p>Control logic to reorganize execution, provide ILP, and minimize
+pipeline hangs</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Requires a very large number of threads for latency to be tolerable</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Beneficial aspects for applications</strong></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>CPUs for sequential games where latency is critical.</p>
+</div>
+<div class="paragraph">
+<p>CPUs can be 10+X faster than GPUs for sequential code.</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>GPUs for parallel parts where throughput is critical.</p>
+</div>
+<div class="paragraph">
+<p>GPUs can be 10+X faster than GPUs for parallel code.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
 </article>
   </div>
 </main>

@@ -25,7 +25,7 @@ Traditionally, software has been written for serial computation:
 * Executed on a single processor
 * Only one instruction may execute at any moment in time
 
-image::serialProblem.gif[xref=#fragment_000_001,scaledwidth=20%]
+image::serialProblem.gif[xref=#fragment_000_001,width=400,height=400]
 
 *Parallel Computing*
 
@@ -37,11 +37,11 @@ In the simplest sense, parallel computing is the simultaneous use of multiple co
 ** An overall control/coordination mechanism is employed
 
 
-image::parallelProblem.gif[xref=#fragment_000_002,scaledwidth=20%]
+image::parallelProblem.gif[xref=#fragment_000_002,width=400,height=400]
 
 For example
 
-image::parallelProblem2.gif[xref=#fragment_000_003,scaledwidth=20%]
+image::parallelProblem2.gif[xref=#fragment_000_003,width=400,height=400]
 
 * The computational problem should be able to:
 ** Be broken apart into discrete pieces of work that can be solved simultaneously;
@@ -59,12 +59,12 @@ image::parallelProblem2.gif[xref=#fragment_000_003,scaledwidth=20%]
 ** Multiple execution units/cores
 ** Multiple hardware threads
 
-image::bgqComputeChip.jpeg[xref=#fragment_000_004,scaledwidth=20%]
+image::bgqComputeChip.jpeg[xref=#fragment_000_004,width=400,height=400]
 
 
 * Networks connect multiple stand-alone computers (nodes) to make larger parallel computer clusters.
 
-image::nodesNetwork.gif[xref=#fragment_000_005,scaledwidth=20%]
+image::nodesNetwork.gif[xref=#fragment_000_005,width=400,height=400]
 
 
 * For example, the schematic below shows a typical LLNL parallel computer cluster:
@@ -72,7 +72,7 @@ image::nodesNetwork.gif[xref=#fragment_000_005,scaledwidth=20%]
 ** Multiple compute nodes are networked together with an Infiniband network
 ** Special purpose nodes, also multi-processor, are used for other purposes
 
-image::parallelComputer1.gif[xref=#fragment_000_006,scaledwidth=20%]
+image::parallelComputer1.gif[xref=#fragment_000_006,width=400,height=400]
 
 * The majority of the world's large parallel computers (supercomputers) are clusters of hardware produced by a handful of (mostly) well known vendors.
 
@@ -207,7 +207,7 @@ xref:ROOT:attachment$Session6_ParallelProgramming_Specx.pdf[HIP],...
 .*RELEVANT VOCABULARY*
 ****
 
-image::CPU1.jpeg[Img2]
+image::CPU1.jpeg[Img2,400,400]
 
 * *Computer Hardware (CPUs, GPUs, and Memory)*
 
@@ -219,7 +219,7 @@ image::CPU1.jpeg[Img2]
 
 ** *MEMORY* – In this guide memory refers to Random-Access Memory, or RAM. The RAM unit stores the data that the CPU is actively working on.
 
-image::ParallelProgramming1.jpeg[Img3]
+image::ParallelProgramming1.jpeg[Img3,400,400]
 
 * *Additional Parallelism Terminology*
 
@@ -235,9 +235,15 @@ image::ParallelProgramming1.jpeg[Img3]
 ****
 
 
-.Coding {c,c++,cu}
+.Coding Practice {c,c++,cu}
 [.examp]
 ****
-
+* xref:MPI_Coding.adoc[MPI Coding]
+* xref:OpenMP_Coding.adoc[OpenMP Coding]
+* xref:CUDA_Coding.adoc[CUDA Coding]
+* xref:HIP_Coding.adoc[HIP Coding]
+* xref:Hybrid_Coding.adoc[Hybrid Coding]
+* xref:SPECX_Coding.adoc[SPECX Coding]
 ****
+
 

@@ -1,0 +1,13 @@
+= OpenMP Coding Practice
+
+* Compiling a program for OpenMP is almost just like compiling a regular C or C++ program. For example, to compile MyProg.c you would use a command like:
+*** gcc -fopenmp -o MyProg MyProg.c
+*** gcc -fopenmp -o MyProg MyProg.cpp
+*** g++ -c MyProg. cpp -o MyProg.o -fopenmp
+*** g++ MyProg.o -o MyProg -fopenmp -lpthread
+
+
+
+
+...
+

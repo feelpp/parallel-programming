@@ -77,7 +77,7 @@ image::parallelComputer1.gif[xref=#fragment_000_006,scaledwidth=20%]
 * The majority of the world's large parallel computers (supercomputers) are clusters of hardware produced by a handful of (mostly) well known vendors.
 
 
-* CPU, GPU, GPGPU Architecture *
+* CPU, GPU, GPGPU Architecture*
 
 * CPU, GPU, and GPGPU architectures are all types of computer processing
 architectures, but they differ in their design and operation.

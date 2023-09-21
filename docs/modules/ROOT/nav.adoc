@@ -1,6 +1,12 @@
 * xref:index.adoc[Introduction]
 
-* xref:PPChapter1.adoc[CPU,GPU,GPGPU Architecture]
+* xref:PPChapter1_CPU.adoc[CPU Architecture]
+
+* xref:PPChapter1_GPU.adoc[GPU Architecture]
+
+* xref:PPChapter1_GPGPU.adoc[GPGPU Architecture]
+
+* xref:PPChapter1_TPU.adoc[TPU Architecture]
 
 * xref:PPChapter2_MPI.adoc[MPI (Message Passing Interface)]
 

@@ -191,34 +191,41 @@ image::simulations03.jpeg[xref=#fragment_000_008,scaledwidth=20%]
 
 .*DOCUMENTATIONS POWERPOINTS*
 ****
+image::PowerPointLogo.png[Img1,50,50,role="left"]
 xref:ROOT:attachment$Session1_ParallelProgramming_Introduction.pdf[OVERVIEW],
 xref:ROOT:attachment$Session2_ParallelProgramming_MPI.pdf[MPI],
 xref:ROOT:attachment$Session3_ParallelProgramming_OpenMP.pdf[OpenMP],
 xref:ROOT:attachment$Session4_ParallelProgramming_Cuda.pdf[CUDA],
 xref:ROOT:attachment$Session5_ParallelProgramming_HIP.pdf[HIP],
 xref:ROOT:attachment$Session6_ParallelProgramming_Specx.pdf[HIP],...
+
+
+
 ****
 
 
 .*RELEVANT VOCABULARY*
 ****
+
+image::CPU1.jpeg[Img2]
+
 * *Computer Hardware (CPUs, GPUs, and Memory)*
 
-** *CPU-chip* – CPU stands for Central Processing Unit. This is the computer's main processing unit; you can think of it as the 'brain' of the computer. This is the piece of hardware that performs calculations, moves data around, has access to the memory, etc. In systems such as Princeton's High Performance Computing clusters, CPU-chips are made of multiple CPU-cores.
+** *CPU-chip* – CPU stands for Central Processing Unit. This is the computer's main processing unit; you can think of it as the 'brain' of the computer. This is the piece of hardware that performs calculations, moves data around, has access to the memory, etc. In systems such as Princeton's High Performance Computing clusters, CPU-chips are made of multiple CPU-cores. 
 
 ** *CPU-core* – A microprocessing unit on a CPU-chip. Each CPU-core can execute an independent set of instructions from the computer.
 
-** *GPU* –GPU stands for the Graphics Processing Unit. Originally intended to process graphics, in the context of parallel programming this unit can do a large number of simple arithmetic computations.
+** *GPU* –GPU stands for the Graphics Processing Unit. Originally intended to process graphics, in the context of parallel programming this unit can do a large number of simple arithmetic computations. 
 
 ** *MEMORY* – In this guide memory refers to Random-Access Memory, or RAM. The RAM unit stores the data that the CPU is actively working on.
 
-
+image::ParallelProgramming1.jpeg[Img3]
 
 * *Additional Parallelism Terminology*
 
 ** An understanding of threads and processes is also useful when discussing parallel programming concepts.
 
-** If you consider the code you need to run as one big job, to run that code in parallel you'll want to divide that one big job into several, smaller tasks^[Note that in SLURM scripts, the word task can be used to refer to a process.] that can be run at the same time. This is the general idea behind parallel programming.
+** If you consider the code you need to run as one big job, to run that code in parallel you'll want to divide that one big job into several, smaller tasks that can be run at the same time. This is the general idea behind parallel programming.
 
 ** When tasks are run as threads, the tasks all share direct access to a common region of memory. The mulitple threads are considered to belong to one process.
 
@@ -228,7 +235,7 @@ xref:ROOT:attachment$Session6_ParallelProgramming_Specx.pdf[HIP],...
 ****
 
 
-.Coding with {feelpp} in {cpp} or {python}
+.Coding {c,c++,cu}
 [.examp]
 ****
 

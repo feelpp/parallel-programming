@@ -1,4 +1,4 @@
-=== 3.Star PU
+= Star PU
 
 *StarPU* is a task scheduling library for hybrid architectures. StarPU's
 goal is to design systems in which applications are distributed across

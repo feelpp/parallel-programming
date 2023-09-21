@@ -1,4 +1,4 @@
-=== 4.Specx
+= Specx
 
 *SPECX* is a task-based execution system. It shares many similarities
 with StarPU but is written in modern C++. It also supports speculative
@@ -8,7 +8,7 @@ unsure about changing the data.
 image::image21.png[xref=#fragment21,image,width=642,height=380]
 
 
-*4.1 Workflow*
+== Workflow
 
 * *Execution interface:* Provides functionality for creating tasks, task
 graphs and generating traces. Can be used to specify speculation model
@@ -19,7 +19,7 @@ or GPU code
 * *Task visualization interface:* Specifies the ways to interact with
 the task object.
 
-*4.1.1 Runtime interface*
+=== Runtime interface
 
 Runtime functionality is exposed through a class called SpRuntime . This
 class provides functionality for creating tasks, task graphs, and
@@ -224,7 +224,7 @@ This method will generate a trace of the execution (with timings and
 dependencies) in svg format. The generateTrace method should only be
 called after calling waitAllTasks() and stopAllThreads().
 
-*4.1.2 Data dependency interface*
+=== Data dependency interface
 
 The data dependency interface forms a collection of objects that can be
 used to express data dependencies. It also provides wrapper objects that
@@ -351,13 +351,9 @@ an SpRuntime object without being wrapped in one of the above two
 objects will be interpreted by the runtime as CPU code by default.
 
 
-*4.1.3 Task visualization interface*
+=== Task visualization interface
 
-The Task Viewer interface specifies ways to interact with the task
-object returned by SpRuntime's task method. The exact type returned by
-SpRuntime's task method doesn't matter and in practice it should be
-inferred from the (auto) type in your programs. You can, however, find
-the definition of the returned type in
+The Task Viewer interface specifies ways to interact with the task object returned by SpRuntime's task method. The exact type returned by SpRuntime's task method doesn't matter and in practice it should be inferred from the (auto) type in your programs. You can, however, find the definition of the returned type in
 [.underline]#Src/Tasks/SpAbstractTask.hpp# .
 
 *Main methods available on task objects returned by task calls*
@@ -391,19 +387,11 @@ define CMAKE_CUDA_ARCHITECTURES to select the CUDA sm to compile.
 Here is an example job on CUDA GPU:
 
     tg.task(SpWrite(a),// Dependencies are expressed as usual
-    
     SpCuda([](SpDeviceDataView<std::vector<int>> paramA) { // Each
     parameter is converted into a SpDeviceDataView
-    
     // The kernel call is called using the dedicated stream
-    
-    inc_var<<<1,1,0,SpCudaUtils::GetCurrentStream()>>>(paramA.array(),
-    
-    paramA.nbElements());
-    
-    })
-    
-    );
+    inc_var<<<1,1,0,SpCudaUtils::GetCurrentStream()>>>(paramA.array(),paramA.nbElements());
+    }));
 
 Currently, the call to a CUDA kernel must be done in a .cu file. There
 are three types of SpDeviceDataView that provide different methods: one
@@ -411,128 +399,77 @@ for is_trivially_copyable objects, one for std::vectors of
 is_trivially_copyable objects, and one user-customized. At the latest,
 it is requested to provide the following methods:
 
-    std::size_t memmovNeededSize() const{
-    
-    ...
-    
-    }
+    std::size_t memmovNeededSize() const{...}
     
     pattern <DeviceMemmov class>
     
     void memmovHostToDevice(DeviceMemmov& mover, void* devicePtr,
-    std::size_t size){
-    ...
-    
-    }
+    std::size_t size){...}
     
     pattern <DeviceMemmov class>
     
     void memmovDeviceToHost(DeviceMemmov& mover, void* devicePtr,
-    std::size_t size){
-    ...
+    std::size_t size){...}
     
-    }
-    
-    self getDeviceDataDescription() const{
-    ...
-    
-    }
+    self getDeviceDataDescription() const{...}
 
-The type returned by getDeviceDataDescription must be copyable and have
-an empty constructor. It should be used to help retrieve raw pointer
-data when calling a device kernel.
+The type returned by getDeviceDataDescription must be copyable and have an empty constructor. It should be used to help retrieve raw pointer data when calling a device kernel.
 
 *GPU/HIP (work in progress)*
 
-The CMake variable SPECX_COMPILE_WITH_HIP must be set to ON, for example
-with the command cmake .. -DSPECX_COMPILE_WITH_HIP=ON . The C++ compiler
-must also be defined with for example CXX=hipcc , so a working command
-line must be CXX=hipcc cmake .. -DSPECX_COMPILE_WITH_HIP=ON . You can
-set GPU_TARGETS to select the HIP sm to compile.
+The CMake variable SPECX_COMPILE_WITH_HIP must be set to ON, for example with the command cmake .. -DSPECX_COMPILE_WITH_HIP=ON . The C++ compiler must also be defined with for example CXX=hipcc , so a working command line must be CXX=hipcc cmake .. -DSPECX_COMPILE_WITH_HIP=ON . You can set GPU_TARGETS to select the HIP sm to compile.
 
 Here is an example of a task on a HIP GPU:
     
     tg.task(SpWrite(a),// Dependencies are expressed as usual
-    
     SpHip([](SpDeviceDataView<std::vector<int>> paramA) { // Each parameter
     is converted into a SpDeviceDataView
-    
     // The kernel call is called using the dedicated stream
-    
     inc_var<<<1,1,0,SpHipUtils::GetCurrentStream()>>>(paramA.array(),
-    
     paramA.nbElements());
-    
     })
-    
     );
 
-Currently, the call to a HIP kernel must be done in a .cu file. There
-are three types of SpDeviceDataView that provide different methods: one
-for is_trivially_copyable objects, one for std::vectors of
-is_trivially_copyable objects, and one user-customized. At the latest,
-it is requested to provide the following methods:
+Currently, the call to a HIP kernel must be done in a .cu file. There are three types of SpDeviceDataView that provide different methods: one for is_trivially_copyable objects, one for std::vectors of is_trivially_copyable objects, and one user-customized. At the latest, it is requested to provide the following methods:
     
-    std::size_t memmovNeededSize() const{
-    
-    ...
-    
-    }
+    std::size_t memmovNeededSize() const{...}
     
     pattern <DeviceMemmov class>
     
     void memmovHostToDevice(DeviceMemmov& mover, void* devicePtr,
-    std::size_t size){
-    
-    ...
-    
-    }
+    std::size_t size){...}
     
     pattern <DeviceMemmov class>
     
     void memmovDeviceToHost(DeviceMemmov& mover, void* devicePtr,
-    std::size_t size){
-    
-    ...
-    
-    }
+    std::size_t size){...}
     
     self getDeviceDataDescription() const{
-    
+
     ...
     
     }
 
-The type returned by getDeviceDataDescription must be copyable and have
-an empty constructor. It should be used to help retrieve raw pointer
-data when calling a device kernel.
+The type returned by getDeviceDataDescription must be copyable and have an empty constructor. It should be used to help retrieve raw pointer data when calling a device kernel.
 
 *MPI*
 
-The CMake variable SPECX_COMPILE_WITH_MPI must be set to ON, for example
-with the command cmake .. -DSPECX_COMPILE_WITH_MPI=ON .
+The CMake variable SPECX_COMPILE_WITH_MPI must be set to ON, for example with the command cmake .. -DSPECX_COMPILE_WITH_MPI=ON .
 
 *Data serialization and deserialization*
 
-Data can be sent to target MPI processes using the mpiSend and mpiRecv
-methods of the SpTaskGraph object.
+Data can be sent to target MPI processes using the mpiSend and mpiRecv methods of the SpTaskGraph object.
 
 To be moved between compute nodes, objects must be one of the following
 types:
 
 [arabic]
 . Be an instance of a class that inherits from SpAbstractSerializable
-(see below for details).
-. Supports getRawDataSize , getRawData and restoreRawData methods, which
-will be used to extract the data to send and restore it.
-. Be a POD type (well, having is_standard_layout_v and is_trivial_v
-returning true, which means having a pointer in a structure won't be
-detected and could be a problem).
+. Supports getRawDataSize , getRawData and restoreRawData methods, which will be used to extract the data to send and restore it.
+. Be a POD type (well, having is_standard_layout_v and is_trivial_v returning true, which means having a pointer in a structure won't be detected and could be a problem).
 . Let be a vector of the types defined in 1, 2 or 3.
 
-It is the SpGetSerializationType function that performs the detection
-and assigns the corresponding SpSerializationType value to each object.
-Detection is carried out in the order written above.
+It is the SpGetSerializationType function that performs the detection and assigns the corresponding SpSerializationType value to each object. Detection is carried out in the order written above.
 
 For examples, see the unit tests under UTests/MPI.
 
@@ -541,111 +478,19 @@ For examples, see the unit tests under UTests/MPI.
 For built-in and POD types, these methods work automatically:
 
     SpTaskGraph<SpSpeculativeModel::SP_NO_SPEC> tg;
-    
     int a = 1;
-    
     integer b = 0;
-    
     ...
-    
     tg.mpiSend(b, 1, 0);
-    
     tg.mpiRecv(b, 1, 1);
 
 *Type 1 - SpAbstractSerializable*
 
-However, user-defined types must allow support for MPI serialization and
-deserialization. To do this, they must implement these steps.
+However, user-defined types must allow support for MPI serialization and deserialization. To do this, they must implement these steps.
 
 [arabic]
 . Include "MPI/SpSerializer.hpp"
 . Make the class a public subclass of the SpAbstractSerializable class
-. Provide a constructor that takes as an argument a non-constant
-reference to SpDeserializer. This constructor makes it possible to
-construct an object of the class from deserialization.
-. Provide a public "serialize" method with a non-const reference to
-SpSerializer as an argument. This method serializes the object into the
-SpSerializer input object.
+. Provide a constructor that takes as an argument a non-constant reference to SpDeserializer. This constructor makes it possible to construct an object of the class from deserialization.
+. Provide a public "serialize" method with a non-const reference to SpSerializer as an argument. This method serializes the object into the SpSerializer input object.
 
-These detailed steps are illustrated in the following example:
-
-    #include "MPI/SpSerializer.hpp"
-    
-    int_data_holder class: public SpAbstractSerializable {
-    
-    audience:
-    
-    int_data_holder(int value = 0): value{value} {}
-    
-    int_data_holder(SpDeserializer &deserializer) :
-    value(deserializer.restore<decltype(value)>("value")) {
-    
-    }
-    
-    void serialize(SpSerializer &serializer) const final {
-    
-    serializer.append(value, "value");
-    
-    }
-    
-    int get() const { return value; }
-    
-    empty set (int value) {
-    
-    this->value=value;
-    
-    }
-    
-    private:
-    
-    integer value;
-    
-    };
-    
-    ...
-
-    SpTaskGraph<SpSpeculativeModel::SP_NO_SPEC> tg;
-    
-    int_data_holder a=1;
-    int_data_holder b=0;
-    ...
-    tg.mpiSend(b, 1, 0);
-    tg.mpiRecv(b, 1, 1);
-    
-    *Type 2 - Direct access*
-    
-    class DirectAccessClass {
-    
-    int key;
-    
-    audience:
-    
-    const unsigned character* getRawData() const {
-    
-    return reinterpret_cast<const unsigned char*>(&key);
-    
-    }
-    
-    std::size_t getRawDataSize() const {
-    
-    return sizeof(key);
-    
-    }
-    
-    void restoreRawData(const unsigned char* ptr, std::size_t size){
-    
-    assert(sizeof(key) == size);
-    
-    key = *reinterpret_cast<const int*>(ptr);
-    
-    }
-    
-    integer& value(){
-    
-    return key;
-    
-    }
-    const int& value() const{
-    return key;
-    }
-    };

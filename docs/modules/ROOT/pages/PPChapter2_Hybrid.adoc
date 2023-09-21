@@ -1,27 +1,19 @@
-*2.3 Hybrid MPI and OpenMP*
+= Hybrid MPI and OpenMP
 
-Hybrid application programs using MPI + OpenMP are now commonplace on
-large HPC systems. There are basically two main motivations for this
-combination of programming models:
+Hybrid application programs using MPI + OpenMP are now commonplace on large HPC systems. There are basically two main motivations for this combination of programming models:
 
-{empty}1. Reduced memory footprint, both in the application and in the
-MPI library (eg communication buffers).
+{empty}1. Reduced memory footprint, both in the application and in the MPI library (eg communication buffers).
 
-{empty}2. Improved performance, especially at high core counts where
-pure MPI scalability runs out.
+{empty}2. Improved performance, especially at high core counts where pure MPI scalability runs out.
 
-A common hybrid approach
+*A common hybrid approach*
 
 image::image9.png[xref=#fragment9,width=307,height=155]
-
-
 
 * From dequential code, alongside MPI first, then try adding OpenMP
 * From MPI code, add OpenMP
 * From OpenMP code, treat as serial code
-* The simplest and least error-prone method is to use MPI outside the
-parallel region and allow only the master thread to communicate between
-MPI tasks.
+* The simplest and least error-prone method is to use MPI outside the parallel region and allow only the master thread to communicate between MPI tasks.
 * Could use MPI in parallel region with thread-safe MPI.
 
 image::image10.png[xref=#fragment10,width=264,height=166]

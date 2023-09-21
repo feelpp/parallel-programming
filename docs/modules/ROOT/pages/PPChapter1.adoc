@@ -1,37 +1,4 @@
-=== 1. CPU, GPU, GPGPU Architecture
-
-CPU, GPU, and GPGPU architectures are all types of computer processing
-architectures, but they differ in their design and operation.
-
-
-CPU: A central processor (CPU) is a processing unit that is designed to
-perform various computing tasks including data processing, mathematical
-and logical calculations, communication between different components of
-a computer system, etc. Modern CPUs usually have multiple cores to
-process multiple tasks simultaneously.
-
-GPU: A graphics processing unit (GPU) is an architecture designed to
-accelerate the processing of images and graphics. GPUs have thousands of
-cores that allow them to process millions of pixels simultaneously,
-making them an ideal choice for video games, 3D modeling, and other
-graphics-intensive applications.
-
-GPGPU: A General Processing Architecture (GPGPU) is a type of GPU that
-is designed to be used for purposes other than graphics processing.
-GPGPUs are used to perform computations of an intensive nature using the
-hundreds or thousands of cores available on the graphics card. They are
-particularly effective for parallel computing, machine learning, and
-other computationally intensive areas.
-
-
-In conclusion, the main difference between the three architectures CPU,
-GPU and GPGPU lies in their design and operation. While CPUs are
-designed for general computer processing, GPUs are designed for
-specialized graphics processing, and GPGPUs are a modified version of
-GPUs intended to be used for specialized computer processing other than
-graphics processing.
-
-==== 1.1 CPU
+==== CPU
 
 The CPU basically consists of three parts:
 
@@ -227,7 +194,7 @@ GPUs can be 10+X faster than GPUs for parallel code.
 
 |===
 
-*1.3 GPGPU ( General-Purpose Graphics Processing Unit)*
+*GPGPU ( General-Purpose Graphics Processing Unit)*
 
 image:image4.png[xref=#fragment4,width=642,height=331]
 
@@ -400,7 +367,7 @@ is because SIMD allows the same instruction to be applied to multiple
 data items in parallel, allowing the programmer to customize the code
 according to application requirements.
 
-*1.5 AMD ROCm Platform, CUDA*
+*AMD ROCm Platform, CUDA*
 
 *1.5.1 AMD ROC platform*
 
@@ -660,7 +627,7 @@ New containers are continually being added to the hub.
 image:image6.png[xref=#fragment6,width=511,height=287]
 
 
-*1.7 TPU (Tensor Processing Unit) form Google*
+*TPU (Tensor Processing Unit) form Google*
 
 A Tensor Processing Unit (TPU) is a specialized hardware processor
 developed by Google to accelerate machine learning. Unlike traditional

@@ -77,7 +77,37 @@ image::parallelComputer1.gif[xref=#fragment_000_006,scaledwidth=20%]
 * The majority of the world's large parallel computers (supercomputers) are clusters of hardware produced by a handful of (mostly) well known vendors.
 
 
+* CPU, GPU, GPGPU Architecture *
 
+* CPU, GPU, and GPGPU architectures are all types of computer processing
+architectures, but they differ in their design and operation.
+
+
+* CPU: A central processor (CPU) is a processing unit that is designed to
+perform various computing tasks including data processing, mathematical
+and logical calculations, communication between different components of
+a computer system, etc. Modern CPUs usually have multiple cores to
+process multiple tasks simultaneously.
+
+* GPU: A graphics processing unit (GPU) is an architecture designed to
+accelerate the processing of images and graphics. GPUs have thousands of
+cores that allow them to process millions of pixels simultaneously,
+making them an ideal choice for video games, 3D modeling, and other
+graphics-intensive applications.
+
+* GPGPU: A General Processing Architecture (GPGPU) is a type of GPU that
+is designed to be used for purposes other than graphics processing.
+GPGPUs are used to perform computations of an intensive nature using the
+hundreds or thousands of cores available on the graphics card. They are
+particularly effective for parallel computing, machine learning, and
+other computationally intensive areas.
+
+* In conclusion, the main difference between the three architectures CPU,
+GPU and GPGPU lies in their design and operation. While CPUs are
+designed for general computer processing, GPUs are designed for
+specialized graphics processing, and GPGPUs are a modified version of
+GPUs intended to be used for specialized computer processing other than
+graphics processing.
 
 
 *Why Use Parallel Computing?*

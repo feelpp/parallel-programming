@@ -11,18 +11,26 @@
 
 //:cpp: C++
 
+.Allgather
+[.examp]
+****
 .Code Allgather
 [source,c]
 ----
 include::ROOT:example$src/MPI/MPI_Allgather.c[indent=0]
 ----
+****
 
-
+.Allreduce
+[.examp]
+****
 .Code Allreduce
 [source,c]
 ----
 include::ROOT:example$src/MPI/MPI_Allreduce.c[indent=0]
 ----
+****
+
 
 
 .Code Demo -

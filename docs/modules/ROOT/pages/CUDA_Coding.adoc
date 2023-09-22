@@ -1,8 +1,23 @@
 = CUDA Coding Practice
 
+image::CUDA_Logo.png[Img401,50,50,role="left"]
+
 * Compiling a program for CUDA 
 *** For example, to compile MyProg.cu you would use a command like
 *** nvcc -o MyProg MyProg.cu
+
+
+.Start
+[.examp]
+****
+
+.Code Start with GPU
+[source,cu]
+----
+include::ROOT:example$src/Cuda/Start/hello.cu[indent=0]
+----
+****
+
 
 
 .Array Addition Examples in CPU/GPU
@@ -262,13 +277,50 @@ ADD SOME RESULTS
 .Vector Examples in CPU/GPU
 [.examp]
 ****
-* Vector Examples in CPU/GPU
 
 ****
 .*Profiling Performance*
 ****
 ADD SOME RESULTS
 ****
+
+
+.Dynamic Sync
+[.examp]
+****
+
+.Code Dynamic Sync
+[source,cu]
+----
+include::ROOT:example$src/Cuda/DynamicSync/simple.cu[indent=0]
+----
+****
+
+
+.Simple Streams
+[.examp]
+****
+
+.Code Simple Stream
+[source,cu]
+----
+include::ROOT:example$src/Cuda/SimpleStreams/streams.cu[indent=0]
+----
+****
+
+
+.Jacobi
+[.examp]
+****
+
+.Code Jacobi
+[source,cu]
+----
+include::ROOT:example$src/Cuda/Jacobi/jacobi.cu[indent=0]
+----
+****
+
+
 
 ...
 

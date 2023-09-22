@@ -1,7 +1,9 @@
 = SPECX Coding Practice
 
 
-
+.Examples
+[.examp]
+****
 .Code Test Promise
 [source,cpp]
 ----
@@ -20,6 +22,7 @@ include::ROOT:example$src/Specx/SPECX_TestRace.bcpp[indent=0]
 include::ROOT:example$src/Specx/SPECX_TestVectorBuffer.bcpp[indent=0]
 ----
 
+****
 
 .Code Draft Tests
 [source,cpp]

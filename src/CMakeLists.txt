@@ -54,9 +54,13 @@ endif()
 if(FALSE)
     add_subdirectory(CUDA/Array_Addition)
     add_subdirectory(CUDA/Array_Reduction)
+    add_subdirectory(CUDA/DynamicSync)
+    add_subdirectory(CUDA/Jacobi)
     add_subdirectory(CUDA/Matrix_Summation)
-    add_subdirectory(CUDA/Matrix_Summation)
-    add_subdirectory(CUDA/Task_Parallelism)
+    add_subdirectory(CUDA/Parallelism_Reduction)
+    add_subdirectory(CUDA/SimpleStreams)
+    add_subdirectory(CUDA/Start)
+    add_subdirectory(CUDA/Task_Paralllism)
     add_subdirectory(CUDA/Vector)
 endif()
 #END:CUDA PART
@@ -69,11 +73,11 @@ if(FALSE)
 endif()
 #END:HIP
 
-#BEGIN:GayaPerformance
+#BEGIN:HPC Performance
 if(TRUE)
     add_subdirectory(HPC_Performance/HPC_Explorer)
 endif()
-#BEGIN:GayaPerformance//+++>OK
+#BEGIN:HPC Performance//+++>OK
 
 if(FALSE)
     add_subdirectory(HPC_Performance/HPC_Process)

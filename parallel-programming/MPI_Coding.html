@@ -239,7 +239,7 @@ MathJax.Hub.Config({
 <p>For example, to compile MyProg.c you would use a command like</p>
 </li>
 <li>
-<p>mpicc - O2 -o MyProg MyProg . c</p>
+<p>mpicc - O2 -o MyProg MyProg.c</p>
 </li>
 </ul>
 </div>
@@ -251,6 +251,135 @@ MathJax.Hub.Config({
 <div class="sect1">
 <h2 id="_list_of_programms"><a class="anchor" href="#_list_of_programms"></a>1. List of programms</h2>
 <div class="sectionbody">
+<div class="listingblock">
+<div class="title">Code Allgather</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-c hljs" data-lang="c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;mpi.h&gt;
+
+/**
+ * @brief Illustrates how to use an allgather.
+ * @details This application is meant to be run with 3 MPI processes. Every MPI
+ * process begins with a value, then every MPI process collects the entirety of
+ * the data gathered and prints them. It can be visualised as follows:
+ *
+ * +-----------+  +-----------+  +-----------+
+ * | Process 0 |  | Process 1 |  | Process 2 |
+ * +-+-------+-+  +-+-------+-+  +-+-------+-+
+ *   | Value |      | Value |      | Value |
+ *   |   0   |      |  100  |      |  200  |
+ *   +-------+      +-------+      +-------+
+ *       |________      |      ________|
+ *                |     |     | 
+ *             +-----+-----+-----+
+ *             |  0  | 100 | 200 |
+ *             +-----+-----+-----+
+ *             |   Each process  |
+ *             +-----------------+
+ **/
+int main(int argc, char* argv[])
+{
+    MPI_Init(&amp;argc, &amp;argv);
+
+    // Get number of processes and check that 3 processes are used
+    int size;
+    MPI_Comm_size(MPI_COMM_WORLD, &amp;size);
+    if(size != 3)
+    {
+        printf("This application is meant to be run with 3 MPI processes.\n");
+        MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
+    }
+
+    // Get my rank
+    int my_rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &amp;my_rank);
+
+    // Define my value
+    int my_value = my_rank * 100;
+    printf("Process %d, my value = %d.\n", my_rank, my_value);
+
+    int buffer[3];
+    MPI_Allgather(&amp;my_value, 1, MPI_INT, buffer, 1, MPI_INT, MPI_COMM_WORLD);
+    printf("Values collected on process %d: %d, %d, %d.\n", my_rank, buffer[0], buffer[1], buffer[2]);
+
+    MPI_Finalize();
+
+    return EXIT_SUCCESS;
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Code Allreduce</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-c hljs" data-lang="c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;mpi.h&gt;
+
+/**
+ * @brief Illustrates how to use an all-reduce.
+ * @details This application consists of a sum all-reduction; every MPI process
+ * sends its rank for reduction before the sum of these ranks is stored in the
+ * receive buffer of each MPI process. It can be visualised as follows:
+ *
+ * +-----------+ +-----------+ +-----------+ +-----------+
+ * | Process 0 | | Process 1 | | Process 2 | | Process 3 |
+ * +-+-------+-+ +-+-------+-+ +-+-------+-+ +-+-------+-+
+ *   | Value |     | Value |     | Value |     | Value |
+ *   |   0   |     |   1   |     |   2   |     |   3   |
+ *   +-------+     +----+--+     +--+----+     +-------+
+ *            \         |           |         /
+ *             \        |           |        /
+ *              \       |           |       /
+ *               \      |           |      /
+ *                +-----+-----+-----+-----+
+ *                            |
+ *                        +---+---+
+ *                        |  SUM  |
+ *                        +---+---+
+ *                        |   6   |
+ *                        +-------+
+ *                            |
+ *                +-----+-----+-----+-----+
+ *               /      |           |      \
+ *              /       |           |       \
+ *             /        |           |        \
+ *            /         |           |         \
+ *   +-------+     +----+--+     +--+----+     +-------+  
+ *   |   6   |     |   6   |     |   6   |     |   6   |  
+ * +-+-------+-+ +-+-------+-+ +-+-------+-+ +-+-------+-+
+ * | Process 0 | | Process 1 | | Process 2 | | Process 3 |
+ * +-----------+ +-----------+ +-----------+ +-----------+
+ **/
+int main(int argc, char* argv[])
+{
+    MPI_Init(&amp;argc, &amp;argv);
+
+    // Get the size of the communicator
+    int size = 0;
+    MPI_Comm_size(MPI_COMM_WORLD, &amp;size);
+    if(size != 4)
+    {
+        printf("This application is meant to be run with 4 MPI processes.\n");
+        MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
+    }
+
+    // Get my rank
+    int my_rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &amp;my_rank);
+
+    // Each MPI process sends its rank to reduction, root MPI process collects the result
+    int reduction_result = 0;
+    MPI_Allreduce(&amp;my_rank, &amp;reduction_result, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
+
+    printf("[MPI Process %d] The sum of all ranks is %d.\n", my_rank, reduction_result);
+
+    MPI_Finalize();
+
+    return EXIT_SUCCESS;
+}</code></pre>
+</div>
+</div>
 <div class="listingblock">
 <div class="title">Code Demo -</div>
 <div class="content">

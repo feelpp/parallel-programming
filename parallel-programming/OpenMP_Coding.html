@@ -247,6 +247,482 @@ MathJax.Hub.Config({
 </li>
 </ul>
 </div>
+<div class="listingblock">
+<div class="title">Code Start</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cpp hljs" data-lang="cpp">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;omp.h&gt;
+
+/**
+ * @brief Illustrates how to do a task reduction.
+ * @details This example consists in calculating the sum of all elements of an
+ * array.
+ **/
+int main(int argc, char* argv[])
+{
+	// Use 4 OpenMP threads
+	omp_set_num_threads(4);
+
+	// Variable that will be private
+	int val = 123456789;
+
+	printf("Value of \"val\" before the OpenMP parallel region: %d.\n", val);
+
+	#pragma omp parallel private(val)
+	{
+		printf("Thread %d sees \"val\" = %d, and updates it to be %d.\n", omp_get_thread_num(), val, omp_get_thread_num());
+		val = omp_get_thread_num();
+	}
+
+	// Value after the parallel region; unchanged.
+	printf("Value of \"val\" after the OpenMP parallel region: %d.\n", val);
+
+
+	return 0;
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Code Firstprivate</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cpp hljs" data-lang="cpp">#include &lt;omp.h&gt;
+#include &lt;stdio.h&gt;
+
+// not using iostream here due to output ordering issues
+
+// iostream tends to output each part between &lt;&lt;'s separately to the console, 
+// which can lead to random output if multiple threads are doing the same
+// thing.
+
+// printf will generally output the whole result string in one go, so results
+// of separate printf calls, even from different threads, will remain intact
+
+// Another fix, other than using printf, would be to give each thread its own 
+// place to store output temporarily (a stringstream), and then output the whole
+// result in one go.
+
+int main() {
+	
+	omp_set_num_threads(4);
+
+	// Variable that will be firstprivate
+	int val = 123456789;
+
+	printf("Value of \"val\" before the OpenMP parallel region: %d.\n", val);
+
+	#pragma omp parallel firstprivate(val)
+	{
+		printf("Thread %d sees \"val\" = %d, and updates it to be %d.\n", omp_get_thread_num(), val, omp_get_thread_num());
+		val = omp_get_thread_num();
+	}
+
+	// Value after the parallel region; unchanged.
+	printf("Value of \"val\" after the OpenMP parallel region: %d.\n", val);
+
+	return 0;
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Code Private</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cpp hljs" data-lang="cpp">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;omp.h&gt;
+
+/**
+ * @brief Illustrates the OpenMP private policy.
+ * @details This example shows that when a private variable is passed to a
+ * parallel region, threads work on uninitialised copies and that whatever
+ * modification is made to their copies is not reflected onto the original
+ * variable. 
+ **/
+int main(int argc, char* argv[])
+{
+	// Use 4 OpenMP threads
+	omp_set_num_threads(4);
+
+	// Variable that will be private
+	int val = 123456789;
+
+	printf("Value of \"val\" before the OpenMP parallel region: %d.\n", val);
+
+	#pragma omp parallel private(val)
+	{
+		printf("Thread %d sees \"val\" = %d, and updates it to be %d.\n", omp_get_thread_num(), val, omp_get_thread_num());
+		val = omp_get_thread_num();
+	}
+
+	// Value after the parallel region; unchanged.
+	printf("Value of \"val\" after the OpenMP parallel region: %d.\n", val);
+
+	return EXIT_SUCCESS;
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Code Lastprivate</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cpp hljs" data-lang="cpp">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;omp.h&gt;
+
+/**
+ * @brief Illustrates the OpenMP lastprivate policy.
+ * @details This example shows that when a lastprivate variable is passed to a
+ * parallelised for loop, threads work on uninitialised copies but, at the end
+ * of the parallelised for loop, the thread in charge of the last iteration
+ * sets the value of the original variable to that of its own copy.
+ **/
+int main(int argc, char* argv[])
+{
+	// Use 4 OpenMP threads
+	omp_set_num_threads(4);
+
+	// Variable that will be lastprivate
+	int val = 123456789;
+
+	printf("Value of \"val\" before the OpenMP parallel region: %d.\n", val);
+
+	#pragma omp parallel for lastprivate(val)
+	for(int i = 0; i &lt; omp_get_num_threads(); i++)
+	{
+		val = omp_get_thread_num();
+	}
+
+	// Value after the parallel region; unchanged.
+	printf("Value of \"val\" after the OpenMP parallel region: %d. Thread %d was therefore the last one to modify it.\n", val, val);
+
+	return 0;
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Code Linear</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cpp hljs" data-lang="cpp">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;omp.h&gt;
+
+/**
+ * @brief Illustrates the OpenMP linear policy.
+ * @details This example shows that when a linear variable is passed to a
+ * parallelised for loop, the value of that variable is the original value plus 
+ * the iteration logical number times the linear-step. After the OpenMP parallel
+ * for, the value of the original variable is that of the linear variable at the
+ * last iteration.
+ **/
+int main(int argc, char* argv[])
+{
+	// Use 4 OpenMP threads
+	omp_set_num_threads(4);
+
+	// Variable that will be private
+	int val = 1;
+
+	printf("Value of \"val\" before the OpenMP parallel for is %d.\n", val);
+
+	#pragma omp parallel for linear(val:2)
+	for(int i = 0; i &lt; 10; i++)
+	{
+		printf("Thread %d sees \"val\" = %d at iteration %d.\n", omp_get_thread_num(), val, i);
+	}
+
+	printf("Value of \"val\" after the OpenMP parallel for is %d.\n", val);
+
+	return EXIT_SUCCESS;
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Code Reduction</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cpp hljs" data-lang="cpp">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;omp.h&gt;
+
+/**
+ * @brief Illustrates how to do a classic reduction.
+ * @details This example consists in calculating the sum of all elements of an
+ * array.
+ **/
+int main(int argc, char* argv[])
+{
+	// Use 2 threads when creating OpenMP parallel regions
+	omp_set_num_threads(2);
+
+	int total = 0;
+	const int ARRAY_SIZE = 10;
+
+	int myArray[ARRAY_SIZE];
+	// Initialise the array
+	for(int i = 0; i &lt; ARRAY_SIZE; i++)
+	{
+		myArray[i] = i;
+	}
+
+	// Calculate the sum of all elements
+	#pragma omp parallel for default(none) shared(myArray) firstprivate(ARRAY_SIZE) reduction(+: total)
+	for(int i = 0; i &lt; ARRAY_SIZE; i++)
+	{
+		total += myArray[i];
+	}
+
+	printf("The sum of all array elements is equal to %d.\n", total);
+
+
+	return EXIT_SUCCESS;
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Code Schedule</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cpp hljs" data-lang="cpp">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;omp.h&gt;
+
+/**
+ * @brief Illustrates how to tell OpenMP which schedule to apply.
+ * @details A static schedule strategy is explicitly specified, as well as the chunksize.
+ **/
+int main(int argc, char* argv[])
+{
+	// Use 2 threads when creating OpenMP parallel regions
+	omp_set_num_threads(2);
+
+	// Parallelise the for loop using the static schedule with chunks made of 2 iterations
+	#pragma omp parallel for schedule(static, 2)
+	for(int i = 0; i &lt; 10; i++)
+	{
+		printf("Thread %d processes iteration %d.\n", omp_get_thread_num(), i);
+	}
+
+	return EXIT_SUCCESS;
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Code None</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cpp hljs" data-lang="cpp">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;omp.h&gt;
+
+/**
+ * @brief Illustrates the OpenMP none policy.
+ * @details This example shows that the usage of the "none" default, by
+ * comparing a version using implicit data-sharing clauses against that using
+ * explicit data-sharing clauses. Both yield the same result, but one requires
+ * the explicit usage of data-sharing clauses.
+ **/
+int main(int argc, char* argv[])
+{
+	// Use 2 OpenMP threads
+	omp_set_num_threads(2);
+
+	// Relying on the implicit default(shared)
+	int implicitlyShared = 0;
+	#pragma omp parallel
+	{
+		#pragma omp atomic
+		implicitlyShared++;
+	}
+	printf("Value with implicit shared: %d.\n", implicitlyShared);
+
+	// Forcing the usage of explicit data-sharing closes
+	int explicitlyShared = 0;
+	#pragma omp parallel default(none) shared(explicitlyShared)
+	{
+		#pragma omp atomic
+		explicitlyShared++;
+	}
+	printf("Value with explicit shared: %d.\n", explicitlyShared);
+
+	return EXIT_SUCCESS;
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Code Task</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cpp hljs" data-lang="cpp">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;omp.h&gt;
+
+/**
+ * @brief Illustrates how to create tasks.
+ * @details This application consists of a thread, in an OpenMP parallel
+ * region, that spawns tasks.
+ **/
+int main(int argc, char* argv[])
+{
+	// Use 3 threads when creating OpenMP parallel regions
+	omp_set_num_threads(3);
+
+	// Create the parallel region
+	#pragma omp parallel
+	{
+		// One thread will spawn the tasks
+		#pragma omp single
+		{
+			// Spawn the first task
+			#pragma omp task
+			{
+				printf("Task 1 executed by thread %d.\n", omp_get_thread_num());
+			}
+
+			// Spawn the second task
+			#pragma omp task
+			{
+				printf("Task 2 executed by thread %d.\n", omp_get_thread_num());
+			}
+
+			// Wait for both tasks to finish
+			#pragma omp taskwait
+		}
+	}
+
+	return EXIT_SUCCESS;
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Code Task Reduction</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cpp hljs" data-lang="cpp">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;omp.h&gt;
+
+/**
+ * @brief Illustrates how to do a task reduction.
+ * @details This example consists in calculating the sum of all elements of an
+ * array.
+ **/
+int main(int argc, char* argv[])
+{
+	// Use 2 threads when creating OpenMP parallel regions
+	omp_set_num_threads(2);
+
+	int total = 0;
+	const int ARRAY_SIZE = 10;
+
+	int myArray[ARRAY_SIZE];
+
+	// Initialise the array
+	for(int i = 0; i &lt; ARRAY_SIZE; i++)
+	{
+		myArray[i] = i;
+	}
+
+	// Calculate the sum of all elements
+	#pragma omp parallel
+	{
+		#pragma omp single
+		{
+			#pragma omp taskgroup task_reduction(+: total)
+			{
+				for(int i = 0; i &lt; ARRAY_SIZE; i++)
+				{
+					#pragma omp task in_reduction(+: total)
+					total += myArray[i];
+				}
+			}
+		}
+	}
+
+	printf("The sum of all array elements is %d.\n", total);
+
+
+	return EXIT_SUCCESS;
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Code Task Wait</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cpp hljs" data-lang="cpp">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;omp.h&gt;
+
+/**
+ * @brief Illustrates how to wait for the completion of child tasks.
+ * @details This application consists of a thread, in an OpenMP parallel region,
+ * that spawns tasks. It first spawns two tasks, then wait for these to complete
+ * before spawning a third task. The execution flow can be visualised below:
+ *
+ * single construct
+ *   |
+ *   +------------------------------------------&gt; spawns task 1 --------+
+ *   |                                                                  |
+ *   |                                                            +-----+-----+
+ *   +------------------------------------------&gt; spawns task 2   | A thread  |
+ *   |                                                  |         | will pick |
+ *   |                                            +-----+-----+   | it up and |
+ *   |                                            | A thread  |   | execute   |
+ *   |                                            | will pick |   | this task |
+ *   |                                            | it up and |   +-----+-----+
+ *   |                                            | execute   |         |
+ *   |                                            | this task |         |
+ *   |                                            +-----+-----+         |
+ *   |                                                  |               |
+ *   +--&gt; waits for tasks 1 and 2 to complete      |////////////////////////|
+ *   |
+ *   +--&gt; spawns task 3 ----------------------------------------------+
+ *   |                                                                |
+ *   |                                                          +-----+-----+
+ *   |                                                          | A thread  |
+ *   |                                                          | will pick |
+ *   |                                                          | it up and |
+ *   |                                                          | execute   |
+ *   |                                                          | this task |
+ *   |                                                          +-----+-----+
+ *   |                                                                |
+ *   +--&gt; implicit barrier at the end of the single construct |///////////////|
+ **/
+int main(int argc, char* argv[])
+{
+    // Use 3 threads when creating OpenMP parallel regions
+    omp_set_num_threads(3);
+
+    // Create the parallel region
+    #pragma omp parallel
+    {
+        #pragma omp single
+        {
+            // Spawn the first task
+            #pragma omp task
+            {
+                printf("Task 1 executed by thread %d.\n", omp_get_thread_num());
+            }
+
+            // Spawn the second task
+            #pragma omp task
+            {
+                printf("Task 2 executed by thread %d.\n", omp_get_thread_num());
+            }
+
+            // Wait for the two tasks above to complete before moving to the third one
+            #pragma omp taskwait
+
+            // One thread indicates that the synchronisation is finished
+            printf("The taskwait construct completed, which means tasks 1 and 2 are complete. We can now move to task 3.\n");
+
+            // Spawn the third task
+            #pragma omp task
+            {
+                printf("Task 3 executed by thread %d.\n", omp_get_thread_num());
+            }
+
+            // The implicit barrier at the end of the single construct will wait for tasks to finish
+        }
+    }
+
+    return EXIT_SUCCESS;
+}</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>&#8230;&#8203;</p>
 </div>

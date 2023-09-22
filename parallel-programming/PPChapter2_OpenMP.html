@@ -923,11 +923,8 @@ faults on a scalar machine), can significantly degrade performance.</p>
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="sect1">
-<h2 id="_directive_atomic_barrier_critical_flush_ordered"><a class="anchor" href="#_directive_atomic_barrier_critical_flush_ordered"></a>1. Directive (atomic, barrier, critical, flush, ordered, ….)</h2>
-<div class="sectionbody">
-
-</div>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Directive (atomic, barrier, critical, flush, ordered,…)</strong></p>
 </div></div></td>
 </tr>
 <tr>
@@ -1223,9 +1220,8 @@ each thread having its own copy.</pre>
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="sect2">
-<h3 id="_parallel_execution"><a class="anchor" href="#_parallel_execution"></a>1. Parallel Execution</h3>
-
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Parallel Execution</strong></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"></div></td>
 </tr>
@@ -1331,9 +1327,7 @@ return 0;
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The nowait Clause</p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>If there are multiple independent loops within a parallel region, you
-can use the nowait clause to avoid the implied barrier at the end of the
-loop construct</p>
+<p>If there are multiple independent loops within a parallel region, you can use the nowait clause to avoid the implied barrier at the end of the loop construct</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -1361,14 +1355,7 @@ y[i] = sqrt(z[i]);
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The collapse Clause</p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>The collapse clause is used since it is implicitly private. The collapse
-clause associates one or more loops with the directive on which it
-appears for the purpose of identifying the portion of the depth of the
-canonical loop nest to which to apply the semantics of the directive.
-The argument n speciﬁes the number of loops of the associated loop nest
-to which to apply those semantics. On all directives on which the
-collapse clause may appear, the eﬀect is as if a value of one was
-speciﬁed for n if the collapse clause is not speciﬁed.</p>
+<p>The collapse clause is used since it is implicitly private. The collapse clause associates one or more loops with the directive on which it appears for the purpose of identifying the portion of the depth of the canonical loop nest to which to apply the semantics of the directive. The argument n speciﬁes the number of loops of the associated loop nest to which to apply those semantics. On all directives on which the collapse clause may appear, the eﬀect is as if a value of one was speciﬁed for n if the collapse clause is not speciﬁed.</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -1442,11 +1429,7 @@ return 0;
 <td class="tableblock halign-left valign-top"><p class="tableblock">The firstprivate Clause and the sections Construct</p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p>The firstprivate clause is used to initialize the private copy of
-section_count of each thread. The problem is that the section constructs
-modify section_count, which breaks the independence of the section
-constructs. When different threads execute each section, both sections
-will print the value 1. When the same thread executes the two sections,
-one section will print the value 1 and the other will print the value 2.
+section_count of each thread. The problem is that the section constructs modify section_count, which breaks the independence of the section constructs. When different threads execute each section, both sections will print the value 1. When the same thread executes the two sections, one section will print the value 1 and the other will print the value 2.
 Since the order of execution of the two sections in this case is
 unspecified, it is unspecified which section prints which value.</p>
 </div>
@@ -1708,9 +1691,8 @@ do_by_16(x, iam, ipoints);
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="sect2">
-<h3 id="_clauses_data_sharing_attribute"><a class="anchor" href="#_clauses_data_sharing_attribute"></a>1. <strong>Clauses: Data Sharing attribute</strong></h3>
-
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Clauses: Data Sharing attribute</strong></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>Data sharing attribute clauses apply only to variables whose names are
 visible in the construct on which the clause appears. Not all of the
@@ -1776,9 +1758,8 @@ appearing in a clause must be visible.</em></p></td>
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="sect2">
-<h3 id="_clauses_data_copying"><a class="anchor" href="#_clauses_data_copying"></a>1. Clauses: Data copying</h3>
-
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Clauses: Data copying</strong></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>Thesis clauses support the copying of data values from private gold thread- private variables on one implicit task or thread to the corresponding variables on other implicit tasks or threads in the team.</em></p></td>
 </tr>
@@ -1807,9 +1788,8 @@ appearing in a clause must be visible.</em></p></td>
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="sect2">
-<h3 id="_execution_environment_routines_function"><a class="anchor" href="#_execution_environment_routines_function"></a>1. Execution Environment Routines Function</h3>
-
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Execution Environment Routines Function</strong></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>Execution environment routines affect and monitor threads, processors,
 and the parallel environment. Lock routines support synchronization with
@@ -1951,9 +1931,8 @@ the maximum number of nested active <strong>parallel</strong> regions.</p></td>
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="sect2">
-<h3 id="_lock_routines"><a class="anchor" href="#_lock_routines"></a>1. Lock Routines</h3>
-
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Lock Routines</strong></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
@@ -2011,9 +1990,8 @@ the maximum number of nested active <strong>parallel</strong> regions.</p></td>
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="sect2">
-<h3 id="_timing_routines"><a class="anchor" href="#_timing_routines"></a>1. Timing Routines</h3>
-
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Timing Routines</strong></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
@@ -2038,9 +2016,8 @@ the maximum number of nested active <strong>parallel</strong> regions.</p></td>
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="sect2">
-<h3 id="_environment_variables"><a class="anchor" href="#_environment_variables"></a>1. Environment Variables</h3>
-
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><strong>Environment Variables</strong></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>Environment variable names are upper case, and the values assigned to them are box insensitive and May have leading and trailing white space.</em></p></td>
 </tr>
@@ -2101,7 +2078,7 @@ the maximum number of nested active <strong>parallel</strong> regions.</p></td>
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-left valign-top">Operators legally allowed in at discount</th>
+<th class="tableblock halign-left valign-top"><strong>Operators legally allowed in at discount</strong></th>
 <th class="tableblock halign-left valign-top"></th>
 </tr>
 </thead>

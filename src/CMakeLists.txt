@@ -71,12 +71,12 @@ endif()
 
 #BEGIN:GayaPerformance
 if(TRUE)
-    add_subdirectory(GayaPerformance/HPC_Explorer)
+    add_subdirectory(HPC_Performance/HPC_Explorer)
 endif()
 #BEGIN:GayaPerformance//+++>OK
 
 if(FALSE)
-    add_subdirectory(GayaPerformance/HPC_Process)
+    add_subdirectory(HPC_Performance/HPC_Process)
 endif()
 #END:GayaPerformance/PB /usr/include/sys/times.h' file not found
 

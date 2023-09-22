@@ -3,11 +3,27 @@
 * Compiling a program for MPI is almost just like compiling a regular C or C++ program
 *** The C compiler is mpicc and the C++ compiler is mpic++.
 *** For example, to compile MyProg.c you would use a command like
-*** mpicc - O2 -o MyProg MyProg . c
+*** mpicc - O2 -o MyProg MyProg.c
 
 == List of programms
 
 //* xref:MPI_Allgather.c[MPI_Allgather]
+
+//:cpp: C++
+
+.Code Allgather
+[source,c]
+----
+include::ROOT:example$src/MPI/MPI_Allgather.c[indent=0]
+----
+
+
+.Code Allreduce
+[source,c]
+----
+include::ROOT:example$src/MPI/MPI_Allreduce.c[indent=0]
+----
+
 
 .Code Demo -
 ----

@@ -7,6 +7,73 @@
 *** g++ MyProg.o -o MyProg -fopenmp -lpthread
 
 
+.Code Start
+[source,cpp]
+----
+include::ROOT:example$src/OpenMP/OpenMP_Start.cpp[indent=0]
+----
+
+.Code Firstprivate
+[source,cpp]
+----
+include::ROOT:example$src/OpenMP/OpenMP_Firstprivate.cpp[indent=0]
+----
+
+.Code Private
+[source,cpp]
+----
+include::ROOT:example$src/OpenMP/OpenMP_Private.cpp[indent=0]
+----
+
+.Code Lastprivate
+[source,cpp]
+----
+include::ROOT:example$src/OpenMP/OpenMP_Lastprivate.cpp[indent=0]
+----
+
+.Code Linear
+[source,cpp]
+----
+include::ROOT:example$src/OpenMP/OpenMP_Linear.cpp[indent=0]
+----
+
+.Code Reduction
+[source,cpp]
+----
+include::ROOT:example$src/OpenMP/OpenMP_Reduction.cpp[indent=0]
+----
+
+.Code Schedule
+[source,cpp]
+----
+include::ROOT:example$src/OpenMP/OpenMP_Schedule.cpp[indent=0]
+----
+
+.Code None
+[source,cpp]
+----
+include::ROOT:example$src/OpenMP/OpenMP_None.cpp[indent=0]
+----
+
+.Code Task
+[source,cpp]
+----
+include::ROOT:example$src/OpenMP/OpenMP_Task.cpp[indent=0]
+----
+
+.Code Task Reduction
+[source,cpp]
+----
+include::ROOT:example$src/OpenMP/OpenMP_Task_reduction.cpp[indent=0]
+----
+
+.Code Task Wait
+[source,cpp]
+----
+include::ROOT:example$src/OpenMP/OpenMP_Task_wait.cpp[indent=0]
+----
+
+
 
 
 ...

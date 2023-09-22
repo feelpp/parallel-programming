@@ -1,8 +1,3 @@
-/**
- * @author RookieHPC
- * @brief Original source code at https://rookiehpc.org/mpi/docs/mpi_graph_neighbors_count/index.html
- **/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>

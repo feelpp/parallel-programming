@@ -1,5 +1,3 @@
-// Example application of random walking using MPI_Send, MPI_Recv, and
-
 #include <iostream>
 #include <vector>
 #include <cstdlib>

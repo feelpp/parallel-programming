@@ -1,8 +1,3 @@
-/**
- * @author RookieHPC
- * @brief Original source code at https://rookiehpc.org/mpi/docs/mpi_win_create_dynamic/index.html
- **/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <mpi.h>

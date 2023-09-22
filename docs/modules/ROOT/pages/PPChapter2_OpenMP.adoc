@@ -394,8 +394,7 @@ faults on a scalar machine), can significantly degrade performance.
 [width="100%",cols="100%",]
 |===
 a|
-== Directive (atomic, barrier, critical, flush, ordered, ….)
-
+*Directive (atomic, barrier, critical, flush, ordered,…)*
 a|
 An OpenMP executable directive applies to the succeeding structured
 block or an OpenMP Construct. A “structured block” is a single statement
@@ -568,7 +567,7 @@ allowing code outside the region to run in parallel.
 [width="100%",cols="27%,73%",]
 |===
 a|
-=== Parallel Execution
+*Parallel Execution*
 a|
 
 
@@ -641,9 +640,7 @@ implementations that support it.
     }
 
 |The nowait Clause a|
-If there are multiple independent loops within a parallel region, you
-can use the nowait clause to avoid the implied barrier at the end of the
-loop construct
+If there are multiple independent loops within a parallel region, you can use the nowait clause to avoid the implied barrier at the end of the loop construct
     
     #include <math.h>
     
@@ -662,14 +659,7 @@ loop construct
     }
 
 |The collapse Clause a|
-The collapse clause is used since it is implicitly private. The collapse
-clause associates one or more loops with the directive on which it
-appears for the purpose of identifying the portion of the depth of the
-canonical loop nest to which to apply the semantics of the directive.
-The argument n speciﬁes the number of loops of the associated loop nest
-to which to apply those semantics. On all directives on which the
-collapse clause may appear, the eﬀect is as if a value of one was
-speciﬁed for n if the collapse clause is not speciﬁed.
+The collapse clause is used since it is implicitly private. The collapse clause associates one or more loops with the directive on which it appears for the purpose of identifying the portion of the depth of the canonical loop nest to which to apply the semantics of the directive. The argument n speciﬁes the number of loops of the associated loop nest to which to apply those semantics. On all directives on which the collapse clause may appear, the eﬀect is as if a value of one was speciﬁed for n if the collapse clause is not speciﬁed.
 
     void bar(float *a, int i, int j, int k);
     
@@ -716,11 +706,7 @@ _j_ is updated with the value _N/2_ from the last iteration of the loop.
 
 |The firstprivate Clause and the sections Construct a|
 The firstprivate clause is used to initialize the private copy of
-section_count of each thread. The problem is that the section constructs
-modify section_count, which breaks the independence of the section
-constructs. When different threads execute each section, both sections
-will print the value 1. When the same thread executes the two sections,
-one section will print the value 1 and the other will print the value 2.
+section_count of each thread. The problem is that the section constructs modify section_count, which breaks the independence of the section constructs. When different threads execute each section, both sections will print the value 1. When the same thread executes the two sections, one section will print the value 1 and the other will print the value 2.
 Since the order of execution of the two sections in this case is
 unspecified, it is unspecified which section prints which value.
 
@@ -883,7 +869,7 @@ explicitly to ensure portability.
 [width="100%",cols="26%,74%",]
 |===
 a|
-=== *Clauses: Data Sharing attribute*
+*Clauses: Data Sharing attribute*
 
 |
 _Data sharing attribute clauses apply only to variables whose names are
@@ -956,7 +942,7 @@ Declares accumulation into the list items using the indicated associative operat
 [width="100%",cols="24%,76%",]
 |===
 a|
-=== Clauses: Data copying
+*Clauses: Data copying*
 
 |
 
@@ -988,7 +974,7 @@ Broadcasts a value from the data environment of one implicit task to the data en
 [width="100%",cols="39%,61%",]
 |===
 a|
-=== Execution Environment Routines Function
+*Execution Environment Routines Function*
 
 
 
@@ -1106,7 +1092,7 @@ int omp_get_active_level(void);
 [width="100%",cols="41%,59%",]
 |===
 a|
-=== Lock Routines
+*Lock Routines*
 
 |
 
@@ -1158,7 +1144,7 @@ int omp_test_lock(omp_lock_t * _lock_ );
 [width="100%",cols="41%,59%",]
 |===
 a|
-=== Timing Routines
+*Timing Routines*
 
 |
 a|
@@ -1174,7 +1160,7 @@ double omp_get_wtick(void);
 [width="100%",cols="35%,65%",]
 |===
 a|
-=== Environment Variables
+*Environment Variables*
 
 
 
@@ -1235,7 +1221,7 @@ a|
 [width="100%",cols="35%,65%",options="header",]
 |===
 a|
-Operators legally allowed in at discount
+*Operators legally allowed in at discount*
 
 |
 a|

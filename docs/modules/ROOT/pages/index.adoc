@@ -197,7 +197,7 @@ xref:ROOT:attachment$Session2_ParallelProgramming_MPI.pdf[MPI],
 xref:ROOT:attachment$Session3_ParallelProgramming_OpenMP.pdf[OpenMP],
 xref:ROOT:attachment$Session4_ParallelProgramming_Cuda.pdf[CUDA],
 xref:ROOT:attachment$Session5_ParallelProgramming_HIP.pdf[HIP],
-xref:ROOT:attachment$Session6_ParallelProgramming_Specx.pdf[HIP],...
+xref:ROOT:attachment$Session6_ParallelProgramming_Specx.pdf[SPECX],...
 
 
 

@@ -1,8 +1,3 @@
-/**
- * @author RookieHPC
- * @brief Original source code at https://rookiehpc.org/openmp/docs/private/index.html
- **/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <omp.h>

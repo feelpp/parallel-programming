@@ -430,6 +430,9 @@ void array_check(const double *vecC, const int NX)
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p>A reduction of an array to a single value on a GPU. Data is copied to the GPU memory, where each thread adds one element to the accumulated value. The thread-safe atomic operations have to be used in order to ensure that there are no race conditions. Many threads will run simultaneously on a GPU, so there is no need for a loop over the indices.</p>
+</div>
 <div class="listingblock">
 <div class="title">Code Array Reduce CPU</div>
 <div class="content">
@@ -802,7 +805,7 @@ void timing(const real *d_x)
 </div>
 </div>
 <div class="paragraph">
-<p>Atomic operations are operations which are performed without interference from any other threads. Atomic operations are often used to prevent race conditions which are common problems in mulithreaded applications. For example, suppose you have two threads named A and B. Now suppose each thread wants to increase the value of memory location 0x1234 by one. Suppose the value at memory location 0x1234 is 5. If A and B both want to increase the value at location 0x1234 at the same time, each thread will first have to read the value. Depending on when the reads occur, it is possible that both A and B will read a value of 5. After adding a value of 1, both A and B will want to write 6 into the memory location, which is not correct! The value, 5, should have been increased twice (once by each thread), but instead, the value was only increased once! This is called a race condition, and can happen in any multi-threaded program if the programmer is not careful.</p>
+<p>A reduction of an array to a single value on a GPU. Data is copied to the GPU memory, where each thread adds one element to the accumulated value. Note that the thread-safe atomic operations have to be used in order to ensure that there are no race conditions. Many threads will run simultaneously on a GPU, so there is no need for a loop over the indices.</p>
 </div>
 <div class="listingblock">
 <div class="title">Code Array Reduce Shuffle GPU</div>
@@ -1264,7 +1267,7 @@ void timing(const real *d_x)
 </div>
 <div class="sidebarblock examp">
 <div class="content">
-<div class="title">Matrix SummationExamples in GPU</div>
+<div class="title">Matrix Summation Examples in GPU</div>
 <div class="ulist">
 <ul>
 <li>

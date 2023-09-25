@@ -60,8 +60,11 @@ if(FALSE)
     add_subdirectory(CUDA/Parallelism_Reduction)
     add_subdirectory(CUDA/SimpleStreams)
     add_subdirectory(CUDA/Start)
-    add_subdirectory(CUDA/Task_Paralllism)
-    add_subdirectory(CUDA/Vector)
+    add_subdirectory(CUDA/Task_Paralllism/Async1)
+    add_subdirectory(CUDA/Task_Paralllism/Async2)
+    add_subdirectory(CUDA/Vector/MatrixAdd)
+    add_subdirectory(CUDA/Vector/VectorAdd)
+    add_subdirectory(CUDA/Vector/VectorDotProduct)
 endif()
 #END:CUDA PART
 

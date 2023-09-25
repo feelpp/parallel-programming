@@ -1,8 +1,7 @@
+project(HEATDemoMPI)
 
-#project(MPI_bcast)
-
-######## A simple cmakelists.txt file for ... #############  
-
+######## A simple cmakelists.txt file for Open... #############  
+#cmake_minimum_required(VERSION 3.26)  
 cmake_minimum_required(VERSION 3.17)
 #set(CMAKE_CXX_STANDARD 14)
 #set(CMAKE_BUILD_TYPE Debug)
@@ -15,18 +14,12 @@ set(CMAKE_BUILD_TYPE Release)
 #set(CMAKE_CXX_COMPILER "/usr/bin/gcc")
 #set(CMAKE_CXX_COMPILER "/usr/bin/g++-11")
 
+
+include_directories("../common") 
+
+
+
 if(TRUE)
-    find_package(PNGwriter)
-        if(PNGwriter_FOUND)
-            MESSAGE("{PNGwrite_LIBRARIES}")
-        else (PNGwriter_FOUND)
-            MESSAGE(SEND_ERROR "{PNGwrite_LIBRARIES Not Found}")
-        endif(PNGwriter_FOUND)
-endif()
-
-
-
-if(FALSE)
     find_package(MPI REQUIRED)
     if (MPI_FOUND)
         MESSAGE("{MPI_CXX_LIBRARIES}")
@@ -40,26 +33,41 @@ if(FALSE)
     if (OpenMP_CXX_FOUND)
         MESSAGE("{OpenMP_CXX_LIBRARIES}")
         else (OpenMP_CXX_FOUND)
-        MESSAGE (SEND_ERROR "This application cannot compile without OpenMPI")
+        MESSAGE (SEND_ERROR "This application cannot compile without OpenMP")
     endif(OpenMP_CXX_FOUND)
 endif()
 
 
-file(GLOB SOURCES
-    "*.h"
-    "*.cpp"
+find_package(PNG REQUIRED)
+if (PNG_FOUND)
+        MESSAGE("{PNG_LIBRARIES}")
+        else (PNG_FOUND)
+        MESSAGE (SEND_ERROR "This application cannot compile without PNG")
+    endif(PNG_FOUND)
+
+
+#file(GLOB my_cpp_list "${CMAKE_CURRENT_SOURCE_DIR}/common/*.c")
+file(GLOB my_common_list 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../common/*.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../common/*.h"
 )
 
-add_executable(HeatMPI ${SOURCES})
+message(${CMAKE_CURRENT_SOURCE_DIR})
+foreach(file_path ${my_cpp_list} ${my_common_list})
+    message(${file_path})
+endforeach()
+
+
+file(GLOB All_SRC
+     "*.h"
+     "*.cpp"
+     "*.c"
+)
+
+
+add_executable(HEATDemoMPI main.cpp ${All_SRC} ${my_common_list})
+
 include_directories(SYSTEM ${MPI_INCLUDES_PATH})
-target_include_directories(HeatMPI PUBLIC ${MPI_CXX_INCLUDE_DIRS})
-target_link_libraries(HeatMPI  PUBLIC ${MPI_CXX_LIBRARIES} PRIVATE PNGwriter::PNGwriter )
-#target_link_libraries(HeatMPI  PUBLIC ${MPI_CXX_LIBRARIES} PRIVATE libPNGwrite.a)
+target_include_directories(HEATDemoMPI PUBLIC ${MPI_CXX_INCLUDE_DIRS} ${PNG_INCLUDE_DIR})
+target_link_libraries(HEATDemoMPI PUBLIC ${MPI_CXX_LIBRARIES} ${PNG_LIBRARY})
 
-
-
-
-
-
-
-########### end ####################################  

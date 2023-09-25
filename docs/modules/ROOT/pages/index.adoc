@@ -246,4 +246,9 @@ image::ParallelProgramming1.jpeg[Img3,400,400]
 * xref:SPECX_Coding.adoc[SPECX Coding]
 ****
 
+.Case Studies
+[.examp]
+****
+* xref:HEAT_Coding.adoc[Case Study Heat Coding]
+****
 

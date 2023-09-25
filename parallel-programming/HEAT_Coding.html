@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Heat Equation Parallel Programming Comparison :: Parallel Programming</title>
+    <link rel="canonical" href="https://feelpp.github.io/parallel-programming/parallel-programming/HEAT_Coding.html">
+    <meta name="generator" content="Antora 3.1.3">
+    <link rel="stylesheet" href="../_/css/site.css">
+<link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+<script>!function(l,p){if(l.protocol!==p&&l.host=="docs.antora.org"){l.protocol=p}else if(/\.gitlab\.io$/.test(l.host)){l.replace(p+"//docs.antora.org"+l.pathname.substr(l.pathname.indexOf("/",1))+l.search+l.hash)}}(location,"https:")</script>
+
+<script src="../_/js/vendor/tabs-block-extension.js"></script>
+<script src="../_/js/vendor/tabs-block-behavior.js"></script>
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\\[','\\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+
+  TeX: {
+      Macros: {
+      bold: ["{\\bf #1}",1],
+      calTh: "{\\mathcal{T}_h}",
+      card: ["{\\operatorname{card}(#1)}",1],
+      card: ["{\\operatorname{card}(#1)}",1],
+      Ck: ["{\\mathcal{C}^{#1}}",1],
+      deformt: ["{\\mathbf{\\varepsilon(#1)}}",1],
+      diam: "{\\operatorname{diam}}",
+      dim: ["{\\operatorname{dim}(#1)}",1],
+      disp: ["{\\mathbf{#1}}",1],
+      domain: "{\\Omega}",
+      ds: "",
+      essinf: "{\\operatorname{ess}\\, \\operatorname{inf}}",
+      F:"{\\mathcal{F}}",
+      geo: "{\\mathrm{geo}}",
+      Ich: ["{\\mathcal{I}^{#1}_{c,h}#2}",2],
+      Id: "{\\mathcal{I}}",
+      Ilag: ["{\\mathcal{I}^{\\mathrm{lag}}_{#1}}",1],
+      jump: ["{[\\![ #1 ]\\!]}",1],
+      n:"{\\mathbf{n}}",
+      Ne: "{N_{\\mathrm{e}}}",
+      Next: "{\\mathrm{n}}",
+      nf: "{n_f}",
+      ngeo: "{n_{\\mathrm{geo}}}",
+      Nma: "{N_{\\mathrm{ma}}}",
+      NN: "{\\mathbb N}",
+      Nno: "{N_{\\mathrm{no}}}",
+      Nso: "{N_{\\mathrm{so}}}",
+      opdim: "{\\operatorname{dim}}",
+      p: "{\\mathrm{p}}",
+      P:"{\\mathcal{P}}",
+      Pch: ["{P^{#1}_{c,h}}",1],
+      Pcho: ["{P^{#1}_{c,h,0}}",1],
+      Pk: ["{\\mathcal{P}^{#1}}",1],
+      poly: ["{\\mathbb{#1}",1],
+      poly: ["{\\mathbb{#1}}",1],
+      prect: ["{\\left\\(#1\\right\\)}",1],
+      q:"{\\mathbf{q}}",
+      Qch: ["{Q^{#1}_{c,h}}",1],
+      Qk: ["{\\mathcal{Q}^{#1}}",1],
+      R: ["{\\mathbb{R}^{#1}}",1],
+      RR: "{\\mathbb R}",
+      set: ["{\\left\\{#1\\right\\}}",1],
+      stresst: ["{\\mathbf{\\sigma(#1)}}",1],
+      T:"{\\mathcal{T}}",
+      tr: "{\\operatorname{tr}}",
+      v:"{\\mathbf{v}}",
+      vertiii: ["\\left\\vert\\kern-0.25ex\\left\\vert\\kern-0.25ex\\left\\vert #1 \\right\\vert\\kern-0.25ex\\right\\vert\\kern-0.25ex\\right\\vert",1]
+  },
+  extensions: ["mhchem.js"] 
+  }
+});
+</script>
+<!--<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>-->
+<!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML' async></script> -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_CHTML'></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.0/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>-->
+
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.css" integrity="sha384-TEMocfGvRuD1rIAacqrknm5BQZ7W7uWitoih+jMNFXQIbNl16bO8OZmylH/Vi/Ei" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.js" integrity="sha384-jmxIlussZWB7qCuB+PgKG1uLjjxbVVIayPJwi6cG6Zb4YKq0JIw+OMnkkEC7kYCq" crossorigin="anonymous"></script>-->
+<script>var uiRootPath = '../_'</script>
+
+  </head>
+  <body class="article">
+<header class="header">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark navbar-template-project" style="border-top: 4px solid #9E9E9E">
+        <div class="navbar-brand">
+            <div class="navbar-item feelpp-logo">
+                <a href="https://feelpp.github.io/parallel-programming">Parallel Programming</a>
+            </div>
+            <button class="navbar-burger" data-target="topbar-nav">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+
+        <div id="topbar-nav" class="navbar-menu">
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <a href="https://docs.feelpp.org/">Documentation Reference</a>
+                </div>
+                <div class="navbar-item has-dropdown is-hoverable download-item">
+                    <div class="navbar-item"><a href="https://docs.feelpp.org/user/latest/install/index.html" class="download-btn">Get Feel++</a></div>
+                </div>
+                <div class="navbar-item">
+                    <a class="navbar-brand"  href="https://www.cemosis.fr">
+                        <img class="cemosis-logo"  src="../_/img/cemosis-logo.svg" alt="Cemosis logo"/>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="body">
+<a href="#" class="menu-expand-toggle"></a>
+<div class="nav-container" data-component="parallel-programming" data-version="">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html">Main</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Introduction</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter1_CPU.html">CPU Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter1_GPU.html">GPU Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter1_GPGPU.html">GPGPU Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter1_TPU.html">TPU Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter1_SIMD.html">SIMD Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter2_MPI.html">MPI (Message Passing Interface)</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter2_OpenMP.html">OpenMP (Open Multi-Processing)</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter2_Hybrid.html">Hybrid MPI with OpenMP</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter3.html">StarPU</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter4.html">Specx</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Main</span>
+    <span class="version"></span>
+  </div>
+  <ul class="components">
+      <li class="component">
+        <a class="title" href="../feelpp-antora-ui/index.html">Antora Feel++ UI</a>
+      </li>
+      <li class="component is-current">
+        <a class="title" href="index.html">Main</a>
+      </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+  <button class="nav-toggle"></button>
+    <a href="index.html" class="home-link"></a>
+  <nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Main</a></li>
+    <li><a href="HEAT_Coding.html">Heat Equation Parallel Programming Comparison</a></li>
+  </ul>
+</nav>
+
+  
+    <div class="edit-this-page"><a href="https://github.com/feelpp/parallel-programming/edit/lem/docs/modules/ROOT/pages/HEAT_Coding.adoc">Edit this Page</a></div>
+  
+  <div class="page-downloads">
+  <span class="label">Download as</span>
+  <ul class="download-options">
+    <li>
+      <a onclick="print(this)" href="#" data-toggle="tooltip" data-placement="left" title="Print to PDF"
+         class="pdf-download">
+        <img class="pdf-file-icon icon" src="../_/img/pdf.svg"/> .pdf
+      </a>
+    </li>
+  </ul>
+</div>
+</div>
+
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Heat Equation Parallel Programming Comparison</h1>
+<div class="sidebarblock examp">
+<div class="content">
+<div class="title">Heat equation in 2D</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Theory</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Heat (or diffusion) equation is a partial differential equation that describes the variation of temperature in a given region over time</p>
+</div>
+<div class="paragraph">
+<p>\begin{align*}
+\frac{\partial u}{\partial t} = \alpha \nabla^2 u
+\end{align*}</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/eq1.png" alt="Img901">
+</div>
+</div>
+<div class="paragraph">
+<p>where <strong>u</strong>(<strong>x</strong>, <strong>y</strong>, <strong>t</strong>) is the temperature field that varies in space and
+time, and α is the thermal diffusivity constant.</p>
+</div>
+<div class="paragraph">
+<p>We limit ourselvels to two dimensions (a plane) where Laplacian can be
+discretized in a grid with finite differences as</p>
+</div>
+<div class="paragraph">
+<p>\begin{align*}
+\nabla^2 u  &amp;= \frac{u(i-1,j)-2u(i,j)u(i+1,j)}{(\Delta x)^2} \\
+ &amp; \frac{u(i,j-1)-2u(i,j)+u(i,j+1)}{(\Delta y)^2}
+\end{align*}</p>
+</div>
+<div class="paragraph">
+<p>where ∆x and ∆y are the grid spacing of the temperature grid <strong>u</strong>.</p>
+</div>
+<div class="paragraph">
+<p>Given an initial condition (<strong>u</strong>(t=0) = u0) one can follow the time dependence
+of the temperature field with explicit time evolution method:</p>
+</div>
+<div class="paragraph">
+<p>\begin{align*}
+u^{m+1}(i,j) = u^m(i,j) + \Delta t \alpha \nabla^2 u^m(i,j)
+\end{align*}</p>
+</div>
+<div class="paragraph">
+<p>Note: The algorithm is stable only when</p>
+</div>
+<div class="paragraph">
+<p>\begin{align*}
+\Delta t &lt; \frac{1}{2 \alpha} \frac{(\Delta x \Delta y)^2}{(\Delta x)^2 (\Delta y)^2}
+\end{align*}</p>
+</div>
+</div>
+</div>
+<div class="sidebarblock examp">
+<div class="content">
+<div class="title">Code</div>
+<div class="paragraph">
+<p>The solver carries out the time development of the 2D heat equation over the number of time steps provided by the user. The default geometry is a flat
+rectangle (with grid size provided by the user), but other shapes may be used via input files. The program will produce an image (PNG) of the temperature field after every 100 iterations.</p>
+</div>
+<div class="listingblock">
+<div class="title">Heat equation solver with MPI</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cpp hljs" data-lang="cpp">/* Heat equation solver in 2D. */
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;time.h&gt;
+#include &lt;mpi.h&gt;
+
+#include "heat.h"
+
+int main(int argc, char **argv)
+{
+    double a = 0.5;             //!&lt; Diffusion constant
+    field current, previous;    //!&lt; Current and previous temperature fields
+
+    double dt;                  //!&lt; Time step
+    int nsteps;                 //!&lt; Number of time steps
+
+    int image_interval = 1500;    //!&lt; Image output interval
+
+    parallel_data parallelization; //!&lt; Parallelization info
+
+    double dx2, dy2;            //!&lt; Delta x and y squared
+
+    double average_temp;        //!&lt; Average temperature
+
+    double start_clock, stop_clock;  //!&lt; Time stamps
+
+
+    MPI_Init(&amp;argc, &amp;argv);
+
+    initialize(argc, argv, &amp;current, &amp;previous, &amp;nsteps, &amp;parallelization);
+
+    /* Output the initial field */
+    write_field(&amp;current, 0, &amp;parallelization);
+
+    average_temp = average(&amp;current);
+    if (parallelization.rank == 0) {
+        printf("Average temperature at start: %f\n", average_temp);
+    }    
+
+
+    /* Largest stable time step */
+    dx2 = current.dx * current.dx;
+    dy2 = current.dy * current.dy;
+    dt = dx2 * dy2 / (2.0 * a * (dx2 + dy2));
+
+    /* Get the start time stamp */
+    start_clock = MPI_Wtime();
+
+    /* Time evolve */
+    for (int iter = 1; iter &lt;= nsteps; iter++) {
+        exchange(&amp;previous, &amp;parallelization);
+        evolve(&amp;current, &amp;previous, a, dt);
+        if (iter % image_interval == 0) {
+            write_field(&amp;current, iter, &amp;parallelization);
+        }
+        /* Swap current field so that it will be used
+            as previous for next iteration step */
+        swap_fields(&amp;current, &amp;previous);
+    }
+
+    stop_clock = MPI_Wtime();
+
+    /* Average temperature for reference */
+    average_temp = average(&amp;previous);
+
+    /* Determine the CPU time used for the iteration */
+    if (parallelization.rank == 0) {
+        printf("Iteration took %.3f seconds.\n", (stop_clock - start_clock));
+        printf("Average temperature: %f\n", average_temp);
+        if (argc == 1) {
+            printf("Reference value with default arguments: 59.281239\n");
+        }
+    }
+
+    /* Output the final field */
+    write_field(&amp;previous, nsteps, &amp;parallelization);
+
+    finalize(&amp;current, &amp;previous);
+    MPI_Finalize();
+
+    return 0;
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Heat equation solver with hybrid MPI+OpenMP</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cpp hljs" data-lang="cpp">/* Heat equation solver in 2D. */
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;time.h&gt;
+#include &lt;mpi.h&gt;
+#ifdef _OPENMP
+#include &lt;omp.h&gt;
+#endif
+
+#include "heat.h"
+
+int main(int argc, char **argv)
+{
+    double a = 0.5;             //!&lt; Diffusion constant
+    field current, previous;    //!&lt; Current and previous temperature fields
+
+    double dt;                  //!&lt; Time step
+    int nsteps;                 //!&lt; Number of time steps
+
+    int image_interval = 1500;    //!&lt; Image output interval
+
+    parallel_data parallelization; //!&lt; Parallelization info
+
+    double dx2, dy2;            //!&lt; Delta x and y squared
+
+    double average_temp;        //!&lt; Average temperature
+
+    double start_clock, stop_clock;  //!&lt; Time stamps
+
+    int provided;             // thread-support level
+
+    MPI_Init_thread(&amp;argc, &amp;argv, MPI_THREAD_MULTIPLE, &amp;provided);
+    if (provided &lt; MPI_THREAD_MULTIPLE) {
+        printf("MPI_THREAD_MULTIPLE thread support level required\n");
+        MPI_Abort(MPI_COMM_WORLD, 5);
+    }
+
+    #pragma omp parallel 
+    {
+    initialize(argc, argv, &amp;current, &amp;previous, &amp;nsteps, &amp;parallelization);
+
+    /* Output the initial field */
+    #pragma omp single
+    {
+    write_field(&amp;current, 0, &amp;parallelization);
+
+    average_temp = average(&amp;current);
+    if (parallelization.rank == 0) {
+        printf("Average temperature at start: %f\n", average_temp);
+    }    
+
+    /* Largest stable time step */
+    dx2 = current.dx * current.dx;
+    dy2 = current.dy * current.dy;
+    dt = dx2 * dy2 / (2.0 * a * (dx2 + dy2));
+    } // end omp simple
+
+    /* Get the start time stamp */
+    start_clock = MPI_Wtime();
+
+    /* Time evolve */
+    for (int iter = 1; iter &lt;= nsteps; iter++) {
+        #pragma omp single
+        exchange(&amp;previous, &amp;parallelization);
+        evolve(&amp;current, &amp;previous, a, dt);
+        if (iter % image_interval == 0) {
+            #pragma omp single
+            write_field(&amp;current, iter, &amp;parallelization);
+        }
+        /* Swap current field so that it will be used
+            as previous for next iteration step */
+        #pragma omp single
+        swap_fields(&amp;current, &amp;previous);
+    }
+
+    } // end omp parallel
+    stop_clock = MPI_Wtime();
+
+    /* Average temperature for reference */
+    average_temp = average(&amp;previous);
+
+    /* Determine the CPU time used for the iteration */
+    if (parallelization.rank == 0) {
+        printf("Iteration took %.3f seconds.\n", (stop_clock - start_clock));
+        printf("Average temperature: %f\n", average_temp);
+        if (argc == 1) {
+            printf("Reference value with default arguments: 59.281239\n");
+        }
+    }
+
+    /* Output the final field */
+    write_field(&amp;previous, nsteps, &amp;parallelization);
+
+    finalize(&amp;current, &amp;previous);
+    MPI_Finalize();
+
+    return 0;
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Heat equation solver with Cuda</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cu hljs" data-lang="cu">/* Main solver routines for heat equation solver */
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;assert.h&gt;
+#include &lt;mpi.h&gt;
+#include &lt;cuda_runtime_api.h&gt;
+
+#include "heat.h"
+
+/* Update the temperature values using five-point stencil */
+__global__ void evolve_kernel(double *currdata, double *prevdata, double a, double dt, int nx, int ny,
+                       double dx2, double dy2)
+{
+
+    /* Determine the temperature field at next time step
+     * As we have fixed boundary conditions, the outermost gridpoints
+     * are not updated. */
+    int ind, ip, im, jp, jm;
+
+    // CUDA threads are arranged in column major order; thus j index from x, i from y
+    int j = blockIdx.x * blockDim.x + threadIdx.x;
+    int i = blockIdx.y * blockDim.y + threadIdx.y;        
+
+    if (i &gt; 0 &amp;&amp; j &gt; 0 &amp;&amp; i &lt; nx+1 &amp;&amp; j &lt; ny+1) {
+        ind = i * (ny + 2) + j;
+        ip = (i + 1) * (ny + 2) + j;
+        im = (i - 1) * (ny + 2) + j;
+	jp = i * (ny + 2) + j + 1;
+	jm = i * (ny + 2) + j - 1;
+        currdata[ind] = prevdata[ind] + a * dt *
+	      ((prevdata[ip] -2.0 * prevdata[ind] + prevdata[im]) / dx2 +
+	      (prevdata[jp] - 2.0 * prevdata[ind] + prevdata[jm]) / dy2);
+
+    }
+
+}
+
+void evolve(field *curr, field *prev, double a, double dt)
+{
+    int nx, ny;
+    double dx2, dy2;
+    nx = prev-&gt;nx;
+    ny = prev-&gt;ny;
+    dx2 = prev-&gt;dx * prev-&gt;dx;
+    dy2 = prev-&gt;dy * prev-&gt;dy;
+
+    /* CUDA thread settings */
+    const int blocksize = 16;  //!&lt; CUDA thread block dimension
+    dim3 dimBlock(blocksize, blocksize); 
+    // CUDA threads are arranged in column major order; thus make ny x nx grid
+    dim3 dimGrid((ny + 2 + blocksize - 1) / blocksize, 
+                 (nx + 2 + blocksize - 1) / blocksize); 
+
+    evolve_kernel&lt;&lt;&lt;dimGrid, dimBlock&gt;&gt;&gt;(curr-&gt;devdata, prev-&gt;devdata, a, dt, nx, ny, dx2, dy2);
+    cudaDeviceSynchronize();
+}
+
+void enter_data(field *temperature1, field *temperature2)
+{
+    size_t datasize;
+
+    datasize = (temperature1-&gt;nx + 2) * (temperature1-&gt;ny + 2) * sizeof(double);
+  
+    cudaMalloc(&amp;temperature1-&gt;devdata, datasize);
+    cudaMalloc(&amp;temperature2-&gt;devdata, datasize);
+
+    cudaMemcpy(temperature1-&gt;devdata, temperature1-&gt;data, datasize, cudaMemcpyHostToDevice);
+    cudaMemcpy(temperature2-&gt;devdata, temperature2-&gt;data, datasize, cudaMemcpyHostToDevice);
+}
+
+/* Copy a temperature field from the device to the host */
+void update_host(field *temperature)
+{
+    size_t datasize;
+
+    datasize = (temperature-&gt;nx + 2) * (temperature-&gt;ny + 2) * sizeof(double);
+    cudaMemcpy(temperature-&gt;data, temperature-&gt;devdata, datasize, cudaMemcpyDeviceToHost);
+}
+
+/* Copy a temperature field from the host to the device */
+void update_device(field *temperature)
+{
+    size_t datasize;
+
+    datasize = (temperature-&gt;nx + 2) * (temperature-&gt;ny + 2) * sizeof(double);
+    cudaMemcpy(temperature-&gt;devdata, temperature-&gt;data, datasize, cudaMemcpyHostToDevice);
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title"><strong>Performance</strong></div>
+<div class="paragraph">
+<p>ADD SOME RESULTS</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>&#8230;&#8203;</p>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer" style="border-top: 2px solid #e9e9e9; background-color: #fafafa; padding-bottom: 2em; padding-top: 2em;">
+    <div class="container" style="display: flex; flex-direction: column; align-items: center; gap: 0.5em;">
+        <div>
+            <a href="https://www.cemosis.fr">
+                <img src="../_/img/cemosis-logo.svg" alt="Cemosis logo" height="50">
+            </a>
+        </div>
+        <span style="font-size: 0.8rem; color: #9e9e9e">© 2023 <a href="https://www.cemosis.fr" style="text-decoration: underline;">Cemosis</a>, Université de Strasbourg</span>
+    </div>
+</footer>
+<script id="site-script" src="../_/js/site.js" data-ui-root-path="../_"></script>
+
+
+<script async src="../_/js/vendor/fontawesome-icon-defs.js"></script>
+<script async src="../_/js/vendor/fontawesome.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+
+
+<script type="text/javascript">
+function toggleFullScreen() {
+   var doc = window.document;
+   var docEl = doc.documentElement;
+
+   var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+   var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+   if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+       requestFullScreen.call(docEl);
+   }
+   else {
+       cancelFullScreen.call(doc);
+   }
+}
+</script>
+  </body>
+</html>

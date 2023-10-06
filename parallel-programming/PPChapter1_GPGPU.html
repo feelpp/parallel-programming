@@ -224,9 +224,9 @@ MathJax.Hub.Config({
 </aside>
 <article class="doc">
 <h1 class="page">GPGPU (General-Purpose Graphics Processing Unit)</h1>
-<div class="paragraph">
-<p><span class="image"><a class="image" href="#fragment4"><img src="_images/image4.png" alt="image4" width="642" height="331"></a></span></p>
-</div>
+<div class="sect1">
+<h2 id="_definition"><a class="anchor" href="#_definition"></a>1. Definition</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>A <strong>General-Purpose Graphics Processing Unit</strong> (GPGPU) is a graphics
 processing unit (GPU) that is programmed for purposes beyond graphics
@@ -234,35 +234,36 @@ processing, such as performing computations typically conducted by a
 Central Processing Unit (CPU).</p>
 </div>
 <div class="paragraph">
+<p><span class="image"><a class="image" href="#fragment4"><img src="_images/image4.png" alt="image4" width="642" height="331"></a></span></p>
+</div>
+<div class="paragraph">
 <p><em>GPGPU</em> is short for general-purpose computing on graphics processing
 units. Graphics processors or GPUs today are capable of much more than
 calculating pixels in video games. For this, Nvidia has been developing
 for four years a hardware interface and a programming language derived
-from C, CUDA ( <strong>C</strong> ompute <strong>Unified Device Architecture</strong> ). This
-technology, known as <strong>GPGPU</strong> ( <strong>General</strong> - <strong>P</strong> urpose computation on <strong>G</strong>
-raphic <strong>P</strong> rocessing <strong>Units</strong> ) exploits the computing power of GPUs for
-the processing of massively parallel tasks. Unlike the CPU, a GPU is not
-suited for fast processing of tasks that run sequentially. On the other
-hand, it is very suitable for processing parallelizable algorithms.</p>
+from C, CUDA ( <strong>C*ompute *Unified Device Architecture</strong> ).</p>
 </div>
 <div class="paragraph">
-<p>•Array of independent "cores" called calculation units</p>
+<p>This technology, known as <strong>GPGPU</strong> ( <strong>General</strong> - <strong>P*urpose computation on *G*raphic *P*rocessing *Units</strong> ) exploits the computing power of GPUs for the processing of massively parallel tasks. Unlike the CPU, a GPU is not suited for fast processing of tasks that run sequentially. On the other hand, it is very suitable for processing parallelizable algorithms.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
+<p>Array of independent "cores" called calculation units</p>
+</li>
+<li>
 <p>High bandwidth, banked L2 caches and main memory</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Banks allow several parallel accesses</p>
+</li>
+<li>
+<p>100s of GB/s</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>− Banks allow several parallel accesses</p>
-</div>
-<div class="paragraph">
-<p>− 100s of GB/s</p>
-</div>
-<div class="ulist">
-<ul>
+</li>
 <li>
 <p>Memory and caches are generally inconsistent</p>
 </li>
@@ -271,9 +272,10 @@ hand, it is very suitable for processing parallelizable algorithms.</p>
 <div class="paragraph">
 <p>Compute units are based on SIMD hardware</p>
 </div>
-<div class="paragraph">
-<p>− Both AMD and NVIDIA have 16-element wide SIMDs</p>
-</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Both AMD and NVIDIA have 16-element wide SIMDs</p>
 <div class="ulist">
 <ul>
 <li>
@@ -281,12 +283,12 @@ hand, it is very suitable for processing parallelizable algorithms.</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>− No save/restore state</p>
-</div>
-<div class="paragraph">
-<p>− Data is persistent throughout the execution of the thread</p>
-</div>
+</li>
+<li>
+<p>No save/restore state</p>
+</li>
+<li>
+<p>Data is persistent throughout the execution of the thread</p>
 <div class="ulist">
 <ul>
 <li>
@@ -299,15 +301,16 @@ user-managed scratchpad</p>
 </li>
 </ul>
 </div>
+</li>
+</ul>
+</div>
 <div class="paragraph">
 <p>Work items are automatically grouped into hardware threads called
 "wavefronts" (AMD) or "warps" (NVIDIA)</p>
 </div>
 <div class="paragraph">
-<p>− Single instruction stream executed on SIMD hardware</p>
-</div>
-<div class="paragraph">
-<p>− 64 work items in a wavefront, 32 in a string</p>
+<p>− Single instruction stream executed on SIMD hardware
+− 64 work items in a wavefront, 32 in a string</p>
 </div>
 <div class="ulist">
 <ul>
@@ -327,17 +330,17 @@ multiple (software) threads sharing a stream of instructions</p>
 <ul>
 <li>
 <p>Work items run in sequence on SIMD hardware</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Multiple software threads are executed on a single hardware thread</p>
+</li>
+<li>
+<p>Divergence between managed threads using predication</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>− Multiple software threads are executed on a single hardware thread</p>
-</div>
-<div class="paragraph">
-<p>− Divergence between managed threads using predication</p>
-</div>
-<div class="ulist">
-<ul>
+</li>
 <li>
 <p>Accuracy is transparent to the OpenCL model</p>
 </li>
@@ -347,18 +350,17 @@ mapping</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p><strong>Architecture of a GPU versus CPU</strong></p>
 </div>
+</div>
+<div class="sect1">
+<h2 id="_architecture_of_a_gpu_versus_cpu"><a class="anchor" href="#_architecture_of_a_gpu_versus_cpu"></a>2. Architecture of a GPU versus CPU</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>Such an architecture is said to be "throughput-oriented". The latest
 from the Santa-Clara firm, codenamed “Fermi” has 512 cores.</p>
 </div>
 <div class="paragraph">
 <p><span class="image"><a class="image" href="#fragment5"><img src="_images/image5.png" alt="image5" width="530" height="241"></a></span></p>
-</div>
-<div class="paragraph">
-<p><em>CPU architecture vs. GPUs</em></p>
 </div>
 <div class="paragraph">
 <p>Traditional microprocessors (CPUs) are essentially "low latency
@@ -385,26 +387,17 @@ program, there is ultimately little dynamic control over the execution.
 Thea term <strong>SIMD</strong> is used for these processors (<strong>S</strong>ingle <strong>I</strong>nstruction <strong>M</strong>ultiple <strong>Da</strong>ta).</p>
 </div>
 <div class="paragraph">
-<p>Each PU (Processing Unit) does not necessarily correspond to a
-processor, they are calculation units. In this mode, the same
-instruction is applied simultaneously to several data.</p>
+<p>Each PU (Processing Unit) does not necessarily correspond to a processor, they are calculation units. In this mode, the same instruction is applied simultaneously to several data.</p>
 </div>
 <div class="paragraph">
 <p>Less control logic means more space on the chip dedicated to the
-calculation. However, this also comes at a cost. A SIMD execution gets a
-performance peak when parallel tasks follow the same branch of
-execution, which deteriorates when the tasks branch off. Indeed, the
-calculation units assigned to a branch will have to wait for the
-execution of the calculation units of the previous branch. This results
-in hardware underutilization and increased execution time. The
-efficiency of the SIMD architecture depends on the uniformity of the
+calculation. However, this also comes at a cost. A SIMD execution gets a performance peak when parallel tasks follow the same branch of execution, which deteriorates when the tasks branch off. Indeed, the
+calculation units assigned to a branch will have to wait for the execution of the calculation units of the previous branch. This results in hardware underutilization and increased execution time. The efficiency of the SIMD architecture depends on the uniformity of the
 workload.</p>
 </div>
 <div class="paragraph">
 <p>However, due to the large number of computational units, it may not be
-very important to have some threads blocked if others can continue their
-execution. Long-latency operations performed on one thread are "hidden"
-by others ready to execute another set of instructions.</p>
+very important to have some threads blocked if others can continue their execution. Long-latency operations performed on one thread are "hidden" by others ready to execute another set of instructions.</p>
 </div>
 <div class="paragraph">
 <p>For a quad or octo-core CPU, the creation of threads and their
@@ -417,6 +410,8 @@ between CPU memory and GPU memory.</p>
 <p>(See:
 <a href="https://blog.octo.com/la-technologie-gpgpu-1ere-partie-le-cote-obscur-de-la-geforce/" class="bare">blog.octo.com/la-technologie-gpgpu-1ere-partie-le-cote-obscur-de-la-geforce/</a>
 )</p>
+</div>
+</div>
 </div>
 </article>
   </div>

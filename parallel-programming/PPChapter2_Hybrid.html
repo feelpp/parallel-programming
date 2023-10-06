@@ -224,6 +224,95 @@ MathJax.Hub.Config({
 </aside>
 <article class="doc">
 <h1 class="page">Hybrid MPI and OpenMP</h1>
+<div class="sect1">
+<h2 id="_mpi_openmp_two_complementary_parallelization_models"><a class="anchor" href="#_mpi_openmp_two_complementary_parallelization_models"></a>1. MPI, OpenMP two complementary parallelization models.</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>MPI is a multi-process model whose mode of communication between the processes is <strong>explicit</strong> (communication management is the responsibility of the user). MPI is generally used on multiprocessor machines with distributed memory. MPI is a library for passing messages between processes without sharing.</p>
+</li>
+<li>
+<p>OpenMP is a multitasking model whose mode of communication between tasks is <strong>implicit</strong> (the management of communications is the responsibility of the compiler). OpenMP is used on shared-memory multiprocessor machines. It focuses on shared memory paradigms. It is a language extension for expressing data-parallel operations (usually parallelized arrays over loops).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Note: on a cluster of independent shared-memory multiprocessor machines (nodes), the implementation of a two-level parallelization (MPI, OpenMP) in the same program can be a major advantage for the parallel performance of the code.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="#fragment7"><img src="_images/image7.png" alt="image7" width="581" height="336"></a>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_mpi_vs_openmp_comparison"><a class="anchor" href="#_mpi_vs_openmp_comparison"></a>2. MPI vs OpenMP comparison</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>MPI vs. OpenMP</strong></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>MPI pos</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>OpenMP pos</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Portable to a distributed and shared memory machine.</p>
+</div>
+<div class="paragraph">
+<p>Scale beyond a node</p>
+</div>
+<div class="paragraph">
+<p>No data placement issues</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Easy to implement parallelism</p>
+</div>
+<div class="paragraph">
+<p>Implicit communications</p>
+</div>
+<div class="paragraph">
+<p>Low latency, high bandwidth</p>
+</div>
+<div class="paragraph">
+<p>Dynamic Load Balancing</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>MPI negative</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>OpenMP negative</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Explicit communication</p>
+</div>
+<div class="paragraph">
+<p>High latency, low bandwidth</p>
+</div>
+<div class="paragraph">
+<p>Difficult load balancing</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Only on nodes or shared memory machines</p>
+</div>
+<div class="paragraph">
+<p>Scale on Node</p>
+</div>
+<div class="paragraph">
+<p>Data placement problem</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
 <div class="paragraph">
 <p>Hybrid application programs using MPI + OpenMP are now commonplace on large HPC systems. There are basically two main motivations for this combination of programming models:</p>
 </div>
@@ -233,9 +322,11 @@ MathJax.Hub.Config({
 <div class="paragraph">
 <p>2. Improved performance, especially at high core counts where pure MPI scalability runs out.</p>
 </div>
-<div class="paragraph">
-<p><strong>A common hybrid approach</strong></p>
 </div>
+</div>
+<div class="sect1">
+<h2 id="_a_common_hybrid_approach"><a class="anchor" href="#_a_common_hybrid_approach"></a>3. A common hybrid approach</h2>
+<div class="sectionbody">
 <div class="imageblock">
 <div class="content">
 <a class="image" href="#fragment9"><img src="_images/image9.png" alt="image9" width="307" height="155"></a>
@@ -260,9 +351,6 @@ MathJax.Hub.Config({
 </li>
 </ul>
 </div>
-<div class="imageblock">
-<div class="content">
-<a class="image" href="#fragment10"><img src="_images/image10.png" alt="image10" width="264" height="166"></a>
 </div>
 </div>
 </article>

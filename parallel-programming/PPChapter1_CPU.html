@@ -224,29 +224,22 @@ MathJax.Hub.Config({
 </aside>
 <article class="doc">
 <h1 class="page">CPU</h1>
+<div class="sect1">
+<h2 id="_definition"><a class="anchor" href="#_definition"></a>1. Definition</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>The CPU basically consists of three parts:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>The control unit which searches for instructions in
-memory, decodes them and coordinates the rest of the processor to
-execute them. A basic control unit basically consists of an instruction
-register and a "decoder/sequencer" unit</p>
+<p>The control unit which searches for instructions in memory, decodes them and coordinates the rest of the processor to execute them. A basic control unit basically consists of an instruction register and a "decoder/sequencer" unit</p>
 </li>
 <li>
-<p>The Arithmetic and Logic Unit executes the
-arithmetic and logic instructions requested by the control unit.
-Instructions can relate to one or more operands. The execution speed is
-optimal when the operands are located in the registers rather than in
-the memory external to the processor.</p>
+<p>The Arithmetic and Logic Unit executes the arithmetic and logic instructions requested by the control unit. Instructions can relate to one or more operands. The execution speed is optimal when the operands are located in the registers rather than in the memory external to the processor.</p>
 </li>
 <li>
-<p>Registers are memory cells internal to the CPU
-They are few in number but very quick to access. They
-are used to store variables, the intermediate results of operations
-(arithmetic or logical) or processor control information.</p>
+<p>Registers are memory cells internal to the CPU. They are few in number but very quick to access. They are used to store variables, the intermediate results of operations (arithmetic or logical) or processor control information.</p>
 </li>
 </ul>
 </div>
@@ -291,32 +284,25 @@ are used by conditional jump instructions.</p>
 <p>The <strong>stack pointer</strong> or <em>stack pointer</em> manages certain data in memory by
 organizing them in the form of stacks.</p>
 </div>
-<div class="paragraph">
-<p><strong>CPU working principle</strong></p>
 </div>
+</div>
+<div class="sect1">
+<h2 id="_cpu_working_principle"><a class="anchor" href="#_cpu_working_principle"></a>2. CPU working principle</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>The content of the program counter is deposited on the addressing bus in
-order to search there for a machine code instruction. The control bus
-produces a read signal and the memory, which is selected by the address,
-sends the instruction code back to the processor via the data bus. Once
-the instruction lands in the instruction register, the processor&#8217;s
-control unit decodes it and produces the appropriate sequence of
-internal and external signals that coordinate its execution. An
-instruction comprises a series of elementary tasks. They are clocked by
-clock cycles.</p>
+<p>The content of the program counter is deposited on the addressing bus in order to search there for a machine code instruction. The control bus produces a read signal and the memory, which is selected by the address, sends the instruction code back to the processor via the data bus. Once the instruction lands in the instruction register, the processor&#8217;s control unit decodes it and produces the appropriate sequence of internal and external signals that coordinate its execution. An instruction comprises a series of elementary tasks. They are clocked by clock cycles.</p>
 </div>
 <div class="paragraph">
 <p>All the tasks that constitute an instruction are executed one after the
 other. The execution of an instruction therefore lasts several cycles.
 As it is not always possible to increase the frequency, the only way to
-increase the number of instructions processed in a given time is to seek
-to execute several of them simultaneously. This is achieved by splitting
-processor resources, data and/or processes. This is called the
-parallelization.</p>
+increase the number of instructions processed in a given time is to seek to execute several of them simultaneously. This is achieved by splitting processor resources, data and/or processes. This is called the parallelization.</p>
 </div>
-<div class="paragraph">
-<p><strong>The different architectures of the processor</strong></p>
 </div>
+</div>
+<div class="sect1">
+<h2 id="_the_different_architectures_of_the_processor"><a class="anchor" href="#_the_different_architectures_of_the_processor"></a>3. The different architectures of the processor</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>There is a classification of the <strong>different CPU architectures.</strong> Five in
 number, they are used by programmers depending on the desired results:</p>
@@ -359,6 +345,8 @@ vectorial;</p>
 <div class="paragraph">
 <p>To further improve the <strong>performance of this processor,</strong> developers can
 add so-called SIMD Supplemental Instruction Sets.</p>
+</div>
+</div>
 </div>
 </article>
   </div>

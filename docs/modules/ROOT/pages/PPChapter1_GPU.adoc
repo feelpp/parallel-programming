@@ -1,5 +1,7 @@
 = GPU (Graphics Processing Unit is a graphics (co-)processor)
 
+== Definition 
+
 Graphics Processing Unit is a graphics (co-)processor capable of very
 efficiently performing calculations on images (2D, 3D, videos, etc.).
 The raw computing power offered is higher due to the large number of
@@ -27,6 +29,8 @@ manipulation may (or may not) be involved. Due to these very different
 roles, GPUs are characterized by having many more processing units and
 higher overall memory bandwidth, while CPUs offer more sophisticated
 instruction processing and faster clock speed.
+
+== CPU vs GPU comparison 
 
 [width="100%",cols="23%,44%,33%",]
 |===

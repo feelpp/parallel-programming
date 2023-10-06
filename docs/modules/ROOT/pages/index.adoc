@@ -250,5 +250,6 @@ image::ParallelProgramming1.jpeg[Img3,400,400]
 [.examp]
 ****
 * xref:HEAT_Coding.adoc[Case Study Heat Coding]
+
 ****
 

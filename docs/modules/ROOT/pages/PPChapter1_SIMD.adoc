@@ -3,7 +3,7 @@
 SIMD is a computer technique that allows several data elements to be
 exploited at the same time.
 
-*What is SIMD used for?*
+== What is SIMD used for?
 
 SIMD can be used in a wide range of applications, such as 3D graphics,
 signal processing, data mining, and many other processing-intensive
@@ -20,7 +20,7 @@ amounts of data, and SIMD can be used to speed up the process. SIMD can
 also be used to process large amounts of data in parallel in machine
 learning algorithms such as artificial neural networks.
 
-*Benefits of using SIMD*
+== Benefits of using SIMD
 
 SIMD has several advantages over other forms of parallelization. First,
 SIMD is more efficient than traditional software parallelization

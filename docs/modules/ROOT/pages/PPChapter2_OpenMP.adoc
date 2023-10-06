@@ -1,31 +1,22 @@
 = OpenMP (Open Multi-Processing)
 
+
+== Definition 
+
 OpenMP ( Open Multi-Processing ) is a programming interface for parallel
 computing on shared memory architecture.
 
 It allows you to manage:
 
-* {blank}
-+
+* the creation of light processes,
 
-the creation of light processes,
+* the sharing of work between these lightweight processes,
 
-* {blank}
-+
+* synchronizations (explicit or implicit) between all light processes,
 
-the sharing of work between these lightweight processes,
+* the status of the variables (private or shared).
 
-* {blank}
-+
-
-synchronizations (explicit or implicit) between all light processes,
-
-* {blank}
-+
-
-the status of the variables (private or shared).
-
-*General concepts*
+== General concepts
 
 An OpenMP program is executed by a single process.
 
@@ -36,10 +27,9 @@ to a parallel region. +
 in memory.
 
 
-– It can be defined in the stack (local memory space) of a lightweight
-process; we then speak of a private variable
+** It can be defined in the stack (local memory space) of a lightweight process; we then speak of a private variable
 
-– It can be defined in a shared memory space
+** It can be defined in a shared memory space
 
 
 * An OpenMP program is an alternation of sequential regions and parallel
@@ -52,10 +42,9 @@ whose rank is 0. +
 * Work sharing essentially consists of:
 
 
-– execute a loop by distributing the iterations between the tasks; +
-– execute several sections of code but only one per task; +
-– execute several occurrences of the same procedure by different tasks
-(orphaning)
+** execute a loop by distributing the iterations between the tasks; +
+** execute several sections of code but only one per task; +
+** execute several occurrences of the same procedure by different tasks (orphaning)
 
 
 * It is sometimes necessary to introduce a synchronization between the
@@ -66,18 +55,18 @@ the value of the same shared variable (case of reduction operations).
 Different cases can occur:
 
 
-– at best, at each instant, there is one task per processor with as many
+** at best, at each instant, there is one task per processor with as many
 tasks as there are dedicated processors for the duration of the work; +
-– at worst, all tasks are processed sequentially by one and only one
+** at worst, all tasks are processed sequentially by one and only one
 processor; +
-– in reality, for reasons essentially of operation on a machine whose
+** in reality, for reasons essentially of operation on a machine whose
 processors are not dedicated, the situation is generally intermediate.
 
 
 * To overcome these problems, it is possible to build the OpenMP runtime
 on a library of mixed threads and thus control the scheduling of tasks.
 
-*Construction of a parallel region*
+== Construction of a parallel region
 
 * In a parallel region, by default, the status of variables is shared.
 * Within a single parallel region, all concurrent tasks execute the same
@@ -96,7 +85,7 @@ parallel region)
 the initialization of this private variable to the last value it had
 before entering the parallel region.
 
-*Extent of a parallel region*
+== Extent of a parallel region
 
 * The scope of an OpenMP construct represents the scope of its influence
 in the program. +
@@ -111,7 +100,7 @@ in the stack of each task).
 parameters) by reference, inherit the status defined in the lexical
 scope (static) of the region.
 
-*Case of static variables*
+== Case of static variables
 
 * A variable is static if its location in memory is defined at
 declaration by the compiler
@@ -121,7 +110,7 @@ omp_get_thread_num(); )
 * If, in addition, the COPYIN clause is specified then the value of
 static instances is passed to all tasks.
 
-*Case of dynamic allocation*
+== Case of dynamic allocation
 
 * The dynamic memory allocation/deallocation operation can be performed
 inside a parallel region.
@@ -130,7 +119,7 @@ each task.
 * If the operation concerns a shared variable, then it is more prudent
 that only one task (e.g. the master task) takes care of this operation
 
-*Complements*
+== Complements
 
 The construction of a parallel region admits two other clauses:
 
@@ -140,12 +129,9 @@ between tasks; +
 entrance of a parallel region in the same way as the OMP_SET_NUM_THREADS
 subroutine would do.
 
-From one parallel region to another, the number of concurrent tasks can
-be varied if desired. To do this, simply use the OMP_SET_DYNAMIC
+From one parallel region to another, the number of concurrent tasks can be varied if desired. To do this, simply use the OMP_SET_DYNAMIC
 subroutine or set the OMP_DYNAMIC environment variable to true. It is
-possible to nest (nesting) parallel regions, but this only has an effect
-if this mode has been activated by calling the OMP_SET_NESTED subroutine
-or by setting the OMP_NESTED environment variable.
+possible to nest (nesting) parallel regions, but this only has an effect if this mode has been activated by calling the OMP_SET_NESTED subroutine or by setting the OMP_NESTED environment variable.
 
     *Examples*
     
@@ -272,35 +258,22 @@ constructions remains quite different.
 Parallel sections
 
 * A section is a portion of code executed by one and only one task.
-* Multiple portions of code can be defined by the user using the SECTION
-directive within a SECTIONS construct.
+* Multiple portions of code can be defined by the user using the  directive within a construct.
 * The goal is to be able to distribute the execution of several
 independent portions of code on the different tasks.
-* The NOWAIT clause is allowed at the end of the END SECTIONS construct
-to remove the implicit synchronization barrier.
+* The NOWAIT clause is allowed at the end of the construct to remove the implicit synchronization barrier.
 
-*Exclusive execution*
-
-* Sometimes you want to exclude all tasks except one to execute certain
-portions of code included in a parallel region.
-* To do this, OpenMP offers two directives SINGLE and MASTER.
-* Although the aim is the same, the behavior induced by these two
-constructions remains quite different.
 
 *SINGLE construction*
 
-* The SINGLE construction allows a portion of code to be executed by one
-and only one task without being able to specify which one.
+* The SINGLE construction allows a portion of code to be executed by one and only one task without being able to specify which one.
 * In general, it is the task which arrives first on the SINGLE
 construction but it is not specified in the standard.
-* All the tasks not executing the SINGLE region wait, at the end of the
-END SINGLE construction, for the termination of the one responsible for
-it, unless they have specified the NOWAIT clause.
+* All the tasks not executing the SINGLE region wait, at the end of the END SINGLE construction, for the termination of the one responsible for it, unless they have specified the NOWAIT clause.
 
 *MASTER building*
 
-* The MASTER construction allows a portion of code to be executed by the
-master task alone.
+* The MASTER construction allows a portion of code to be executed by the master task alone.
 * This construction does not admit any clauses.
 * There is no synchronization barrier either at the beginning (MASTER)
 or at the end of construction (END MASTER).
@@ -310,20 +283,18 @@ or at the end of construction (END MASTER).
 Synchronization becomes necessary in the following situations:
 
 
-{empty}1. to ensure that all concurrent tasks have reached the same
+* to ensure that all concurrent tasks have reached the same
 level of instruction in the program (global barrier);
 
-{empty}2. to order the execution of all the concurrent tasks when these
+* to order the execution of all the concurrent tasks when these
 must execute the same portion of code affecting one or more shared
-variables whose consistency (in reading or in writing) in memory must be
-guaranteed (mutual exclusion).
+variables whose consistency (in reading or in writing) in memory must be guaranteed (mutual exclusion).
 
-{empty}3. to synchronize at least two concurrent tasks among the set
+* to synchronize at least two concurrent tasks among the set
 (lock mechanism).
 
 
-As we have already indicated, the absence of a NOWAIT clause means that
-a global synchronization barrier is implicitly applied at the end of the
+As we have already indicated, the absence of a NOWAIT clause means thata global synchronization barrier is implicitly applied at the end of the
 \openmp construction. But it is possible to explicitly impose a global
 synchronization barrier thanks to the BARRIER directive.
 
@@ -333,8 +304,7 @@ execution of a loop (DO ORDERED directive). For the same purpose, this
 mechanism is also implemented in the ATOMIC and CRITICAL directives.
 
 Finer synchronizations can be achieved either by setting up lock
-mechanisms (this requires calling subroutines from the OpenMP library),
-or by using the FLUSH directive.
+mechanisms (this requires calling subroutines from the OpenMP library), or by using the FLUSH directive.
 
 *Barrier*
 
@@ -352,10 +322,8 @@ directive.
 
 * A critical region can be seen as a generalization of the ATOMIC
 directive although the underlying mechanisms are distinct.
-* The tasks execute this region in a non-deterministic order but one at
-a time.
-* A critical region is defined using the CRITICAL directive and applies
-to a portion of code terminated by END CRITICAL.
+* The tasks execute this region in a non-deterministic order but one at a time.
+* A critical region is defined using the CRITICAL directive and applies to a portion of code terminated by END CRITICAL.
 * Its scope is dynamic.
 * For performance reasons, it is not recommended to emulate an atomic
 instruction by a critical region.
@@ -364,20 +332,16 @@ instruction by a critical region.
 
 * It is useful in a parallel region to refresh the value of a shared
 variable in global memory.
-* It is all the more useful when the memory of a machine is
-hierarchical.
-* It can be used to implement a synchronization point mechanism between
-tasks.
+* It is all the more useful when the memory of a machine is hierarchical.
+* It can be used to implement a synchronization point mechanism between tasks.
 
 *Rules of good performance*
 
 * Minimize the number of parallel regions in the code.
 * Adapt the number of tasks requested to the size of the problem to be
-treated in order to minimize the additional costs of task management by
-the system.
+treated in order to minimize the additional costs of task management by the system.
 * As much as possible, parallelize the outermost loop.
-* Use the SCHEDULE(RUNTIME) clause to be able to dynamically change the
-scheduling and the size of the iteration packets in a loop.
+* Use the SCHEDULE(RUNTIME) clause to be able to dynamically change the scheduling and the size of the iteration packets in a loop.
 * The SINGLE directive and the NOWAIT clause can make it possible to
 reduce the rendering time at the cost, most often, of an explicit
 synchronization.
@@ -389,7 +353,7 @@ enough).
 * Inter-task conflicts (of memory bank on a vector machine or of cache
 faults on a scalar machine), can significantly degrade performance.
 
-*OpenMP keywords*
+== OpenMP keywords
 
 [width="100%",cols="100%",]
 |===

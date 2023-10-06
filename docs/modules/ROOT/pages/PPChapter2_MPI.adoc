@@ -1,223 +1,117 @@
-= Programming interface for parallel computing
-
-*MPI, OpenMP two complementary parallelization models.*
-
-– MPI is a multi-process model whose mode of communication between the processes is *explicit* (communication management is the responsibility of the user). MPI is generally used on multiprocessor machines with distributed memory. MPI is a library for passing messages between processes without sharing.
-
-– OpenMP is a multitasking model whose mode of communication between tasks is *implicit* (the management of communications is the responsibility of the compiler). OpenMP is used on shared-memory multiprocessor machines. It focuses on shared memory paradigms. It is a language extension for expressing data-parallel operations (usually parallelized arrays over loops).
-
-Note: on a cluster of independent shared-memory multiprocessor machines (nodes), the implementation of a two-level parallelization (MPI, OpenMP) in the same program can be a major advantage for the parallel performance of the code.
-
-image::image7.png[xref=#fragment7,width=581,height=336]
+= MPI (Message Passing Interface)
 
 
-[width="100%",cols="50%,50%",]
-|===
-|*MPI vs. OpenMP* |
-|*MPI pos* |*OpenMP pos*
-a|
-Portable to a distributed and shared memory machine.
+== General notions
 
-Scale beyond a node
+The transmitter and the receiver are identified by their rank in the communicator. The entity passed between two processes is called a message. A message is characterized by its envelope. 
 
-No data placement issues
+This consists of:
 
-a|
-Easy to implement parallelism
-
-Implicit communications
-
-Low latency, high bandwidth
-
-Dynamic Load Balancing
-
-|*MPI negative* |*OpenMP negative*
-a|
-Explicit communication
-
-High latency, low bandwidth
-
-Difficult load balancing
-
-a|
-Only on nodes or shared memory machines
-
-Scale on Node
-
-Data placement problem
-
-|===
-
-*2.1 MPI (Message Passing Interface)*
-
-*Point-to-point communications*
-
-*General notions*
-
-The transmitter and the receiver are identified by their rank in the
-communicator. The entity passed between two processes is called a
-message . +
-A message is characterized by its envelope . This consists of:
-
-• the rank of the sending process; +
-• the rank of the receiving process; +
-• the label ( _tag_ ) of the message; +
-• the communicator who defines the process group and the communication
+* The rank of the sending process.
+* The rank of the receiving process. 
+* The label ( _tag_ ) of the message. 
+* The communicator who defines the process group and the communication
 context.
 
-The data exchanged is typed (integers, reals, etc. or personal derived
-types).
-
-In each case, there are several transfer modes , using different
+The data exchanged is typed (integers, reals, etc. or personal derived types) In each case, there are several transfer modes , using different
 protocols.
     
-    int MPI_Send( *const void* *message, *int* length, MPI_Datatype type_message, *int* rank_dest, *int* label, MPI_Comm comm)
+    int MPI_Send( *const void* *message, *int* length, MPI_Datatyp type_message, *int* rank_dest, *int* label, MPI_Comm comm)
     
-    int MPI_Recv ( *void* *message, *int* length, MPI_Datatype type_message, *int* rank_source, *int* label, MPI_Comm comm, MPI_Status *status)
+    int MPI_Recv ( *void* *message, *int* length, MPI_Datatype type_message *int* rank_source, *int* label, MPI_Comm comm, MPI_Status *status)
+
+And simultaneous send and receive operation:
+    
+    int MPI_Sendrecv_replace ( void * message, int length, MPI_Datatype type_message, int rank_dest, int label_message_sent, int* rank_source, int label_message_recu, MPI_Comm comm, MPI_Status *status).
 
 Note this operation is blocking.
 
-*Simultaneous send and receive operation*
 
-    int MPI_Sendrecv ( *const void* *message_sent, *int*
-    length_message_sent, +
-    MPI_Datatype type_message_sent, *int* rank_dest, *int*
-    label_message_sent, *void* *message_received , *int*
-    length_message_received, +
-    MPI_Datatype type_message_received, *int* rank_source, *int*
-    label_message_received, MPI_Comm comm, MPI_Status *status)
+== Collective communications
 
-*Simultaneous send and receive operation*
-    
-    int MPI_Sendrecv_replace ( void * message, int length, MPI_Datatype
-    type_message, int rank_dest, int label_message_sent, int* rank_source,
-    int label_message_recu, MPI_Comm comm, MPI_Status *status)
+=== General notions
 
-*Collective communications*
+Collective communications allow a series of point-to-point communications to be made in a single operation. A collective communication always concerns all the processes of the indicated communicator. For each of the processes, the call ends when the latter's participation in the collective operation is completed, in the sense of point-to-point communications (thus when the memory zone concerned can be modified). The management of labels in these communications is transparent and at the expense of the system. They are therefore never explicitly defined during the call to these subroutines. One of the advantages of this is that collective communications never interfere with point-to-point communications.
 
-*General notions*
+=== Types of collective communications
 
-Collective communications allow a series of point-to-point
-communications to be made in a single operation.
+There are three types of subroutines: 
+* The one that ensures global synchronizations: MPI_Barrier().
 
-A collective communication always concerns all the processes of the indicated communicator.
+* those that only transfer data:
 
-For each of the processes, the call ends when the latter's participation in the collective operation is completed, in the sense of point-to-point communications (thus when the memory zone concerned can be modified).
+** global data broadcasting: MPI_Bcast(); 
+** selective diffusion of data: MPI_Scatter(); 
+** distributed data collection: MPI_Gather(); 
+** collection by all distributed data processes: MPI_Allgather(); 
+** selective collection and dissemination, by all processes, of distributed data: MPI_Alltoall().
 
-The management of labels in these communications is transparent and at the expense of the system. They are therefore never explicitly defined during the call to these subroutines. One of the advantages of this is that collective communications never interfere with point-to-point communications.
-
-*Types of collective communications*
-
-There are three types of subroutines: +
-*1.* the one that ensures global synchronizations: MPI_Barrier() .
-
-*2.* those that only transfer data:
-
-• global data broadcasting: MPI_Bcast(); +
-• selective diffusion of data: MPI_Scatter(); +
-• distributed data collection: MPI_Gather(); +
-• collection by all distributed data processes: MPI_Allgather(); •
-selective collection and dissemination, by all processes, of distributed
-data: MPI_Alltoall() .
-
-*3.* those who, in addition to managing communications, perform
+* those who, in addition to managing communications, perform
 operations on the transferred data:
 
-* {blank}
-+
-
-reduction operations (sum, product, maximum, minimum, etc.), whether of
+** reduction operations (sum, product, maximum, minimum, etc.), whether of
 a predefined type or of a personal type: MPI_Reduce();
 
-* {blank}
-+
-
-reduction operations with distribution of the result (equivalent to an
+** reduction operations with distribution of the result (equivalent to an
 MPI_Reduce() followed by an MPI_Bcast()): MPI_Allreduce().
 
 
-*Global synchronization*
+== Global synchronization
 
     int MPI_Barrier ( MPI_Comm comm)
 
 *General distribution*
 
-    int MPI_Bcast( void *message, int length, MPI_Datatype,
-    type_message, *int* rank_source, MPI_Comm comm)
+    int MPI_Bcast( void *message, int length, MPI_Datatype, type_message, *int* rank_source, MPI_Comm comm)
 
 *Selective dissemination*
 
-    int MPI_Scatter ( const void *message_to_be restarted, int
-    length_message_sent, MPI_Datatype type_message_sent, void
-    *message_received, int length_message_recu, MPI_Datatype type_message_recu, int
-    rank_source, MPI_Comm comm)
+    int MPI_Scatter ( const void *message_to_be restarted, int length_message_sent, MPI_Datatype type_message_sent, void *message_received, int length_message_recu, MPI_Datatype type_message_recu, int rank_source, MPI_Comm comm)
 
 *Collection*
 
-    int MPI_Gather ( const void *message_sent, int
-    length_message_sent, MPI_Datatype type_message_sent, void
-    *message_received, int length_message_received, MPI_Datatype
-    type_message_received, *int* rank_dest, MPI_Comm comm)
+    int MPI_Gather ( const void *message_sent, int length_message_sent, MPI_Datatype type_message_sent, void *message_received, int length_message_received, MPI_Datatype type_message_received, *int* rank_dest, MPI_Comm comm)
 
 *General collection*
 
-    int MPI_Allgather ( const void *message_sent, int
-    length_message_sent, MPI_Datatype type_message_sent, void
-    *message_received, int length_message_received, MPI_Datatype
-    type_message_received, MPI_Comm comm)
+    int MPI_Allgather ( const void *message_sent, int length_message_sent, MPI_Datatype type_message_sent, void *message_received, int length_message_received, MPI_Datatype type_message_received, MPI_Comm comm)
 
 *"Variable" collection*
 
-    int MPI_Gatherv ( const void *message_sent, int
-    length_message_sent, MPI_Datatype type_message_sent, void
-    *message_received, const int *nb_elts_recus, const int *deplts,
-    MPI_Datatype type_message_recu, *int* rang_dest, MPI_Comm comm)
+    int MPI_Gatherv ( const void *message_sent, int length_message_sent, MPI_Datatype type_message_sent, void *message_received, const int *nb_elts_recus, const int *deplts, MPI_Datatype type_message_recu, *int* rang_dest, MPI_Comm comm)
 
 *Selective collections and distributions*
 
-    int MPI_Alltoall ( const void *message_sent, int
-    length_message_sent, MPI_Datatype type_message_sent, void
-    *message_received, int length_message_received, MPI_Datatype
-    type_message_received, MPI_Comm comm)
+    int MPI_Alltoall ( const void *message_sent, int length_message_sent, MPI_Datatype type_message_sent, void *message_received, int length_message_received, MPI_Datatype type_message_received, MPI_Comm comm)
 
 *Distributed reductions*
 
-    int MPI_Reduce ( const void *message_sent, void *message_received,
-    int length, MPI_Datatype type_message, MPI_Op operation, int rank_dest,*
-    MPI_Comm comm)
+    int MPI_Reduce ( const void *message_sent, void *message_received, int length, MPI_Datatype type_message, MPI_Op operation, int rank_dest,* MPI_Comm comm)
 
 *Distributed reductions with distribution of the result*
 
-    int MPI_Allreduce ( const void *message_sent, void *message_received, *int* length, MPI_Datatype, type_message, MPI_Op operation, MPI_Comm comm)
+    int MPI_Allreduce ( const void *message_sent, void *message_received, *int length, MPI_Datatype, type_message, MPI_Op operation, MPI_Comm comm)
 
 
 
-*Communication models*
+== Communication models
 
-*Point-to-point sending modes*
+=== Point-to-point sending modes
 
-    _Blocking and Non-blocking mode_
+* Blocking and Non-blocking mode
     
-    Standard sending MPI_Send() MPI_Isend()
+* Standard sending MPI_Send() MPI_Isend()
     
-    Synchronous send MPI_Ssend() MPI_Issend()
+* Synchronous send MPI_Ssend() MPI_Issend()
     
-    _Buffered_ send MPI_Bsend() MPI_Ibsend()
+* _Buffered_ send MPI_Bsend() MPI_Ibsend()
     
-    Receive MPI_Recv() MPI_Irecv()
+* Receive MPI_Recv() MPI_Irecv()
+
+A call is blocking if the memory space used for communication can be reused immediately after the call exits. The data sent can be modified after the blocking call. The received data can be read after the blocking call.
 
 
-*_Blocking calls_*
-
-A call is blocking if the memory space used for communication can be
-reused immediately after the call exits.
-
-The data sent can be modified after the blocking call.
-
-The received data can be read after the blocking call.
-
-
-*Synchronous sends*
+=== Synchronous sends
 
 A synchronous send involves synchronization between the processes
 involved. A shipment can only begin when its receipt is posted. There
@@ -227,22 +121,17 @@ can only be communication if both processes are willing to communicate.
 message_type, *int* dest, *int* label, MPI_Comm comm)
 
 
-*Benefits*
+* Benefits
 
-Consume few resources (no _buffer_ ) +
-Fast if the receiver is ready (no copying into a _buffer_ ) Recognition
-of reception thanks to synchronization
+ ** Consume few resources (no _buffer_ ) Fast if the receiver is ready (no copying into a _buffer_ ) Recognition of reception thanks to synchronization
 
-*Disadvantages*
+* Disadvantages
 
-Waiting time if the receiver is not there/not ready Risks of deadlock
+ ** Waiting time if the receiver is not there/not ready Risks of deadlock
 
 
-**_Buffered +
-_**sends A buffered send involves the copying of data into an
-intermediate memory space. There is then no coupling between the two
-communication processes. The output of this type of sending therefore
-does not mean that the reception has taken place.
+=== Buffered sends 
+A buffered send involves the copying of data into an intermediate memory space. There is then no coupling between the two communication processes. The output of this type of sending therefore does not mean that the reception has taken place.
 
 Buffers must be managed manually (with calls to MPI_Buffer_attach( _)_
 and MPI_Buffer_detach()). They must be allocated taking into account the
@@ -254,55 +143,34 @@ constant for each message instance).
     int MPI_Bsend( const void *values, int size, MPI_Datatype type_message, int dest, int label, MPI_Comm comm)
 
 
-*Advantages of buffered mode*
+* Advantages of buffered mode
 
-No need to wait for the receiver (recopy in a _buffer_ ) No risk of
+ ** No need to wait for the receiver (recopy in a _buffer_ ) No risk of
 blocking ( _deadlocks_ )
 
-*Disadvantages of buffered mode*
+* Disadvantages of buffered mode
 
-Consume more resources (memory occupation by _buffers_ with risk of
+ ** Consume more resources (memory occupation by _buffers_ with risk of
 saturation)
 
-Send buffers must be managed manually (often difficult to choose an
+ ** Send buffers must be managed manually (often difficult to choose an
 appropriate size _)_
 
-A bit slower than synchronous sends if the receiver is ready
+ ** A bit slower than synchronous sends if the receiver is ready
 
-No knowledge of the reception (send-receive decoupling)
+ ** No knowledge of the reception (send-receive decoupling)
 
-Risk of wasting memory space if the _buffers_ are too oversized
+ ** Risk of wasting memory space if the _buffers_ are too oversized
 
-The application crashes if the _buffers_ are too small
+ ** The application crashes if the _buffers_ are too small
 
-There are also often hidden _buffers_ managed by the MPI implementation
+ ** There are also often hidden _buffers_ managed by the MPI implementation
 on the sender and/or receiver side (and consuming memory resources)
 
-*Standard shipments*
 
-MPI_Send() subroutine . In most implementations, this mode switches from
-buffered _(_ eager _)_ to synchronous mode as message sizes grow.
+== Non-blocking calls
 
-    int MPI_Send( const void *values, int size, MPI_Datatype type_message, int dest, int label, MPI_Comm comm)
-
-
-*Benefits of standard mode*
-
-=> Often the most efficient (choice of the most suitable mode by the
-manufacturer)
-
-*Disadvantages of standard mode*
-
-=> Little control over the mode actually used (often accessible via
-environment variables)
-
-Risk of _deadlock_ depending on the real mode +
-Behavior may vary depending on the architecture and the size of the
-problem
-
-*Non-blocking calls*
-
-non-blocking call returns control very quickly, but does not allow the
+*Non-blocking* call returns control very quickly, but does not allow the
 immediate reuse of the memory space used in the call. It is necessary to
 ensure that the communication is indeed terminated (with MPI_Wait() for
 example) before using it again.
@@ -320,29 +188,64 @@ example) before using it again.
     int* source, int label, MPI_Comm comm, MPI_Request *req)
 
 
-*Benefits of non-blocking calls*
+* Benefits of non-blocking calls
 
-Ability to hide all or part of the communication costs (if the
-architecture allows it)
+** Ability to hide all or part of the communication costs (if the architecture allows it). No risk of _deadlock_.
 
-No risk of _deadlock_
+* Disadvantages of non-blocking calls
 
-*Disadvantages of non-blocking calls*
+** Higher additional costs (several calls for a single send or receive, request management).
 
-Higher additional costs (several calls for a single send or receive,
-request management)
+** Higher complexity and more complicated maintenance.
 
-Higher complexity and more complicated maintenance
+** Risk of loss of performance on the calculation cores (for example differentiated management between the zone close to the border of a domain and the interior zone resulting in less good use of memory caches).
 
-Risk of loss of performance on the calculation cores (for example
-differentiated management between the zone close to the border of a
-domain and the interior zone resulting in less good use of memory
-caches)
+** Limited to point-to-point communications.
 
-Limited to point-to-point communications (has been extended to
-collectives in MPI 3.0)
 
-*interfaces*
+
+
+== Memory to memory communications
+
+Memory-to-memory communications (or RMA for _Remote Memory Access_ or _one-sided communications_ ) consist of accessing the memory of a remote process in write or read mode without the latter having to manage this access explicitly. The target process therefore does not intervene during the transfer.
+
+=== RMA - General Approach
+
+Creation of a memory window with MPI_Win_create() to authorize RMA transfers in this area.
+
+Remote read or write access by calling MPI_Put(), MPI_Get(), MPI_Accumulate(), MPI_Get_accumulate() and MPI_Compare_and_swap()
+
+Freeing the memory window with M PI_Win_free().
+
+=== RMA - Synchronization Methods
+
+To ensure correct operation, it is mandatory to carry out certain synchronizations. 3 methods are available:
+
+Active target communication with global synchronization (MPI_Win_fence() );
+
+Communication with active target with pair synchronization
+(MPI_Win_start() and MPI_Win_complete() for the origin process;
+MPI_Win-post() and MPI_Win_wait() for the target process);
+
+Passive target communication without target intervention (MPI_Win_lock()
+and MPI_Win_unlock()).
+
+* Benefits of RMAs
+
+** Allows you to implement certain algorithms more efficiently.
+** More efficient than point-to-point communications on some machines (use of specialized hardware such as DMA engine, coprocessor, specialized memory, etc.).
+** Ability for the implementation to group multiple operations.
+
+* Disadvantages of RMAs
+
+** Synchronization management is tricky.
+** Complexity and high risk of error.
+** For passive target synchronizations, obligation to allocate memory with
+MPI_Alloc_mem() which does not respect the Fortran standard (use of Cray
+pointers not supported by some compilers).
+** Less efficient than point-to-point communications on some machines.
+
+== Interfaces
 
 MPI_Wait() waits for the end of a communication. MPI_Test() is the
 non-blocking version.
@@ -372,75 +275,8 @@ MPI_Testsome is the non-blocking version.
 
     int MPI_Testsome( int size, MPI_Request reqs[], int *endcount,int *indexes, MPI_Status *status)
 
-*Memory-to-memory communications (RMA)*
 
-Memory-to-memory communications (or RMA for _Remote Memory Access_ or
-_one-sided communications_ ) consist of accessing the memory of a remote
-process in write or read mode without the latter having to manage this
-access explicitly. The target process therefore does not intervene
-during the transfer.
-
-*RMA - General Approach*
-
-Creation of a memory window with MPI_Win_create() to authorize RMA
-transfers in this area.
-
-Remote read or write access by calling MPI_Put(), MPI_Get(),
-MPI_Accumulate(), , MPI_Get_accumulate() and MPI_Compare_and_swap()
-
-Freeing the memory window with M PI_Win_free() .
-
-*RMA - Synchronization Methods*
-
-To ensure correct operation, it is mandatory to carry out certain
-synchronizations. 3 methods are available:
-
-Active target communication with global synchronization (
-MPI_Win_fence() );
-
-Communication with active target with pair synchronization
-(MPI_Win_start() and MPI_Win_complete() for the origin process;
-MPI_Win-post() and MPI_Win_wait() for the target process);
-
-Passive target communication without target intervention (MPI_Win_lock()
-and MPI_Win_unlock()).
-
-*Benefits of RMAs*
-
-Allows you to implement certain algorithms more efficiently.
-
-More efficient than point-to-point communications on some machines (use
-of specialized hardware such as DMA engine, coprocessor, specialized
-memory, etc.).
-
-Ability for the implementation to group multiple operations.
-
-*Disadvantages of RMAs*
-
-Synchronization management is tricky.
-
-Complexity and high risk of error.
-
-For passive target synchronizations, obligation to allocate memory with
-MPI_Alloc_mem() which does not respect the Fortran standard (use of Cray
-pointers not supported by some compilers).
-
-Less efficient than point-to-point communications on some machines.
-
-*Derived data types*
-
-In the communications, the data exchanged are typed: MPI_INTEGER,
-MPI_REAL, MPI_COMPLEX, etc .
-
-More complex data structures can be created using subroutines such as
-MPI_Type_contiguous(), MPI_Type_vector(), MPI_Type_Indexed() , or
-MPI_Type_create_struct()
-
-The derived types notably allow the exchange of non-contiguous or
-non-homogeneous data in memory and to limit the number of calls to the
-communications subroutines.
-
-*MPI keywords*
+== MPI keywords
 
 [width="100%",cols="50%,50%",]
 |===
@@ -576,3 +412,18 @@ topology
 • MPI MODE CREATE,MPI MODE RONLY,MPI MODE WRONLY
 
 |===
+
+
+== Derived data types
+
+In the communications, the data exchanged are typed: MPI_INTEGER,
+MPI_REAL, MPI_COMPLEX, etc .
+
+More complex data structures can be created using subroutines such as
+MPI_Type_contiguous(), MPI_Type_vector(), MPI_Type_Indexed() , or
+MPI_Type_create_struct()
+
+The derived types notably allow the exchange of non-contiguous or
+non-homogeneous data in memory and to limit the number of calls to the
+communications subroutines.
+

@@ -1013,6 +1013,144 @@ communications subroutines.</p>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_mpi_threading"><a class="anchor" href="#_mpi_threading"></a>10. MPI + threading</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The MPI standard has been updated to accommodate the use of threads within processes. Using these capabilities is optional, and presents numerous advantages and disadvantages</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Advantages of MPI + threading</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Possiblity for better scaling of communication costs</p>
+</li>
+<li>
+<p>Either simpler and/or faster code that does not need to distribute as much data, because all threads in the process can share it already</p>
+</li>
+<li>
+<p>Higher performance from using memory caches better</p>
+</li>
+<li>
+<p>Reduced need to dedicate a rank solely to communication coordination in code using a manager-worker paradigm</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Disadvantages of MPI + threading</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Implicitly shared data can be harder to reason about correctly (eg. race conditions)</p>
+</li>
+<li>
+<p>Code now has to be correct MPI code and correct threaded code</p>
+</li>
+<li>
+<p>Possibility of lower performance from cache contention, when one thread writes to memory that is very close to where another thread needs to read</p>
+</li>
+<li>
+<p>More code complexity</p>
+</li>
+<li>
+<p>Might be merely shifting bottlenecks from one place to another (eg. opening and closing OpenMP thread regions)</p>
+</li>
+<li>
+<p>Needs higher quality MPI implementations</p>
+</li>
+<li>
+<p>It can be awkward to use libraries that also use threading internally</p>
+</li>
+<li>
+<p>Usage gets more complicated, as both ranks and threads have to be shepherded onto cores for maximum performance</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_mpi_support_for_threading"><a class="anchor" href="#_mpi_support_for_threading"></a>11. MPI support for threading</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Since version 2.0, MPI can be initialized in up to four different ways. The former approach using MPI_Init still works, but applications that wish to use threading should use MPI_Init_thread.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>int MPI_Init_thread(int *argc, char ***argv, int required, int *provided)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following threading levels are generally supported:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>MPI_THREAD_SINGLE - rank is not allowed to use threads, which is basically equivalent to calling MPI_Init.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><span class="image"><a class="image" href="#fragment1113"><img src="_images/MPI_THREAD_SINGLE.svg" alt="MPI THREAD SINGLE" width="600" height="300"></a></span></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>With MPI_THREAD_SINGLE, the rank may use MPI freely and will not use threads.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>*MPI_THREAD_FUNNELED - rank can be multi-threaded but only the main thread may call MPI functions. Ideal for fork-join parallelism such as used in #pragma omp parallel, where all MPI calls are outside the OpenMP regions.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><a class="image" href="#fragment1114"><img src="_images/MPI_THREAD_FUNNELED.svg" alt="MPI THREAD FUNNELED" width="600" height="300"></a></span></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>With MPI_THREAD_FUNNELED, the rank can use MPI from only the main thread.</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>MPI_THREAD_SERIALIZED - rank can be multi-threaded but only one thread at a time may call MPI functions. The rank must ensure that MPI is used in a thread-safe way. One approach is to ensure that MPI usage is mutually excluded by all the threads, eg. with a mutex.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><span class="image"><a class="image" href="#fragment1115"><img src="_images/MPI_THREAD_SERIALIZED.svg" alt="MPI THREAD SERIALIZED" width="600" height="300"></a></span></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>With MPI_THREAD_SERIALIZED, the rank can use MPI from any thread so long as it ensures the threads synchronize such that no thread calls MPI while another thread is doing so.</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>MPI_THREAD_MULTIPLE - rank can be multi-threaded and any thread may call MPI functions. The MPI library ensures that this access is safe across threads. Note that this makes all MPI operations less efficient, even if only one thread makes MPI calls, so should be used only where necessary.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><span class="image"><a class="image" href="#fragment1116"><img src="_images/MPI_THREAD_MULTIPLE.svg" alt="MPI THREAD MULTIPLE" width="600" height="300"></a></span></p>
+</div>
+<div class="paragraph">
+<p>With MPI_THREAD_MULTIPLE, the rank can use MPI from any thread. The MPI library ensures the necessary synchronization</p>
+</div>
+<div class="paragraph">
+<p>Note that different MPI ranks may make different requirements for MPI threading. This can be efficient for applications using manager-worker paradigms where the workers have simpler communication patterns.</p>
+</div>
+<div class="paragraph">
+<p>For applications where it is possible to implement using MPI_THREAD_SERIALIZED approach, it will generally outperform the same application naively implemented and using MPI_THREAD_MULTIPLE, because the latter will need to use more synchronization.</p>
+</div>
+</div>
+</div>
 </article>
   </div>
 </main>

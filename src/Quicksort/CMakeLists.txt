@@ -25,7 +25,7 @@ if(FALSE)
     endif()
 endif()
 
-if(TRUE)
+if(FALSE)
     find_package(OpenMP REQUIRED)
 endif()
 

@@ -34,7 +34,7 @@ if(FALSE)
     endif(OpenMP_CXX_FOUND)
 endif()
 
-if(TRUE)
+if(FALSE)
     find_package(OpenMP REQUIRED)
 endif()
 

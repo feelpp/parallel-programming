@@ -45,7 +45,7 @@ endif()
 #END:OpenMP//+++>OK
 
 #BEGIN:OpenStar
-if(TRUE)
+if(FALSE)
     add_subdirectory(OpenStar/OpenMP_MPI)
 endif()
 #END:OpenStar//+++>OK

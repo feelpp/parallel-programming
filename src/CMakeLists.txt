@@ -39,7 +39,7 @@ endif()
 #END:MPI/+++>OK
 
 #BEGIN:OpenMP
-if(TRUE)
+if(FALSE)
     add_subdirectory(OpenMP)
 endif()
 #END:OpenMP//+++>OK
@@ -88,7 +88,7 @@ endif()
 #END:GayaPerformance/PB /usr/include/sys/times.h' file not found
 
 #BEGIN:Quicksort
-if(TRUE)
+if(FALSE)
     add_subdirectory(Quicksort)
 endif()
 #END:Quicksort//+++>OK

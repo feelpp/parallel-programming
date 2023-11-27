@@ -252,11 +252,11 @@ MathJax.Hub.Config({
 <pre>#include &lt;cmath&gt;
 int main()
 {
-const int size = 256;
-double sinTable[size];
-#pragma omp parallel for
-for(int n=0; n&lt;size; ++n)
-sinTable[n] = std::sin(2 * M_PI * n / size);
+    const int size = 256;
+    double sinTable[size];
+    #pragma omp parallel for
+    for(int n=0; n&lt;size; ++n)
+        sinTable[n] = std::sin(2 * M_PI * n / size);
 }</pre>
 </div>
 </div>
@@ -270,11 +270,11 @@ sinTable[n] = std::sin(2 * M_PI * n / size);
 <p>#include &lt;cmath&gt;
     int main()
     {
-    const int size = 256;
-    double sinTable [ size ];
-    #pragma omp simd
-    for(int n=0; n&lt;size; ++n)
-    sinTable[n] = std::sin(2 * M_PI * n / size);
+        const int size = 256;
+        double sinTable [ size ];
+        #pragma omp simd
+        for(int n=0; n&lt;size; ++n)
+            sinTable[n] = std::sin(2 * M_PI * n / size);
     }</p>
 </div>
 </div>
@@ -288,12 +288,12 @@ sinTable[n] = std::sin(2 * M_PI * n / size);
 <pre>#include &lt;cmath&gt;
 int main()
 {
-const int size = 256;
-double sinTable[size];
-#pragma omp target teams distribute parallel for map
-for(int n=0; n&lt;size; ++n)
-sinTable[n] = std::sin(2 * M_PI * n / size);
-// the table is now initialized
+    const int size = 256;
+    double sinTable[size];
+    #pragma omp target teams distribute parallel for map
+    for(int n=0; n&lt;size; ++n)
+        sinTable[n] = std::sin(2 * M_PI * n / size);
+    // the table is now initialized
 }</pre>
 </div>
 </div>
@@ -314,14 +314,14 @@ sinTable[n] = std::sin(2 * M_PI * n / size);
 <pre>typedef std::complex&lt;double&gt; complex;
 int MandelbrotCalculate(complex c, int maxiter)
 {
-complex z = c;
-int n=0;
-for(; n&lt;maxiter; ++n)
-{
-if( std::abs(z) &gt;= 2.0) break;
-z = z*z + c;
-}
-return n;
+    complex z = c;
+    int n=0;
+    for(; n&lt;maxiter; ++n)
+    {
+        if( std::abs(z) &gt;= 2.0) break;
+        z = z*z + c;
+    }
+    return n;
 }</pre>
 </div>
 </div>
@@ -329,34 +329,34 @@ return n;
 <div class="content">
 <pre>int main()
 {
-const int width = 78, height = 44, num_pixels = width*height;
-const complex center(-.7, 0), span(2.7, -(4/3.0)*2.7*height/width);
-const complex begin = center-span/2.0;//, end = center+span/2.0;
-const int maxiter = 100000;
-#pragma omp parallel for ordered schedule(dynamic)
-for(int pix=0; pix&lt;num_pixels; ++pix)
-{
-const int x = pix%width, y = pix/width;
-complex c = begin + complex(x * span.real() / (width +1.0),
-y * span.imag() / (height+1.0));
-int n = MandelbrotCalculate(c, maxiter);
-if(n == maxiter) n = 0;</pre>
+    const int width = 78, height = 44, num_pixels = width*height;
+    const complex center(-.7, 0), span(2.7, -(4/3.0)*2.7*height/width);
+    const complex begin = center-span/2.0;//, end = center+span/2.0;
+    const int maxiter = 100000;
+    #pragma omp parallel for ordered schedule(dynamic)
+    for(int pix=0; pix&lt;num_pixels; ++pix)
+    {
+        const int x = pix%width, y = pix/width;
+        complex c = begin + complex(x * span.real() / (width +1.0),
+        y * span.imag() / (height+1.0));
+        int n = MandelbrotCalculate(c, maxiter);
+        if(n == maxiter) n = 0;</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp ordered
-{
-char c = ' ';
-if(n &gt; 0)
-{
-static const char charset[] = ".,c8M@jawrpogOQEPGJ";
-c = charset[n % (sizeof(charset)-1)];
-}
-std::putchar(c);
-if(x+1 == width) std::puts("|");
-}
-}
+<pre>        #pragma omp ordered
+        {
+        char c = ' ';
+        if(n &gt; 0)
+        {
+            static const char charset[] = ".,c8M@jawrpogOQEPGJ";
+            c = charset[n % (sizeof(charset)-1)];
+        }
+        std::putchar(c);
+        if(x+1 == width) std::puts("|");
+        }
+    }
 }</pre>
 </div>
 </div>
@@ -379,23 +379,11 @@ if(x+1 == width) std::puts("|");
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp parallel</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>// Code inside this region runs in parallel.
-printf("Hello!\n");</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>#pragma omp parallel
+{
+    // Code inside this region runs in parallel.
+    printf("Hello!\n");
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -415,22 +403,10 @@ ICC, on the other hand, uses a mechanism resembling fork(), and does not create 
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>extern int parallelism_enabled;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp parallel for if(parallelism_enabled)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int c=0; c&lt;n; ++c)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>handle(c);</pre>
+<pre>extern int parallelism_enabled;
+#pragma omp parallel for if(parallelism_enabled)
+for(int c=0; c&lt;n; ++c)
+handle(c);</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -445,66 +421,31 @@ ICC, on the other hand, uses a mechanism resembling fork(), and does not create 
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp for</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int n=0; n&lt;10; ++n)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>printf(" %d", n);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>printf(".\n");</pre>
+<pre>#pragma omp for
+for(int n=0; n&lt;10; ++n)
+{
+    printf(" %d", n);
+}
+printf(".\n");</pre>
 </div>
 </div>
 <div class="paragraph">
 <p>This loop will output each number from 0…9 once. However, it may do it in arbitrary order. It may output, for example:</p>
 </div>
-<div class="paragraph">
-<p>0 5 6 7 1 8 2 3 4 9.</p>
+<div class="literalblock">
+<div class="content">
+<pre>0 5 6 7 1 8 2 3 4 9.</pre>
+</div>
 </div>
 <div class="paragraph">
 <p>Internally, the above loop becomes into code equivalent to this:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>int this_thread = omp_get_thread_num(), num_threads = omp_get_num_threads();</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int my_start = (this_thread ) * 10 / num_threads;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int my_end = (this_thread+1) * 10 / num_threads;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int n=my_start; n&lt;my_end; ++n)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>printf(" %d", n);</pre>
+<pre>int this_thread = omp_get_thread_num(), num_threads = omp_get_num_threads();
+int my_start = (this_thread ) * 10 / num_threads;
+int my_end = (this_thread+1) * 10 / num_threads;
+for(int n=my_start; n&lt;my_end; ++n) printf(" %d", n);</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -518,27 +459,11 @@ ICC, on the other hand, uses a mechanism resembling fork(), and does not create 
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp parallel</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp for</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int n=0; n&lt;10; ++n) printf(" %d", n);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>#pragma omp parallel
+{
+    #pragma omp for
+    for(int n=0; n&lt;10; ++n) printf(" %d", n);
+}</pre>
 </div>
 </div>
 <div class="literalblock">
@@ -551,17 +476,9 @@ ICC, on the other hand, uses a mechanism resembling fork(), and does not create 
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp parallel for</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int n=0; n&lt;10; ++n) printf(" %d", n);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>printf(".\n");</pre>
+<pre>#pragma omp parallel for
+for(int n=0; n&lt;10; ++n) printf(" %d", n);
+printf(".\n");</pre>
 </div>
 </div>
 <div class="literalblock">
@@ -571,42 +488,14 @@ ICC, on the other hand, uses a mechanism resembling fork(), and does not create 
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp parallel num_threads ( 3 )</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>// This code will be executed by three threads.</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>// Chunks of this loop will be divided amongst</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>// the (three) threads of the current team.</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp for</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int n=0; n&lt;10; ++n) printf(" %d", n);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>#pragma omp parallel num_threads ( 3 )
+{
+// This code will be executed by three threads.
+// Chunks of this loop will be divided amongst
+// the (three) threads of the current team.
+    #pragma omp for
+    for(int n=0; n&lt;10; ++n) printf(" %d", n);
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -614,22 +503,10 @@ ICC, on the other hand, uses a mechanism resembling fork(), and does not create 
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>int n;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp for private(n)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(n=0; n&lt;10; ++n) printf(" %d", n);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>printf(".\n");</pre>
+<pre>int n;
+#pragma omp for private(n)
+for(n=0; n&lt;10; ++n) printf(" %d", n);
+printf(".\n");</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -677,17 +554,9 @@ ICC, on the other hand, uses a mechanism resembling fork(), and does not create 
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp for schedule(static)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int n=0; n&lt;10; ++n) printf(" %d", n);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>printf(".\n");</pre>
+<pre>#pragma omp for schedule(static)
+for(int n=0; n&lt;10; ++n) printf(" %d", n);
+printf(".\n");</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -701,17 +570,9 @@ ICC, on the other hand, uses a mechanism resembling fork(), and does not create 
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp for schedule(dynamic)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int n=0; n&lt;10; ++n) printf(" %d", n);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>printf(".\n");</pre>
+<pre>#pragma omp for schedule(dynamic)
+for(int n=0; n&lt;10; ++n) printf(" %d", n);
+printf(".\n");</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -722,17 +583,9 @@ ICC, on the other hand, uses a mechanism resembling fork(), and does not create 
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp for schedule(dynamic, 3)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int n=0; n&lt;10; ++n) printf(" %d", n);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>printf(".\n");</pre>
+<pre>#pragma omp for schedule(dynamic, 3)
+for(int n=0; n&lt;10; ++n) printf(" %d", n);
+printf(".\n");</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -743,37 +596,13 @@ ICC, on the other hand, uses a mechanism resembling fork(), and does not create 
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>int a,b;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>if(GOMP_loop_dynamic_start(0,10,1, 3, &amp;a,&amp;b))</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>do {</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int n=a; n&lt;b; ++n) printf(" %d", n);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>} while(GOMP_loop_dynamic_next(&amp;a,&amp;b));</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>int a,b;
+if(GOMP_loop_dynamic_start(0,10,1, 3, &amp;a,&amp;b))
+{
+    do {
+    for(int n=a; n&lt;b; ++n) printf(" %d", n);
+    } while(GOMP_loop_dynamic_next(&amp;a,&amp;b));
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -812,32 +641,12 @@ The modifiers are:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>for(int n=0; n&lt;100; ++n)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>files[n].compress();</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp ordered</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>send(files[n]);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>for(int n=0; n&lt;100; ++n)
+{
+    files[n].compress();
+    #pragma omp ordered
+    send(files[n]);
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -884,27 +693,11 @@ The modifiers are:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>for(int y=0; y&lt;25; ++y)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int x=0; x&lt;80; ++x)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>tick(x,y);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>for(int y=0; y&lt;25; ++y)
+    for(int x=0; x&lt;80; ++x)
+    {
+        tick(x,y);
+    }</pre>
 </div>
 </div>
 </div>
@@ -915,17 +708,9 @@ The modifiers are:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>int sum=0;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp parallel for reduction(+:sum)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int n=0; n&lt;1000; ++n) sum += table[n];</pre>
+<pre>int sum=0;
+#pragma omp parallel for reduction(+:sum)
+for(int n=0; n&lt;1000; ++n) sum += table[n];</pre>
 </div>
 </div>
 </div>
@@ -937,47 +722,15 @@ The modifiers are:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp sections</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{ Work1(); }</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp section</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{ Work2();</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>Work3(); }</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp section</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{ Work4(); }</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>#pragma omp sections
+{
+    { Work1(); }
+    #pragma omp section
+    { Work2();
+    Work3(); }
+    #pragma omp section
+    { Work4(); }
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -995,47 +748,15 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp parallel sections // starts a new team</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{ Work1(); }</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp section</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{ Work2();</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>Work3(); }</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp section</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{ Work4(); }</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>#pragma omp parallel sections // starts a new team
+{
+    { Work1(); }
+    #pragma omp section
+    { Work2();
+    Work3(); }
+    #pragma omp section
+    { Work4(); }
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1043,77 +764,21 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp parallel // starts a new team</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>//Work0(); // this function would be run by all threads.</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp sections // divides the team into sections</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>// everything herein is run only once.</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{ Work1(); }</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp section</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{ Work2();</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>Work3(); }</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp section</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{ Work4(); }</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>//Work5(); // this function would be run by all threads.</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>#pragma omp parallel // starts a new team
+{
+//Work0(); // this function would be run by all threads.
+    #pragma omp sections // divides the team into sections
+    {
+        // everything herein is run only once.
+        { Work1(); }
+        #pragma omp section
+        { Work2();
+        Work3(); }
+        #pragma omp section
+        { Work4(); }
+    }
+//Work5(); // this function would be run by all threads.
+}</pre>
 </div>
 </div>
 </div>
@@ -1130,22 +795,10 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>float a[8], b[8];</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>...</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp simd</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int n=0; n&lt;8; ++n) a[n] += b[n];</pre>
+<pre>float a[8], b[8];
+...
+#pragma omp simd
+for(int n=0; n&lt;8; ++n) a[n] += b[n];</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1153,32 +806,12 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp declare simd aligned(a,b:16)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>void add_arrays(float *__restrict__ a, float *__restrict__ b)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp simd aligned(a,b:16)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int n=0; n&lt;8; ++n) a[n] += b[n];</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>#pragma omp declare simd aligned(a,b:16)
+void add_arrays(float *__restrict__ a, float *__restrict__ b)
+{
+    #pragma omp simd aligned(a,b:16)
+    for(int n=0; n&lt;8; ++n) a[n] += b[n];
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1194,22 +827,10 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp simd collapse(2)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int i=0; i&lt;4; ++i)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int j=0; j&lt;4; ++j)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>a[j*4+i] += b[i*4+j];</pre>
+<pre>#pragma omp simd collapse(2)
+for(int i=0; i&lt;4; ++i)
+    for(int j=0; j&lt;4; ++j)
+        a[j*4+i] += b[i*4+j];</pre>
 </div>
 </div>
 </div>
@@ -1220,17 +841,9 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>int sum=0;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp simd reduction(+:sum)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int n=0; n&lt;1000; ++n) sum += table[n];</pre>
+<pre>int sum=0;
+#pragma omp simd reduction(+:sum)
+for(int n=0; n&lt;1000; ++n) sum += table[n];</pre>
 </div>
 </div>
 </div>
@@ -1244,32 +857,12 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp declare simd aligned(a,b:16)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>void add_arrays(float *__restrict__ a, float *__restrict__ b)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp simd aligned(a,b:16)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int n=0; n&lt;8; ++n) a[n] += b[n];</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>#pragma omp declare simd aligned(a,b:16)
+void add_arrays(float *__restrict__ a, float *__restrict__ b)
+{
+    #pragma omp simd aligned(a,b:16)
+    for(int n=0; n&lt;8; ++n) a[n] += b[n];
+}</pre>
 </div>
 </div>
 </div>
@@ -1283,32 +876,12 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp declare simd</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>void add_arrays(float* a, float* b)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp simd aligned(a,b:16) safelen(4)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int n=0; n&lt;8; ++n) a[n] += b[n];</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>#pragma omp declare simd
+void add_arrays(float* a, float* b)
+{
+    #pragma omp simd aligned(a,b:16) safelen(4)
+    for(int n=0; n&lt;8; ++n) a[n] += b[n];
+}</pre>
 </div>
 </div>
 </div>
@@ -1334,47 +907,15 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#include &lt;stdio.h&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int b = 10;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int main()</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int array[8];</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp simd linear(b:2)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int n=0; n&lt;8; ++n) array[n] = b;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int n=0; n&lt;8; ++n) printf("%d\n", array[n]);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>#include &lt;stdio.h&gt;
+int b = 10;
+int main()
+{
+    int array[8];
+    #pragma omp simd linear(b:2)
+    for(int n=0; n&lt;8; ++n) array[n] = b;
+    for(int n=0; n&lt;8; ++n) printf("%d\n", array[n]);
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1413,37 +954,13 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>float sum(float* table)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>float result=0;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp parallel for simd reduction(+:result)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int n=0; n&lt;1000; ++n) result += table[n];</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>return result;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>float sum(float* table)
+{
+    float result=0;
+    #pragma omp parallel for simd reduction(+:result)
+    for(int n=0; n&lt;1000; ++n) result += table[n];
+    return result;
+}</pre>
 </div>
 </div>
 </div>
@@ -1454,62 +971,18 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>struct node { node *left, *right; };</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>extern void process(node* );</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>void traverse(node* p)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>if (p-&gt;left)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp task // p is firstprivate by default</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>traverse(p-&gt;left);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>if (p-&gt;right)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp task // p is firstprivate by default</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>traverse(p-&gt;right);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>process(p);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>struct node { node *left, *right; };
+extern void process(node* );
+void traverse(node* p)
+{
+    if (p-&gt;left)
+    #pragma omp task // p is firstprivate by default
+    traverse(p-&gt;left);
+    if (p-&gt;right)
+    #pragma omp task // p is firstprivate by default
+    traverse(p-&gt;right);
+    process(p);
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1517,67 +990,19 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>struct node { node *left, *right; };</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>extern void process(node* );</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>void postorder_traverse(node* p)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>if (p-&gt;left)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp task // p is firstprivate by default</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>postorder_traverse(p-&gt;left);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>if (p-&gt;right)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp task // p is firstprivate by default</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>postorder_traverse(p-&gt;right);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp taskwait</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>process(p);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>struct node { node *left, *right; };
+extern void process(node* );
+void postorder_traverse(node* p)
+{
+    if (p-&gt;left)
+    #pragma omp task // p is firstprivate by default
+    postorder_traverse(p-&gt;left);
+    if (p-&gt;right)
+    #pragma omp task // p is firstprivate by default
+    postorder_traverse(p-&gt;right);
+    #pragma omp taskwait
+    process(p);
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1585,82 +1010,22 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>struct node { int data; node* next; };</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>extern void process(node* );</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>void increment_list_items(node* head)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp parallel</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp single</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(node* p = head; p; p = p-&gt;next)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp task</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>process(p); // p is firstprivate by default</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>struct node { int data; node* next; };
+extern void process(node* );
+void increment_list_items(node* head)
+{
+    #pragma omp parallel
+    {
+        #pragma omp single
+        {
+            for(node* p = head; p; p = p-&gt;next)
+            {
+            #pragma omp task
+            process(p); // p is firstprivate by default
+            }
+        }
+    }
+}</pre>
 </div>
 </div>
 </div>
@@ -1682,22 +1047,10 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp declare target</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int x;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>void murmur() { x+=5; }</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp end declare target</pre>
+<pre>#pragma omp declare target
+int x;
+void murmur() { x+=5; }
+#pragma omp end declare target</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1729,22 +1082,10 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp target</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>&lt;&lt;statements...&gt;&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>#pragma omp target
+{
+    &lt;&lt;statements...&gt;&gt;
+}</pre>
 </div>
 </div>
 <div class="literalblock">
@@ -1754,37 +1095,13 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp target data // device()... map()... if()...</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp target</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>&lt;&lt;statements...&gt;&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>#pragma omp target data // device()... map()... if()...
+{
+    #pragma omp target
+    {
+        &lt;&lt;statements...&gt;&gt;
+    }
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1795,57 +1112,16 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#include &lt;stdio.h&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>long long r = 1;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int main(void)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>r=10;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp target teams distribute parallel for reduction(+:r) map(tofrom:r)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(unsigned long long n=0; n&lt;0x800000000ull; ++n)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>r += n;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>printf( "r=%llX\n", r );</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>return 0;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>#include &lt;stdio.h&gt;
+long long r = 1;
+int main(void)
+{
+    r=10;
+    #pragma omp target teams distribute parallel for reduction(+:r) map(tofrom:r)
+    for(unsigned long long n=0; n&lt;0x800000000ull; ++n) r += n;
+    printf( "r=%llX\n", r );
+    return 0;
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1861,47 +1137,15 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#include &lt;stdlib.h&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#include &lt;stdio.h&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int main(int argc, char** argv)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int r=0;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp target if(atoi(argv[1])) map(tofrom:r)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>r += 4;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>printf("r=%d\n", r);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+int main(int argc, char** argv)
+{
+    int r=0;
+    #pragma omp target if(atoi(argv[1])) map(tofrom:r)
+    r += 4;
+    printf("r=%d\n", r);
+}</pre>
 </div>
 </div>
 </div>
@@ -1912,27 +1156,11 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>int device_number = ...;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp target device(device_number)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>//...</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>int device_number = ...;
+#pragma omp target device(device_number)
+{
+    //...
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2000,32 +1228,17 @@ Example:</p>
 <div class="paragraph">
 <p>An example of a valid array subscript mapping:</p>
 </div>
-<div class="paragraph">
-<p>void foo (int *p)</p>
+<div class="literalblock">
+<div class="content">
+<pre>void foo (int *p)
+{
+    int i;
+    #pragma omp parallel
+    #pragma omp single
+    #pragma omp target teams distribute parallel for map(p[0:24])
+    for (i = 0; i &lt; 24; i++) p[i] = p[i] + 1;
+}</pre>
 </div>
-<div class="paragraph">
-<p>{</p>
-</div>
-<div class="paragraph">
-<p>int i;</p>
-</div>
-<div class="paragraph">
-<p>#pragma omp parallel</p>
-</div>
-<div class="paragraph">
-<p>#pragma omp single</p>
-</div>
-<div class="paragraph">
-<p>#pragma omp target teams distribute parallel for map(p[0:24])</p>
-</div>
-<div class="paragraph">
-<p>for (i = 0; i &lt; 24; i++)</p>
-</div>
-<div class="paragraph">
-<p>p[i] = p[i] + 1;</p>
-</div>
-<div class="paragraph">
-<p>}</p>
 </div>
 </div>
 </div>
@@ -2077,47 +1290,15 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#include &lt;stdio.h&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int main(void)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp target teams</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>printf("test\n");</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>return 0;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>#include &lt;stdio.h&gt;
+int main(void)
+{
+    #pragma omp target teams
+    {
+    printf("test\n");
+    }
+    return 0;
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2136,52 +1317,16 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#include &lt;stdio.h&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int main(void)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int r=0;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp target teams distribute reduction(+:r)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int n=0; n&lt;10000; ++n)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>r += n;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>printf("r=%d\n", r);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>return 0;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>#include &lt;stdio.h&gt;
+int main(void)
+{
+    int r=0;
+    #pragma omp target teams distribute reduction(+:r)
+    for(int n=0; n&lt;10000; ++n)
+    r += n;
+    printf("r=%d\n", r);
+    return 0;
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2213,52 +1358,16 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#include &lt;stdio.h&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int main(void)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int r=0;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp target teams distribute parallel for reduction(+:r)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int n=0; n&lt;10000; ++n)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>r += n;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>printf("r=%d\n", r);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>return 0;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>#include &lt;stdio.h&gt;
+int main(void)
+{
+    int r=0;
+    #pragma omp target teams distribute parallel for reduction(+:r)
+    for(int n=0; n&lt;10000; ++n)
+    r += n;
+    printf("r=%d\n", r);
+    return 0;
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2290,11 +1399,11 @@ Example:</p>
 <div class="paragraph">
 <p>Atomicity means that something is inseparable; an event either happens completely or it does not happen at all, and another thread cannot intervene during the execution of the event.</p>
 </div>
-<div class="paragraph">
-<p>#pragma omp atomic</p>
+<div class="literalblock">
+<div class="content">
+<pre>#pragma omp atomic
+counter += value;</pre>
 </div>
-<div class="paragraph">
-<p>counter += value;</p>
 </div>
 <div class="paragraph">
 <p>The atomic keyword in OpenMP specifies that the denoted action happens atomically. It is commonly used to update counters and other simple variables that are accessed by multiple threads simultaneously.</p>
@@ -2307,11 +1416,11 @@ Example:</p>
 </div>
 <div class="sect3">
 <h4 id="_atomic_read_expressions"><a class="anchor" href="#_atomic_read_expressions"></a>5.1.1. Atomic read expressions</h4>
-<div class="paragraph">
-<p>#pragma omp atomic read</p>
+<div class="literalblock">
+<div class="content">
+<pre>#pragma omp atomic read
+var = x;</pre>
 </div>
-<div class="paragraph">
-<p>var = x;</p>
 </div>
 <div class="paragraph">
 <p>Here the reading of x is guaranteed to happen atomically, but nothing is guaranteed about var. Note that var may not access the memory location designated for x.</p>
@@ -2319,11 +1428,11 @@ Example:</p>
 </div>
 <div class="sect3">
 <h4 id="_atomic_write_expressions"><a class="anchor" href="#_atomic_write_expressions"></a>5.1.2. Atomic write expressions</h4>
-<div class="paragraph">
-<p>#pragma omp atomic write</p>
+<div class="literalblock">
+<div class="content">
+<pre>#pragma omp atomic write
+x = expr;</pre>
 </div>
-<div class="paragraph">
-<p>x = expr;</p>
 </div>
 <div class="paragraph">
 <p>Here the writing of x is guaranteed to happen atomically, but nothing is guaranteed about expr. Note that expr may not access the memory location designated for x.</p>
@@ -2333,47 +1442,15 @@ Example:</p>
 <h4 id="_atomic_update_expressions"><a class="anchor" href="#_atomic_update_expressions"></a>5.1.3. Atomic update expressions</h4>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp atomic update // The word "update" is optional</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>// One of these:</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>++x; --x; x++; x--;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>x += expr; x -= expr; x *= expr; x /= expr; x &amp;= expr;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>x = x+expr; x = x-expr; x = x*expr; x = x/expr; x = x&amp;expr;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>x = expr+x; x = expr-x; x = expr*x; x = expr/x; x = expr&amp;x;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>x |= expr; x ^= expr; x &lt;&lt;= expr; x &gt;&gt;= expr;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>x = x|expr; x = x^expr; x = x&lt;&lt;expr; x = x&gt;&gt;expr;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>x = expr|x; x = expr^x; x = expr&lt;&lt;x; x = expr&gt;&gt;x;</pre>
+<pre>#pragma omp atomic update // The word "update" is optional
+// One of these:
+++x; --x; x++; x--;
+x += expr; x -= expr; x *= expr; x /= expr; x &amp;= expr;
+x = x+expr; x = x-expr; x = x*expr; x = x/expr; x = x&amp;expr;
+x = expr+x; x = expr-x; x = expr*x; x = expr/x; x = expr&amp;x;
+x |= expr; x ^= expr; x &lt;&lt;= expr; x &gt;&gt;= expr;
+x = x|expr; x = x^expr; x = x&lt;&lt;expr; x = x&gt;&gt;expr;
+x = expr|x; x = expr^x; x = expr&lt;&lt;x; x = expr&gt;&gt;x;</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2387,32 +1464,12 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp atomic capture</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>// One of these:</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>var = x++; /* Or any other of the update expressions listed above */</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{ var = x; x++; /* Or any other of of the update expressions listed above */ }</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{ x++; /* Or any other of of the update expressions listed above */; var = x; }</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{ var = x; x = expr; }</pre>
+<pre>#pragma omp atomic capture
+// One of these:
+var = x++; /* Or any other of the update expressions listed above */
+{ var = x; x++; /* Or any other of of the update expressions listed above */ }
+{ x++; /* Or any other of of the update expressions listed above */; var = x; }
+{ var = x; x = expr; }</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2433,47 +1490,15 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp critical(dataupdate)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>datastructure.reorganize();</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>...</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp critical(dataupdate)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>datastructure.reorganize_again();</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>#pragma omp critical(dataupdate)
+{
+    datastructure.reorganize();
+}
+...
+#pragma omp critical(dataupdate)
+{
+    datastructure.reorganize_again();
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2521,187 +1546,43 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#ifdef _OPENMP</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre># include &lt;omp.h&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#endif</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#include &lt;set&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>class data</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>private:</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>std::set&lt;int&gt; flags;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#ifdef _OPENMP</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>omp_lock_t lock;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#endif</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>public:</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>data() : flags()</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#ifdef _OPENMP</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>omp_init_lock(&amp;lock);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#endif</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>~data()</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#ifdef _OPENMP</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>omp_destroy_lock(&amp;lock);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#endif</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>bool set_get(int c)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#ifdef _OPENMP</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>omp_set_lock(&amp;lock);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#endif</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>bool found = flags.find(c) != flags.end();</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>if(!found) flags.insert(c);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#ifdef _OPENMP</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>omp_unset_lock(&amp;lock);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#endif</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>return found;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>};</pre>
+<pre>#ifdef _OPENMP
+# include &lt;omp.h&gt;
+#endif
+#include &lt;set&gt;
+class data
+{
+    private:
+        std::set&lt;int&gt; flags;
+        #ifdef _OPENMP
+        omp_lock_t lock;
+        #endif
+    public:
+    data() : flags()
+    {
+        #ifdef _OPENMP
+        omp_init_lock(&amp;lock);
+        #endif
+    }
+    ~data()
+    {
+        #ifdef _OPENMP
+        omp_destroy_lock(&amp;lock);
+        #endif
+    }
+    bool set_get(int c)
+    {
+        #ifdef _OPENMP
+        omp_set_lock(&amp;lock);
+        #endif
+        bool found = flags.find(c) != flags.end();
+        if(!found) flags.insert(c);
+        #ifdef _OPENMP
+        omp_unset_lock(&amp;lock);
+        #endif
+        return found;
+    }
+};</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2709,263 +1590,65 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#ifdef _OPENMP</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre># include &lt;omp.h&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>struct MutexType</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>MutexType() { omp_init_lock(&amp;lock); }</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>~MutexType() { omp_destroy_lock(&amp;lock); }</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>void Lock() { omp_set_lock(&amp;lock); }</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>void Unlock() { omp_unset_lock(&amp;lock); }</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>MutexType(const MutexType&amp; ) { omp_init_lock(&amp;lock); }</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>MutexType&amp; operator= (const MutexType&amp; ) { return *this; }</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>public:</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>omp_lock_t lock;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>};</pre>
+<pre>    #ifdef _OPENMP
+    # include &lt;omp.h&gt;
+    struct MutexType
+    {
+        MutexType() { omp_init_lock(&amp;lock); }
+        ~MutexType() { omp_destroy_lock(&amp;lock); }
+        void Lock() { omp_set_lock(&amp;lock); }
+        void Unlock() { omp_unset_lock(&amp;lock); }
+        MutexType(const MutexType&amp; ) { omp_init_lock(&amp;lock); }
+        MutexType&amp; operator= (const MutexType&amp; ) { return *this; }
+        public:
+        omp_lock_t lock;
+    };
+#else
+    /* A dummy mutex that doesn't actually exclude anything,
+    * but as there is no parallelism either, no worries. */
+    struct MutexType
+    {
+        void Lock() {}
+        void Unlock() {}
+    };
+    #endif
+    /* An exception-safe scoped lock-keeper. */
+    struct ScopedLock
+    {
+        explicit ScopedLock(MutexType&amp; m) : mut(m), locked(true) { mut.Lock(); }
+        ~ScopedLock() { Unlock(); }
+        void Unlock() { if(!locked) return; locked=false; mut.Unlock(); }
+        void LockAgain() { if(locked) return; mut.Lock(); locked=true; }
+        private:
+        MutexType&amp; mut;
+        bool locked;
+        private: // prevent copying the scoped lock.
+        void operator=(const ScopedLock&amp;);
+        ScopedLock(const ScopedLock&amp;);
+    };</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>#else</p>
+<p>This way, the example above becomes a lot simpler, and also exception-safe:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>/* A dummy mutex that doesn't actually exclude anything,</pre>
+<pre>#include &lt;set&gt;
+class data
+{
+    private:
+        std::set&lt;int&gt; flags;
+        MutexType lock;
+        public:
+        bool set_get(int c)
+        {
+            ScopedLock lck(lock); // locks the mutex
+            if(flags.find(c) != flags.end()) return true; // was found
+            flags.insert(c);
+            return false; // was not found
+        } // automatically releases the lock when lck goes out of scope.
+};</pre>
 </div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>but as there is no parallelism either, no worries. */</p>
-<div class="literalblock">
-<div class="content">
-<pre>struct MutexType</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>void Lock() {}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>void Unlock() {}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>};</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#endif</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>/* An exception-safe scoped lock-keeper. */</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>struct ScopedLock</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>explicit ScopedLock(MutexType&amp; m) : mut(m), locked(true) { mut.Lock(); }</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>~ScopedLock() { Unlock(); }</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>void Unlock() { if(!locked) return; locked=false; mut.Unlock(); }</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>void LockAgain() { if(locked) return; mut.Lock(); locked=true; }</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>private:</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>MutexType&amp; mut;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>bool locked;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>private: // prevent copying the scoped lock.</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>void operator=(const ScopedLock&amp;);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>ScopedLock(const ScopedLock&amp;);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>};</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>This way, the example above becomes a lot simpler, and also exception-safe:</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#include &lt;set&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>class data</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>private:</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>std::set&lt;int&gt; flags;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>MutexType lock;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>public:</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>bool set_get(int c)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>ScopedLock lck(lock); // locks the mutex</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>if(flags.find(c) != flags.end()) return true; // was found</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>flags.insert(c);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>return false; // was not found</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>} // automatically releases the lock when lck goes out of scope.</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>};</pre>
-</div>
-</div>
-</li>
-</ul>
 </div>
 <div class="paragraph">
 <p>There is also a lock type that supports nesting, omp_nest_lock_t. I will not cover it here.</p>
@@ -2981,42 +1664,14 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>/* presumption: int a = 0, b = 0; */</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>/* First thread */ /* Second thread */</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>b = 1; a = 1;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp flush(a,b) #pragma omp flush(a,b)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>if(a == 0) if(b == 0)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{ {</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>/* Critical section */ /* Critical section */</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>} }</pre>
+<pre>/* presumption: int a = 0, b = 0; */
+/* First thread */ /* Second thread */
+b = 1; a = 1;
+#pragma omp flush(a,b) #pragma omp flush(a,b)
+if(a == 0) if(b == 0)
+{ {
+    /* Critical section */ /* Critical section */
+} }</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3054,37 +1709,13 @@ Example:</p>
 <h3 id="_the_private_firstprivate_and_shared_clauses"><a class="anchor" href="#_the_private_firstprivate_and_shared_clauses"></a>6.1. The private, firstprivate and shared clauses</h3>
 <div class="literalblock">
 <div class="content">
-<pre>int a, b=0;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp parallel for private(a) shared(b)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(a=0; a&lt;50; ++a)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp atomic</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>b += a;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>int a, b=0;
+#pragma omp parallel for private(a) shared(b)
+for(a=0; a&lt;50; ++a)
+{
+    #pragma omp atomic
+    b += a;
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3100,67 +1731,19 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#include &lt;string&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#include &lt;iostream&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int main()</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>std::string a = "x", b = "y";</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int c = 3;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp parallel private(a,c) shared(b) num_threads(2)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>a += "k";</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>c += 7;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>std::cout &lt;&lt; "A becomes (" &lt;&lt; a &lt;&lt; "), b is (" &lt;&lt; b &lt;&lt; ")\n";</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>#include &lt;string&gt;
+#include &lt;iostream&gt;
+int main()
+{
+    std::string a = "x", b = "y";
+    int c = 3;
+#pragma omp parallel private(a,c) shared(b) num_threads(2)
+{
+    a += "k";
+    c += 7;
+    std::cout &lt;&lt; "A becomes (" &lt;&lt; a &lt;&lt; "), b is (" &lt;&lt; b &lt;&lt; ")\n";
+}
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3171,72 +1754,20 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>int main()</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>std::string a = "x", b = "y";</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int c = 3;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>OpenMP_thread_fork(2);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{ // Start new scope</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>std::string a; // Note: It is a new local variable.</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int c; // This too.</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>a += "k";</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>c += 7;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>std::cout &lt;&lt; "A becomes (" &lt;&lt; a &lt;&lt; "), b is (" &lt;&lt; b &lt;&lt; ")\n";</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>} // End of scope for the local variables</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>OpenMP_join();</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>int main()
+{
+    std::string a = "x", b = "y";
+    int c = 3;
+    OpenMP_thread_fork(2);
+    { // Start new scope
+        std::string a; // Note: It is a new local variable.
+        int c; // This too.
+        a += "k";
+        c += 7;
+        std::cout &lt;&lt; "A becomes (" &lt;&lt; a &lt;&lt; "), b is (" &lt;&lt; b &lt;&lt; ")\n";
+    } // End of scope for the local variables
+    OpenMP_join();
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3247,67 +1778,19 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#include &lt;string&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#include &lt;iostream&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int main()</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>std::string a = "x", b = "y";</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int c = 3;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp parallel firstprivate(a,c) shared(b) num_threads(2)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>a += "k";</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>c += 7;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>std::cout &lt;&lt; "A becomes (" &lt;&lt; a &lt;&lt; "), b is (" &lt;&lt; b &lt;&lt; ")\n";</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>#include &lt;string&gt;
+#include &lt;iostream&gt;
+int main()
+{
+    std::string a = "x", b = "y";
+    int c = 3;
+        #pragma omp parallel firstprivate(a,c) shared(b) num_threads(2)
+        {
+        a += "k";
+        c += 7;
+        std::cout &lt;&lt; "A becomes (" &lt;&lt; a &lt;&lt; "), b is (" &lt;&lt; b &lt;&lt; ")\n";
+        }
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3335,62 +1818,18 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#include &lt;stdio.h&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int main()</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int done = 4, done2 = 5;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp parallel for lastprivate(done, done2) num_threads(2) schedule(static)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int a=0; a&lt;8; ++a)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>if(a==2) done=done2=0;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>if(a==3) done=done2=1;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>printf("%d,%d\n", done,done2);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>#include &lt;stdio.h&gt;
+int main()
+{
+    int done = 4, done2 = 5;
+    #pragma omp parallel for lastprivate(done, done2) num_threads(2) schedule(static)
+    for(int a=0; a&lt;8; ++a)
+    {
+        if(a==2) done=done2=0;
+        if(a==3) done=done2=1;
+    }
+    printf("%d,%d\n", done,done2);
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3398,122 +1837,30 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#include &lt;stdio.h&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int main()</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int done = 4, done2 = 5;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>OpenMP_thread_fork(2);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int this_thread = omp_get_thread_num(), num_threads = 2;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int my_start = (this_thread ) * 8 / num_threads;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int my_end = (this_thread+1) * 8 / num_threads;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int priv_done, priv_done2; // not initialized, because firstprivate was not used</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int a=my_start; a&lt;my_end; ++a)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>if(a==2) priv_done=priv_done2=0;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>if(a==3) priv_done=priv_done2=1;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>if(my_end == 8)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>// assign the values back, because this was the last iteration</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>done = priv_done;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>done2 = priv_done2;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>OpenMP_join();</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>#include &lt;stdio.h&gt;
+int main()
+{
+int done = 4, done2 = 5;
+OpenMP_thread_fork(2);
+    {
+        int this_thread = omp_get_thread_num(), num_threads = 2;
+        int my_start = (this_thread ) * 8 / num_threads;
+        int my_end = (this_thread+1) * 8 / num_threads;
+        int priv_done, priv_done2; // not initialized, because firstprivate was not used
+        for(int a=my_start; a&lt;my_end; ++a)
+        {
+            if(a==2) priv_done=priv_done2=0;
+            if(a==3) priv_done=priv_done2=1;
+        }
+        if(my_end == 8)
+        {
+            // assign the values back, because this was the last iteration
+            done = priv_done;
+            done2 = priv_done2;
+        }
+    }
+OpenMP_join();
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3527,42 +1874,14 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>void loop()</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int i;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp for lastprivate(i)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(i=0; i&lt;get_loop_count(); ++i) // note: get_loop_count() must be a pure function.</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{ ... }</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>printf("%d\n", i); // this shows the number of loop iterations done.</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>void loop()
+{
+    int i;
+    #pragma omp for lastprivate(i)
+    for(i=0; i&lt;get_loop_count(); ++i) // note: get_loop_count() must be a pure function.
+    { ... }
+    printf("%d\n", i); // this shows the number of loop iterations done.
+    }</pre>
 </div>
 </div>
 </div>
@@ -3573,27 +1892,11 @@ Example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>int a, b=0;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp parallel default(none) shared(b)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>b += a;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>int a, b=0;
+#pragma omp parallel default(none) shared(b)
+{
+    b += a;
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3614,42 +1917,14 @@ It allows to accumulate a shared variable without the atomic clause, but the typ
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>int factorial(int number)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int fac = 1;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp parallel for reduction(*:fac)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int n=2; n&lt;=number; ++n)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>fac *= n;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>return fac;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>int factorial(int number)
+{
+    int fac = 1;
+    #pragma omp parallel for reduction(*:fac)
+    for(int n=2; n&lt;=number; ++n)
+    fac *= n;
+    return fac;
+}</pre>
 </div>
 </div>
 <div class="ulist">
@@ -3689,57 +1964,17 @@ It allows to accumulate a shared variable without the atomic clause, but the typ
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>int factorial(int number)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int fac = 1;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp parallel for</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int n=2; n&lt;=number; ++n)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp atomic</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>fac *= n;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>return fac;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>int factorial(int number)
+{
+    int fac = 1;
+    #pragma omp parallel for
+    for(int n=2; n&lt;=number; ++n)
+    {
+        #pragma omp atomic
+        fac *= n;
+    }
+    return fac;
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3750,72 +1985,20 @@ It allows to accumulate a shared variable without the atomic clause, but the typ
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>int factorial(int number)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int fac = 1;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp parallel</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int omp_priv = 1; /* This value comes from the table shown above */</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp for nowait</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int n=2; n&lt;=number; ++n)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>omp_priv *= n;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp atomic</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>fac *= omp_priv;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>return fac;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>int factorial(int number)
+{
+    int fac = 1;
+    #pragma omp parallel
+    {
+        int omp_priv = 1; /* This value comes from the table shown above */
+        #pragma omp for nowait
+        for(int n=2; n&lt;=number; ++n)
+        omp_priv *= n;
+        #pragma omp atomic
+        fac *= omp_priv;
+    }
+return fac;
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3829,32 +2012,12 @@ It allows to accumulate a shared variable without the atomic clause, but the typ
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>int a = 0;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp parallel reduction (+:a)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>a = 1; // Assigns a value to the private copy.</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>// Each thread increments the value by 1.</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>int a = 0;
+#pragma omp parallel reduction (+:a)
+{
+    a = 1; // Assigns a value to the private copy.
+    // Each thread increments the value by 1.
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3897,112 +2060,28 @@ It allows to accumulate a shared variable without the atomic clause, but the typ
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#include &lt;cstdio&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int compress(int param1, int param2)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>return (param1+13)^param2; // Placeholder for a compression algorithm</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int main(int argc, char** argv)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>struct BestInfo { unsigned size, param1, param2; };</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp declare reduction(isbetter:BestInfo: \</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>omp_in.size&lt;omp_out.size ? omp_out=omp_in : omp_out \</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>) initializer(omp_priv = BestInfo{~0u,~0u,~0u})</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>BestInfo result{~0u,~0u,~0u};</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp parallel for collapse(2) reduction(isbetter:result)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(unsigned p1=0; p1&lt;10; ++p1)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(unsigned p2=0; p2&lt;10; ++p2)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>unsigned size = compress(p1,p2);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>if(size &lt; result.size) result = BestInfo{size,p1,p2};</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>std::printf("Best compression (%u bytes) with params %u,%u\n",</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>result.size, result.param1, result.param2);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>#include &lt;cstdio&gt;
+int compress(int param1, int param2)
+{
+return (param1+13)^param2; // Placeholder for a compression algorithm
+}
+int main(int argc, char** argv)
+{
+    struct BestInfo { unsigned size, param1, param2; };
+    #pragma omp declare reduction(isbetter:BestInfo: \
+    omp_in.size&lt;omp_out.size ? omp_out=omp_in : omp_out \
+    ) initializer(omp_priv = BestInfo{~0u,~0u,~0u})
+    BestInfo result{~0u,~0u,~0u};
+    #pragma omp parallel for collapse(2) reduction(isbetter:result)
+    for(unsigned p1=0; p1&lt;10; ++p1)
+        for(unsigned p2=0; p2&lt;10; ++p2)
+        {
+        unsigned size = compress(p1,p2);
+        if(size &lt; result.size) result = BestInfo{size,p1,p2};
+        }
+    std::printf("Best compression (%u bytes) with params %u,%u\n",
+    result.size, result.param1, result.param2);
+}</pre>
 </div>
 </div>
 </div>
@@ -4043,55 +2122,17 @@ It allows to accumulate a shared variable without the atomic clause, but the typ
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp parallel</pre>
+<pre>#pragma omp parallel
+{
+    /* All threads execute this. */
+    SomeCode();
+    #pragma omp barrier
+    /* All threads execute this, but not before
+    * all threads have finished executing SomeCode().
+    */
+    SomeMoreCode();
+}</pre>
 </div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>/* All threads execute this. */</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>SomeCode();</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp barrier</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>/* All threads execute this, but not before</pre>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>all threads have finished executing SomeCode().</p>
-<div class="literalblock">
-<div class="content">
-<pre>*/</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>SomeMoreCode();</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-</li>
-</ul>
 </div>
 <div class="paragraph">
 <p>Note: There is an implicit barrier at the end of each parallel block, and at the end of each sections, for and single statement, unless the nowait directive is used.</p>
@@ -4101,102 +2142,26 @@ It allows to accumulate a shared variable without the atomic clause, but the typ
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp parallel</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp for</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int n=0; n&lt;10; ++n) Work();</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>// This line is not reached before the for-loop is completely finished</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>SomeMoreCode();</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>// This line is reached only after all threads from</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>// the previous parallel block are finished.</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>CodeContinues();</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp parallel</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp for nowait</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int n=0; n&lt;10; ++n) Work();</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>// This line may be reached while some threads are still executing the for-loop.</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>SomeMoreCode();</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>// This line is reached only after all threads from</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>// the previous parallel block are finished.</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>CodeContinues();</pre>
+<pre>#pragma omp parallel
+{
+    #pragma omp for
+    for(int n=0; n&lt;10; ++n) Work();
+    // This line is not reached before the for-loop is completely finished
+    SomeMoreCode();
+}
+// This line is reached only after all threads from
+// the previous parallel block are finished.
+CodeContinues();
+#pragma omp parallel
+{
+    #pragma omp for nowait
+    for(int n=0; n&lt;10; ++n) Work();
+    // This line may be reached while some threads are still executing the for-loop.
+    SomeMoreCode();
+}
+// This line is reached only after all threads from
+// the previous parallel block are finished.
+CodeContinues();</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4210,47 +2175,15 @@ It allows to accumulate a shared variable without the atomic clause, but the typ
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp parallel</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>Work1();</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp single</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>Work2();</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>Work3();</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>#pragma omp parallel
+{
+    Work1();
+    #pragma omp single
+    {
+        Work2();
+    }
+    Work3();
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4264,77 +2197,25 @@ It allows to accumulate a shared variable without the atomic clause, but the typ
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp parallel</pre>
+<pre>#pragma omp parallel
+{
+    Work1();
+    // This...
+    #pragma omp master
+    {
+        Work2();
+    }</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>Work1();</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>// This...</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp master</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>Work2();</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>// ...is practically identical to this:</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>if(omp_get_thread_num() == 0)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>Work2();</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>Work3();</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>    // ...is practically identical to this:
+    if(omp_get_thread_num() == 0)
+    {
+        Work2();
+    }
+    Work3();
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4351,76 +2232,26 @@ It allows to accumulate a shared variable without the atomic clause, but the typ
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>/* Returns any position from the haystack where the needle can</pre>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>be found, or NULL if no such position exists. It is not guaranteed</p>
-</li>
-<li>
-<p>to find the first matching position; it only guarantees to find</p>
-</li>
-<li>
-<p><em>a</em> matching position if one exists.</p>
-<div class="literalblock">
-<div class="content">
-<pre>*/</pre>
+<pre>/* Returns any position from the haystack where the needle can
+* be found, or NULL if no such position exists. It is not guaranteed
+* to find the first matching position; it only guarantees to find
+* _a_ matching position if one exists.
+*/</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>const char* FindAnyNeedle(const char* haystack, size_t size, char needle)</pre>
+<pre>const char* FindAnyNeedle(const char* haystack, size_t size, char needle)
+{
+    for(size_t p = 0; p &lt; size; ++p)
+        if(haystack[p] == needle)
+        {
+            /* This breaks out of the loop. */
+            return haystack+p;
+        }
+    return NULL;
+}</pre>
 </div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(size_t p = 0; p &lt; size; ++p)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>if(haystack[p] == needle)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>/* This breaks out of the loop. */</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>return haystack+p;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>return NULL;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-</li>
-</ul>
 </div>
 <div class="paragraph">
 <p>Our first attempt might be to simply tack a #pragma parallel for before the for loop, but that doesn&#8217;t work: OpenMP requires that a loop construct processes each iteration. Breaking out of the loop (using return, goto, break, throw or other means) is not allowed.</p>
@@ -4455,202 +2286,54 @@ It allows to accumulate a shared variable without the atomic clause, but the typ
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#include &lt;stdio.h&gt; // For printf</pre>
+<pre>#include &lt;stdio.h&gt; // For printf
+#include &lt;string.h&gt; // For strlen
+#include &lt;stdlib.h&gt; // For putenv
+#include &lt;unistd.h&gt; // For execv
+#include &lt;omp.h&gt; // For omp_get_cancellation, omp_get_thread_num()</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#include &lt;string.h&gt; // For strlen</pre>
+<pre>static const char* FindAnyNeedle(const char* haystack, size_t size, char needle)
+{
+    const char* result = haystack+size;
+    #pragma omp parallel
+    {
+        unsigned num_iterations=0;
+        #pragma omp for
+        for(size_t p = 0; p &lt; size; ++p)
+        {
+            ++num_iterations;
+            if(haystack[p] == needle)
+            {
+                #pragma omp atomic write
+                result = haystack+p;
+                // Signal cancellation.
+                #pragma omp cancel for
+            }
+            // Check for cancellations signalled by other threads:
+            #pragma omp cancellation point for
+        }
+        // All threads reach here eventually; sooner if the cancellation was signalled.
+        printf("Thread %u: %u iterations completed\n", omp_get_thread_num(), num_iterations);
+    }
+    return result;
+}</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#include &lt;stdlib.h&gt; // For putenv</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#include &lt;unistd.h&gt; // For execv</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#include &lt;omp.h&gt; // For omp_get_cancellation, omp_get_thread_num()</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>static const char* FindAnyNeedle(const char* haystack, size_t size, char needle)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>const char* result = haystack+size;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp parallel</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>unsigned num_iterations=0;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp for</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(size_t p = 0; p &lt; size; ++p)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>++num_iterations;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>if(haystack[p] == needle)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp atomic write</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>result = haystack+p;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>// Signal cancellation.</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp cancel for</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>// Check for cancellations signalled by other threads:</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp cancellation point for</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>// All threads reach here eventually; sooner if the cancellation was signalled.</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>printf("Thread %u: %u iterations completed\n", omp_get_thread_num(), num_iterations);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>return result;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int main(int argc, char** argv)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>if(!omp_get_cancellation())</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>printf("Cancellations were not enabled, enabling cancellation and rerunning program\n");</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>putenv("OMP_CANCELLATION=true");</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>execv(argv[0], argv);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>printf("%s\n%*s\n", argv[1], FindAnyNeedle(argv[1],strlen(argv[1]),argv[2][0])-argv[1]+1, "^");</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>int main(int argc, char** argv)
+{
+    if(!omp_get_cancellation())
+    {
+        printf("Cancellations were not enabled, enabling cancellation and rerunning program\n");
+        putenv("OMP_CANCELLATION=true");
+        execv(argv[0], argv);
+    }
+    printf("%s\n%*s\n", argv[1], FindAnyNeedle(argv[1],strlen(argv[1]),argv[2][0])-argv[1]+1, "^");
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4660,29 +2343,17 @@ It allows to accumulate a shared variable without the atomic clause, but the typ
 <div class="title">/a.out "OpenMP cancellations can only be performed synchronously at cancellation points." "l"</div>
 <p>Cancellations were not enabled, enabling cancellation and rerunning program</p>
 </div>
-<div class="paragraph">
-<p>Thread 0: 10 iterations completed</p>
+<div class="literalblock">
+<div class="content">
+<pre>Thread 0: 10 iterations completed
+Thread 1: 3 iterations completed
+Thread 7: 10 iterations completed
+Thread 3: 10 iterations completed
+Thread 4: 10 iterations completed
+Thread 2: 8 iterations completed
+Thread 5: 5 iterations completed
+Thread 6: 6 iterations completed</pre>
 </div>
-<div class="paragraph">
-<p>Thread 1: 3 iterations completed</p>
-</div>
-<div class="paragraph">
-<p>Thread 7: 10 iterations completed</p>
-</div>
-<div class="paragraph">
-<p>Thread 3: 10 iterations completed</p>
-</div>
-<div class="paragraph">
-<p>Thread 4: 10 iterations completed</p>
-</div>
-<div class="paragraph">
-<p>Thread 2: 8 iterations completed</p>
-</div>
-<div class="paragraph">
-<p>Thread 5: 5 iterations completed</p>
-</div>
-<div class="paragraph">
-<p>Thread 6: 6 iterations completed</p>
 </div>
 <div class="paragraph">
 <p>OpenMP cancellations can only be performed synchronously at cancellation points.</p>
@@ -4705,47 +2376,15 @@ It allows to accumulate a shared variable without the atomic clause, but the typ
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp parallel for</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int y=0; y&lt;25; ++y)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp parallel for</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int x=0; x&lt;80; ++x)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>tick(x,y);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>#pragma omp parallel for
+for(int y=0; y&lt;25; ++y)
+{
+    #pragma omp parallel for
+    for(int x=0; x&lt;80; ++x)
+    {
+        tick(x,y);
+    }
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4759,47 +2398,15 @@ It allows to accumulate a shared variable without the atomic clause, but the typ
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp parallel for</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int y=0; y&lt;25; ++y)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp for // ERROR, nesting like this is not allowed.</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int x=0; x&lt;80; ++x)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>tick(x,y);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>#pragma omp parallel for
+for(int y=0; y&lt;25; ++y)
+    {
+    #pragma omp for // ERROR, nesting like this is not allowed.
+    for(int x=0; x&lt;80; ++x)
+    {
+        tick(x,y);
+    }
+}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4815,32 +2422,12 @@ It allows to accumulate a shared variable without the atomic clause, but the typ
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#pragma omp parallel for collapse(2)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int y=0; y&lt;25; ++y)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for(int x=0; x&lt;80; ++x)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>tick(x,y);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>#pragma omp parallel for collapse(2)
+for(int y=0; y&lt;25; ++y)
+    for(int x=0; x&lt;80; ++x)
+    {
+        tick(x,y);
+    }</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4883,152 +2470,40 @@ It allows to accumulate a shared variable without the atomic clause, but the typ
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#include &lt;stdio.h&gt;</pre>
+<pre>#include &lt;stdio.h&gt;
+#include &lt;sys/wait.h&gt;
+#include &lt;unistd.h&gt;
+void a()
+{
+    #pragma omp parallel num_threads(2)
+    {
+        puts("para_a"); // output twice
+    }
+    puts("a ended"); // output once
+}
+void b()
+{
+    #pragma omp parallel num_threads(2)
+    {
+    puts("para_b");
+    }
+    puts("b ended");
+}</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#include &lt;sys/wait.h&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#include &lt;unistd.h&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>void a()</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp parallel num_threads(2)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>puts("para_a"); // output twice</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>puts("a ended"); // output once</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>void b()</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp parallel num_threads(2)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>puts("para_b");</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>puts("b ended");</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int main() {</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>a(); // Invokes OpenMP features (parent process)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int p = fork();</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>if(!p)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>b(); // ERROR: Uses OpenMP again, but in child process</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>_exit(0);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>wait(NULL);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>return 0;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
+<pre>int main() {
+    a(); // Invokes OpenMP features (parent process)
+    int p = fork();
+    if(!p)
+    {
+        b(); // ERROR: Uses OpenMP again, but in child process
+        _exit(0);
+    }
+    wait(NULL);
+    return 0;
+}</pre>
 </div>
 </div>
 <div class="paragraph">

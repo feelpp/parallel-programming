@@ -17,11 +17,11 @@ This code divides the table initialization into multiple threads, which are run 
     #include <cmath>
     int main()
     {
-    const int size = 256;
-    double sinTable[size];
-    #pragma omp parallel for
-    for(int n=0; n<size; ++n)
-    sinTable[n] = std::sin(2 * M_PI * n / size);
+        const int size = 256;
+        double sinTable[size];
+        #pragma omp parallel for
+        for(int n=0; n<size; ++n)
+            sinTable[n] = std::sin(2 * M_PI * n / size);
     }
 
 === Example: Initializing a table in parallel (single thread, SIMD)
@@ -31,11 +31,11 @@ This version requires compiler support for at least OpenMP 4.0, and the use of a
 #include <cmath>
     int main()
     {
-    const int size = 256;
-    double sinTable [ size ];
-    #pragma omp simd
-    for(int n=0; n<size; ++n)
-    sinTable[n] = std::sin(2 * M_PI * n / size);
+        const int size = 256;
+        double sinTable [ size ];
+        #pragma omp simd
+        for(int n=0; n<size; ++n)
+            sinTable[n] = std::sin(2 * M_PI * n / size);
     }
 
 === Example: Initializing a table in parallel (multiple threads on another device)
@@ -45,12 +45,12 @@ OpenMP 4.0 added support for offloading code to different devices, such as a GPU
     #include <cmath>
     int main()
     {
-    const int size = 256;
-    double sinTable[size];
-    #pragma omp target teams distribute parallel for map
-    for(int n=0; n<size; ++n)
-    sinTable[n] = std::sin(2 * M_PI * n / size);
-    // the table is now initialized
+        const int size = 256;
+        double sinTable[size];
+        #pragma omp target teams distribute parallel for map
+        for(int n=0; n<size; ++n)
+            sinTable[n] = std::sin(2 * M_PI * n / size);
+        // the table is now initialized
     }
 
 === Example: Calculating the Mandelbrot fractal in parallel (host computer)
@@ -63,43 +63,43 @@ This program calculates the classic Mandelbrot fractal at a low resolution and r
     typedef std::complex<double> complex;
     int MandelbrotCalculate(complex c, int maxiter)
     {
-    complex z = c;
-    int n=0;
-    for(; n<maxiter; ++n)
-    {
-    if( std::abs(z) >= 2.0) break;
-    z = z*z + c;
-    }
-    return n;
+        complex z = c;
+        int n=0;
+        for(; n<maxiter; ++n)
+        {
+            if( std::abs(z) >= 2.0) break;
+            z = z*z + c;
+        }
+        return n;
     }
 
     int main()
     {
-    const int width = 78, height = 44, num_pixels = width*height;
-    const complex center(-.7, 0), span(2.7, -(4/3.0)*2.7*height/width);
-    const complex begin = center-span/2.0;//, end = center+span/2.0;
-    const int maxiter = 100000;
-    #pragma omp parallel for ordered schedule(dynamic)
-    for(int pix=0; pix<num_pixels; ++pix)
-    {
-    const int x = pix%width, y = pix/width;
-    complex c = begin + complex(x * span.real() / (width +1.0),
-    y * span.imag() / (height+1.0));
-    int n = MandelbrotCalculate(c, maxiter);
-    if(n == maxiter) n = 0;
+        const int width = 78, height = 44, num_pixels = width*height;
+        const complex center(-.7, 0), span(2.7, -(4/3.0)*2.7*height/width);
+        const complex begin = center-span/2.0;//, end = center+span/2.0;
+        const int maxiter = 100000;
+        #pragma omp parallel for ordered schedule(dynamic)
+        for(int pix=0; pix<num_pixels; ++pix)
+        {
+            const int x = pix%width, y = pix/width;
+            complex c = begin + complex(x * span.real() / (width +1.0),
+            y * span.imag() / (height+1.0));
+            int n = MandelbrotCalculate(c, maxiter);
+            if(n == maxiter) n = 0;
   
-    #pragma omp ordered
-    {
-    char c = ' ';
-    if(n > 0)
-    {
-    static const char charset[] = ".,c8M@jawrpogOQEPGJ";
-    c = charset[n % (sizeof(charset)-1)];
-    }
-    std::putchar(c);
-    if(x+1 == width) std::puts("|");
-    }
-    }
+            #pragma omp ordered
+            {
+            char c = ' ';
+            if(n > 0)
+            {
+                static const char charset[] = ".,c8M@jawrpogOQEPGJ";
+                c = charset[n % (sizeof(charset)-1)];
+            }
+            std::putchar(c);
+            if(x+1 == width) std::puts("|");
+            }
+        }
     }
 
 This program can be improved in many different ways, but it is left simple for the sake of an introductory example.
@@ -113,12 +113,9 @@ All OpenMP constructs in C and C++ are indicated with a #pragma omp followed by 
 The parallel construct starts a parallel block. It creates a _team_ of N threads (where N is determined at runtime, usually from the number of CPU cores, but may be affected by a few things), all of which execute the next statement (or the next block, if the statement is a {…} -enclosure). After the statement, the threads join back into one.
 
     #pragma omp parallel
-
     {
-
-    // Code inside this region runs in parallel.
-    printf("Hello!\n");
-
+        // Code inside this region runs in parallel.
+        printf("Hello!\n");
     }
 
 This code creates a team of threads, and each thread executes the same code. It prints the text "Hello!" followed by a newline, as many times as there are threads in the team created. For a dual-core system, it will output the text twice. (Note: It may also output something like "HeHlellolo", depending on system, because the printing happens in parallel.) At the }, the threads are joined back into one, as if in non-threaded program.
@@ -133,11 +130,8 @@ Variables shared from the context are handled transparently, sometimes by passin
 The parallelism can be made _conditional_ by including a if clause in the parallel command, such as:
 
     extern int parallelism_enabled;
-
     #pragma omp parallel for if(parallelism_enabled)
-
     for(int c=0; c<n; ++c)
-
     handle(c);
 
 In this case, if parallelism_enabled evaluates to a zero value, the number of threads in the team that processes the for loop will always be exactly one.
@@ -147,32 +141,22 @@ In this case, if parallelism_enabled evaluates to a zero value, the number of th
 The for construct splits the for-loop so that each thread in the current team handles a different portion of the loop.
 
     #pragma omp for
-
     for(int n=0; n<10; ++n)
-
     {
-
-    printf(" %d", n);
-
+        printf(" %d", n);
     }
-
     printf(".\n");
 
 This loop will output each number from 0…9 once. However, it may do it in arbitrary order. It may output, for example:
 
-0 5 6 7 1 8 2 3 4 9.
+    0 5 6 7 1 8 2 3 4 9.
 
 Internally, the above loop becomes into code equivalent to this:
 
     int this_thread = omp_get_thread_num(), num_threads = omp_get_num_threads();
-
     int my_start = (this_thread ) * 10 / num_threads;
-
     int my_end = (this_thread+1) * 10 / num_threads;
-
-    for(int n=my_start; n<my_end; ++n)
-
-    printf(" %d", n);
+    for(int n=my_start; n<my_end; ++n) printf(" %d", n);
 
 So each thread gets a different section of the loop, and they execute their own sections in parallel.
 
@@ -181,13 +165,9 @@ Note: #pragma omp for only delegates portions of the loop for different threads 
 To create a new team of threads, you need to specify the parallel keyword. It can be specified in the surrounding context:
 
     #pragma omp parallel
-
     {
-
-    #pragma omp for
-
-    for(int n=0; n<10; ++n) printf(" %d", n);
-
+        #pragma omp for
+        for(int n=0; n<10; ++n) printf(" %d", n);
     }
 
     printf(".\n");
@@ -195,37 +175,25 @@ To create a new team of threads, you need to specify the parallel keyword. It ca
 Equivalent shorthand is to specify it in the pragma itself, as #pragma omp parallel for:
 
     #pragma omp parallel for
-
     for(int n=0; n<10; ++n) printf(" %d", n);
-
     printf(".\n");
-
+    
     You can explicitly specify the number of threads to be created in the team, using the num_threads attribute:
 
     #pragma omp parallel num_threads ( 3 )
-
     {
-
     // This code will be executed by three threads.
-
     // Chunks of this loop will be divided amongst
-
     // the (three) threads of the current team.
-
-    #pragma omp for
-
-    for(int n=0; n<10; ++n) printf(" %d", n);
-
+        #pragma omp for
+        for(int n=0; n<10; ++n) printf(" %d", n);
     }
 
 Note that OpenMP also works for C. However, in C, you need to set explicitly the loop variable as private, because C does not allow declaring it in the loop body:
 
     int n;
-
     #pragma omp for private(n)
-
     for(n=0; n<10; ++n) printf(" %d", n);
-
     printf(".\n");
 
 See the "private and shared clauses" section for details.
@@ -249,9 +217,7 @@ If your program never contains a parallel construct, there is never more than on
 The scheduling algorithm for the for-loop can explicitly controlled.
 
     #pragma omp for schedule(static)
-
     for(int n=0; n<10; ++n) printf(" %d", n);
-
     printf(".\n");
 
 There are five scheduling types: static, dynamic, guided, auto, and (since OpenMP 4.0) runtime. In addition, there are three scheduling modifiers (since OpenMP 4.5): monotonic, nonmonotonic, and simd.
@@ -261,9 +227,7 @@ static is the default schedule as shown above. Upon entering the loop, each thre
 There is also the dynamic schedule:
 
     #pragma omp for schedule(dynamic)
-
     for(int n=0; n<10; ++n) printf(" %d", n);
-
     printf(".\n");
 
 In the dynamic schedule, there is no predictable order in which the loop items are assigned to different threads. Each thread asks the OpenMP runtime library for an iteration number, then handles it, then asks for next, and so on. This is most useful when used in conjunction with the ordered clause, or when the different iterations in the loop may take different time to execute.
@@ -271,9 +235,7 @@ In the dynamic schedule, there is no predictable order in which the loop items a
 The chunk size can also be specified to lessen the number of calls to the runtime library:
 
     #pragma omp for schedule(dynamic, 3)
-
     for(int n=0; n<10; ++n) printf(" %d", n);
-
     printf(".\n");
 
 In this example, each thread asks for an iteration number, executes 3 iterations of the loop, then asks for another, and so on. The last chunk may be smaller than 3, though.
@@ -281,17 +243,11 @@ In this example, each thread asks for an iteration number, executes 3 iterations
 Internally, the loop above becomes into code equivalent to this (illustration only, do not write code like this):
 
     int a,b;
-
     if(GOMP_loop_dynamic_start(0,10,1, 3, &a,&b))
-
     {
-
-    do {
-
-    for(int n=a; n<b; ++n) printf(" %d", n);
-
-    } while(GOMP_loop_dynamic_next(&a,&b));
-
+        do {
+        for(int n=a; n<b; ++n) printf(" %d", n);
+        } while(GOMP_loop_dynamic_next(&a,&b));
     }
 
 
@@ -313,15 +269,10 @@ However, it is possible to force that certain events within the loop happen in a
     #pragma omp for ordered schedule(dynamic)
 
     for(int n=0; n<100; ++n)
-
     {
-
-    files[n].compress();
-
-    #pragma omp ordered
-
-    send(files[n]);
-
+        files[n].compress();
+        #pragma omp ordered
+        send(files[n]);
     }
 
 This loop "compresses" 100 files with some files being compressed in parallel, but ensures that the files are "sent" in a strictly sequential order.
@@ -347,23 +298,17 @@ Example:
     #pragma omp parallel for collapse(2)
 
     for(int y=0; y<25; ++y)
-
-    for(int x=0; x<80; ++x)
-
-    {
-
-    tick(x,y);
-
-    }
+        for(int x=0; x<80; ++x) 
+        {
+            tick(x,y);
+        }
 
 ==== The reduction clause
 
 The reduction clause is a special directive that instructs the compiler to generate code that accumulates values from different loop iterations together in a certain manner. It is discussed in a separate chapter later in this article. Example:
 
     int sum=0;
-
     #pragma omp parallel for reduction(+:sum)
-
     for(int n=0; n<1000; ++n) sum += table[n];
 
 === Sections
@@ -371,21 +316,13 @@ The reduction clause is a special directive that instructs the compiler to gener
 Sometimes it is handy to indicate that "this and this can run in parallel". The sections setting is just for that.
 
     #pragma omp sections
-
     {
-
-    { Work1(); }
-
-    #pragma omp section
-
-    { Work2();
-
-    Work3(); }
-
-    #pragma omp section
-
-    { Work4(); }
-
+        { Work1(); }
+        #pragma omp section
+        { Work2();
+        Work3(); }
+        #pragma omp section
+        { Work4(); }
     }
 
 This code indicates that any of the tasks Work1, Work2 + Work3 and Work4 may run in parallel, but that Work2 and Work3 must be run in sequence. Each work is done exactly once.
@@ -398,53 +335,31 @@ Note: #pragma omp sections only delegates the sections for different threads in 
 Example:
 
     #pragma omp parallel sections // starts a new team
-
     {
-
-    { Work1(); }
-
-    #pragma omp section
-
-    { Work2();
-
-    Work3(); }
-
-    #pragma omp section
-
-    { Work4(); }
-
+        { Work1(); }
+        #pragma omp section
+        { Work2();
+        Work3(); }
+        #pragma omp section
+        { Work4(); }
     }
 
 or
 
     #pragma omp parallel // starts a new team
-
     {
-
     //Work0(); // this function would be run by all threads.
-
-    #pragma omp sections // divides the team into sections
-
-    {
-
-    // everything herein is run only once.
-
-    { Work1(); }
-
-    #pragma omp section
-
-    { Work2();
-
-    Work3(); }
-
-    #pragma omp section
-
-    { Work4(); }
-
-    }
-
+        #pragma omp sections // divides the team into sections
+        {
+            // everything herein is run only once.
+            { Work1(); }
+            #pragma omp section
+            { Work2();
+            Work3(); }
+            #pragma omp section
+            { Work4(); }
+        }
     //Work5(); // this function would be run by all threads.
-
     }
 
 === The simd construct 
@@ -456,25 +371,17 @@ There are two use cases for the simd construct.
 Firstly, #pragma omp simd can be used to declare that a loop will be utilizing SIMD.
 
     float a[8], b[8];
-
     ...
-
     #pragma omp simd
-
     for(int n=0; n<8; ++n) a[n] += b[n];
 
 Secondly, #pragma omp declare simd can be used to indicate a function or procedure that is explicitly designed to take advantage of SIMD parallelism. The compiler may create multiple versions of the same function that use different parameter passing conventions for different CPU capabilities for SIMD processing.
 
     #pragma omp declare simd aligned(a,b:16)
-
     void add_arrays(float *__restrict__ a, float *__restrict__ b)
-
     {
-
-    #pragma omp simd aligned(a,b:16)
-
-    for(int n=0; n<8; ++n) a[n] += b[n];
-
+        #pragma omp simd aligned(a,b:16)
+        for(int n=0; n<8; ++n) a[n] += b[n];
     }
 
 Without the pragma, the function will use the default non-SIMD-aware ABI, even though the function itself may do calculation using SIMD.
@@ -486,21 +393,16 @@ Since compilers of today attempt to do SIMD regardless of OpenMP simd directives
 The collapse clause can be added to bind the SIMDness into multiple nested loops. The example code below will direct the compiler into attempting to generate instructions that calculate 16 values simultaneously, if at all possible.
 
     #pragma omp simd collapse(2)
-
     for(int i=0; i<4; ++i)
-
-    for(int j=0; j<4; ++j)
-
-    a[j*4+i] += b[i*4+j];
+        for(int j=0; j<4; ++j)
+            a[j*4+i] += b[i*4+j];
 
 ==== The reduction clause
 
 The reduction clause can be used with SIMD just like with parallel loops.
 
     int sum=0;
-
     #pragma omp simd reduction(+:sum)
-
     for(int n=0; n<1000; ++n) sum += table[n];
 
 ==== The aligned clause
@@ -510,15 +412,10 @@ The aligned attribute hints the compiler that each element listed is aligned to 
 The attribute can be used in both the function declaration, and in the individual SIMD statements.
 
     #pragma omp declare simd aligned(a,b:16)
-
     void add_arrays(float *__restrict__ a, float *__restrict__ b)
-
     {
-
-    #pragma omp simd aligned(a,b:16)
-
-    for(int n=0; n<8; ++n) a[n] += b[n];
-
+        #pragma omp simd aligned(a,b:16)
+        for(int n=0; n<8; ++n) a[n] += b[n];
     }
 
 ==== The safelen clause
@@ -528,15 +425,10 @@ While the restrict keyword in C tells the compiler that it can assume that two p
 In the example code below, the compiler is informed that a[x] and b[y] are independent _as long as_ the difference between x and y is smaller than 4. In reality, the clause controls the upper limit of concurrent loop iterations. It means that only 4 items can be processed concurrently at most. The actual concurrency may be smaller, and depends on the compiler implementation and hardware limits.
 
     #pragma omp declare simd
-
     void add_arrays(float* a, float* b)
-
     {
-
-    #pragma omp simd aligned(a,b:16) safelen(4)
-
-    for(int n=0; n<8; ++n) a[n] += b[n];
-
+        #pragma omp simd aligned(a,b:16) safelen(4)
+        for(int n=0; n<8; ++n) a[n] += b[n];
     }
 
 ==== The simdlen clause (OpenMP 4.5+)
@@ -554,21 +446,13 @@ The linear clause is similar to the firstprivate clause discussed later in this 
 Consider this example code:
 
     #include <stdio.h>
-
     int b = 10;
-
     int main()
-
     {
-
-    int array[8];
-
-    #pragma omp simd linear(b:2)
-
-    for(int n=0; n<8; ++n) array[n] = b;
-
-    for(int n=0; n<8; ++n) printf("%d\n", array[n]);
-
+        int array[8];
+        #pragma omp simd linear(b:2)
+        for(int n=0; n<8; ++n) array[n] = b;
+        for(int n=0; n<8; ++n) printf("%d\n", array[n]);
     }
 
 What does this code print? If we ignore the SIMD constructs, we can see it should print the sequence 10,10,10,10,10,10,10,10.
@@ -594,17 +478,11 @@ The compiler may use this knowledge to optimize the code.
 The for and simd constructs can be combined, to divide the execution of a loop into multiple threads, and then execute those loop slices in parallel using SIMD.
 
     float sum(float* table)
-
     {
-
-    float result=0;
-
-    #pragma omp parallel for simd reduction(+:result)
-
-    for(int n=0; n<1000; ++n) result += table[n];
-
-    return result;
-
+        float result=0;
+        #pragma omp parallel for simd reduction(+:result)
+        for(int n=0; n<1000; ++n) result += table[n];
+        return result;
     }
 
 === The task construct (OpenMP 3.0+)
@@ -612,89 +490,51 @@ The for and simd constructs can be combined, to divide the execution of a loop i
 When for and sections are too cumbersome, the task construct can be used. 
 
     struct node { node *left, *right; };
-
     extern void process(node* );
-
     void traverse(node* p)
-
     {
-
-    if (p->left)
-
-    #pragma omp task // p is firstprivate by default
-
-    traverse(p->left);
-
-    if (p->right)
-
-    #pragma omp task // p is firstprivate by default
-
-    traverse(p->right);
-
-    process(p);
-
+        if (p->left)
+        #pragma omp task // p is firstprivate by default
+        traverse(p->left);
+        if (p->right)
+        #pragma omp task // p is firstprivate by default
+        traverse(p->right);
+        process(p);
     }
 
 In the next example, we force a postorder traversal of the tree by adding a taskwait directive. Now, we can safely assume that the left and right sons have been executed before we process the current node.
 
     struct node { node *left, *right; };
-
     extern void process(node* );
-
     void postorder_traverse(node* p)
-
     {
-
-    if (p->left)
-
-    #pragma omp task // p is firstprivate by default
-
-    postorder_traverse(p->left);
-
-    if (p->right)
-
-    #pragma omp task // p is firstprivate by default
-
-    postorder_traverse(p->right);
-
-    #pragma omp taskwait
-
-    process(p);
-
+        if (p->left)
+        #pragma omp task // p is firstprivate by default
+        postorder_traverse(p->left);
+        if (p->right)
+        #pragma omp task // p is firstprivate by default
+        postorder_traverse(p->right);
+        #pragma omp taskwait
+        process(p);
     }
 
 The following example demonstrates how to use the task construct to process elements of a linked list in parallel. The pointer p is firstprivate by default on the task construct so it is not necessary to specify it in a firstprivate clause.
 
     struct node { int data; node* next; };
-
     extern void process(node* );
-
     void increment_list_items(node* head)
-
     {
-
-    #pragma omp parallel
-
-    {
-
-    #pragma omp single
-
-    {
-
-    for(node* p = head; p; p = p->next)
-
-    {
-
-    #pragma omp task
-
-    process(p); // p is firstprivate by default
-
-    }
-
-    }
-
-    }
-
+        #pragma omp parallel
+        {
+            #pragma omp single
+            {
+                for(node* p = head; p; p = p->next)
+                {
+                #pragma omp task
+                process(p); // p is firstprivate by default
+                }
+            }
+        }
     }
 
 == Offloading support
@@ -708,11 +548,8 @@ The declare target and end declare target directives delimit a section of the so
 Example:
 
     #pragma omp declare target
-
     int x;
-
     void murmur() { x+=5; }
-
     #pragma omp end declare target
 
 This creates one or more versions of "x" and "murmur". A set that exists on the host computer, and also a separate set that exists and can be run on a device.
@@ -734,27 +571,18 @@ The target construct executes the construct on a device (and also has target dat
 These two constructs are identical in effect:
 
     #pragma omp target 
-
     {
-
-    <<statements...>>
-
+        <<statements...>>
     }
 
     And:
 
     #pragma omp target data // device()... map()... if()...
-
     {
-
-    #pragma omp target
-
-    {
-
-    <<statements...>>
-
-    }
-
+        #pragma omp target
+        {
+            <<statements...>>
+        }
     }
 
 *IMPORTANT*: The target construct does not add any parallelism to the program by itself. It only transfers the execution into another device, and executes the code there in a single thread.
@@ -762,25 +590,14 @@ These two constructs are identical in effect:
 To utilize parallelism on device, you have to engage a teams construct inside the target construct. Example:
 
     #include <stdio.h>
-
     long long r = 1;
-
     int main(void)
-
     {
-
-    r=10;
-
-    #pragma omp target teams distribute parallel for reduction(+:r) map(tofrom:r)
-
-    for(unsigned long long n=0; n<0x800000000ull; ++n)
-
-    r += n;
-
-    printf( "r=%llX\n", r );
-
-    return 0;
-
+        r=10;
+        #pragma omp target teams distribute parallel for reduction(+:r) map(tofrom:r)
+        for(unsigned long long n=0; n<0x800000000ull; ++n) r += n;
+        printf( "r=%llX\n", r );
+        return 0;
     }
 
 See the teams keyword below for details.
@@ -792,21 +609,13 @@ If an if clause is added to the target region, the attached expression is evalua
 Example:
 
     #include <stdlib.h>
-
     #include <stdio.h>
-
     int main(int argc, char** argv)
-
     {
-
-    int r=0;
-
-    #pragma omp target if(atoi(argv[1])) map(tofrom:r)
-
-    r += 4;
-
-    printf("r=%d\n", r);
-
+        int r=0;
+        #pragma omp target if(atoi(argv[1])) map(tofrom:r)
+        r += 4;
+        printf("r=%d\n", r);
     }
 
 ==== The device clause
@@ -814,13 +623,9 @@ Example:
 Specifices the particular device that is to execute the code.
 
     int device_number = ...;
-
     #pragma omp target device(device_number)
-
     {
-
-    //...
-
+        //...
     }
 
 You can acquire device numbers by using the <omp.h> library functions, such as omp_set_default_device, omp_get_default_device, omp_get_num_devices, and omp_is_initial_device.
@@ -855,23 +660,14 @@ Array sections can only be specified in the map, and depend clauses. They are in
 
 An example of a valid array subscript mapping:
 
-void foo (int *p)
-
-{
-
-int i;
-
-#pragma omp parallel
-
-#pragma omp single
-
-#pragma omp target teams distribute parallel for map(p[0:24])
-
-for (i = 0; i < 24; i++)
-
-p[i] = p[i] + 1;
-
-}
+    void foo (int *p)
+    {
+        int i;
+        #pragma omp parallel
+        #pragma omp single
+        #pragma omp target teams distribute parallel for map(p[0:24])
+        for (i = 0; i < 24; i++) p[i] = p[i] + 1;
+    }
 
 === The target enter data and target exit data constructs (OpenMP 4.5+)
 
@@ -897,21 +693,13 @@ This directive can be only used directly inside a target construct. The optional
 The example code below _may_ print the message multiple times.
 
     #include <stdio.h>
-
     int main(void)
-
     {
-
-    #pragma omp target teams
-
-    {
-
-    printf("test\n");
-
-    }
-
-    return 0;
-
+        #pragma omp target teams
+        {
+        printf("test\n");
+        }
+        return 0;
     }
 
 *OpenACC differences*
@@ -925,23 +713,14 @@ The distribute construct can be used to distribute a for loop across the _master
 For example, if there are 20 teams, the loop will be distributed across 20 _master_ threads.
 
     #include <stdio.h>
-
     int main(void)
-
     {
-
-    int r=0;
-
-    #pragma omp target teams distribute reduction(+:r)
-
-    for(int n=0; n<10000; ++n)
-
-    r += n;
-
-    printf("r=%d\n", r);
-
-    return 0;
-
+        int r=0;
+        #pragma omp target teams distribute reduction(+:r)
+        for(int n=0; n<10000; ++n)
+        r += n;
+        printf("r=%d\n", r);
+        return 0;
     }
 
 *OpenACC differences*
@@ -963,23 +742,14 @@ The distribute parallel for construct can be used to distribute a for loop acros
 For example, if there are 20 teams, and each team consists of 256 threads, the loop will be distributed across 5120 threads.
 
     #include <stdio.h>
-
     int main(void)
-
     {
-
-    int r=0;
-
-    #pragma omp target teams distribute parallel for reduction(+:r)
-
-    for(int n=0; n<10000; ++n)
-
-    r += n;
-
-    printf("r=%d\n", r);
-
-    return 0;
-
+        int r=0;
+        #pragma omp target teams distribute parallel for reduction(+:r)
+        for(int n=0; n<10000; ++n)
+        r += n;
+        printf("r=%d\n", r);
+        return 0;
     }
 
 The number of threads created in each team is implementation defined, but can be explicitly defined with the num_threads attribute.
@@ -1000,9 +770,8 @@ Instead, I will explain the tools that OpenMP provides to handle mutual exclusio
 
 Atomicity means that something is inseparable; an event either happens completely or it does not happen at all, and another thread cannot intervene during the execution of the event.
 
-#pragma omp atomic
-
-counter += value;
+    #pragma omp atomic
+    counter += value;
 
 The atomic keyword in OpenMP specifies that the denoted action happens atomically. It is commonly used to update counters and other simple variables that are accessed by multiple threads simultaneously.
 
@@ -1012,38 +781,28 @@ There are four different types of atomic expressions (since OpenMP 3.1):
 
 ==== Atomic read expressions
 
-#pragma omp atomic read
-
-var = x;
+    #pragma omp atomic read
+    var = x;
 
 Here the reading of x is guaranteed to happen atomically, but nothing is guaranteed about var. Note that var may not access the memory location designated for x.
 
 ==== Atomic write expressions
 
-#pragma omp atomic write
-
-x = expr;
+    #pragma omp atomic write
+    x = expr;
 
 Here the writing of x is guaranteed to happen atomically, but nothing is guaranteed about expr. Note that expr may not access the memory location designated for x.
 
 ==== Atomic update expressions
 
     #pragma omp atomic update // The word "update" is optional
-
     // One of these:
-
     ++x; --x; x++; x--;
-
     x += expr; x -= expr; x *= expr; x /= expr; x &= expr;
-
     x = x+expr; x = x-expr; x = x*expr; x = x/expr; x = x&expr;
-
     x = expr+x; x = expr-x; x = expr*x; x = expr/x; x = expr&x;
-
     x |= expr; x ^= expr; x <<= expr; x >>= expr;
-
     x = x|expr; x = x^expr; x = x<<expr; x = x>>expr;
-
     x = expr|x; x = expr^x; x = expr<<x; x = expr>>x;
 
 Here the updating of x is guaranteed to happen atomically, but nothing is guaranteed about expr. Note that expr may not access the memory location designated for x.
@@ -1053,15 +812,10 @@ Here the updating of x is guaranteed to happen atomically, but nothing is guaran
 Capture expressions combine the read and update features.
 
     #pragma omp atomic capture
-
     // One of these:
-
     var = x++; /* Or any other of the update expressions listed above */
-
     { var = x; x++; /* Or any other of of the update expressions listed above */ }
-
     { x++; /* Or any other of of the update expressions listed above */; var = x; }
-
     { var = x; x = expr; }
 
 Note that neither var nor expr may not access the memory location designated for x.
@@ -1075,21 +829,13 @@ The critical construct may optionally contain a global name that identifies the 
 If the name is omitted, a default name is assumed.
 
     #pragma omp critical(dataupdate)
-
     {
-
-    datastructure.reorganize();
-
+        datastructure.reorganize();
     }
-
     ...
-
     #pragma omp critical(dataupdate)
-
     {
-
-    datastructure.reorganize_again();
-
+        datastructure.reorganize_again();
     }
 
 In this example, only one of the critical sections named "dataupdate" may be executed at any given time, and only one thread may be executing it at that time. I.e. the functions "reorganize" and "reorganize_again" cannot be invoked at the same time, and two calls to the function cannot be active at the same time. (Except if other calls exist elsewhere, unprotected by the critical construct.)
@@ -1115,183 +861,98 @@ Here is an example of a wrapper around std::set<> that provides per-instance mut
 You can maintain backward compability with non-OpenMP-supporting compilers by enclosing the library references in #ifdef _OPENMP…#endif blocks.
 
     #ifdef _OPENMP
-
     # include <omp.h>
-
     #endif
-
     #include <set>
-
     class data
-
     {
-
-    private:
-
-    std::set<int> flags;
-
-    #ifdef _OPENMP
-
-    omp_lock_t lock;
-
-    #endif
-
-    public:
-
-    data() : flags()
-
-    {
-
-    #ifdef _OPENMP
-
-    omp_init_lock(&lock);
-
-    #endif
-
-    }
-
-    ~data()
-
-    {
-
-    #ifdef _OPENMP
-
-    omp_destroy_lock(&lock);
-
-    #endif
-
-    }
-
-    bool set_get(int c)
-
-    {
-
-    #ifdef _OPENMP
-
-    omp_set_lock(&lock);
-
-    #endif
-
-    bool found = flags.find(c) != flags.end();
-
-    if(!found) flags.insert(c);
-
-    #ifdef _OPENMP
-
-    omp_unset_lock(&lock);
-
-    #endif
-
-    return found;
-
-    }
-
+        private:
+            std::set<int> flags;
+            #ifdef _OPENMP
+            omp_lock_t lock;
+            #endif
+        public:
+        data() : flags()
+        {
+            #ifdef _OPENMP
+            omp_init_lock(&lock);
+            #endif
+        }
+        ~data()
+        {
+            #ifdef _OPENMP
+            omp_destroy_lock(&lock);
+            #endif
+        }
+        bool set_get(int c)
+        {
+            #ifdef _OPENMP
+            omp_set_lock(&lock);
+            #endif
+            bool found = flags.find(c) != flags.end();
+            if(!found) flags.insert(c);
+            #ifdef _OPENMP
+            omp_unset_lock(&lock);
+            #endif
+            return found;
+        }
     };
 
 Of course, you would really rather wrap the lock into a custom container to avoid littering the code with #ifdefs and also for providing exception-safety:
 
     #ifdef _OPENMP
-
     # include <omp.h>
-
     struct MutexType
-
     {
-
-    MutexType() { omp_init_lock(&lock); }
-
-    ~MutexType() { omp_destroy_lock(&lock); }
-
-    void Lock() { omp_set_lock(&lock); }
-
-    void Unlock() { omp_unset_lock(&lock); }
-
-    MutexType(const MutexType& ) { omp_init_lock(&lock); }
-
-    MutexType& operator= (const MutexType& ) { return *this; }
-
-    public:
-
-    omp_lock_t lock;
-
+        MutexType() { omp_init_lock(&lock); }
+        ~MutexType() { omp_destroy_lock(&lock); }
+        void Lock() { omp_set_lock(&lock); }
+        void Unlock() { omp_unset_lock(&lock); }
+        MutexType(const MutexType& ) { omp_init_lock(&lock); }
+        MutexType& operator= (const MutexType& ) { return *this; }
+        public:
+        omp_lock_t lock;
     };
-
 #else
-
     /* A dummy mutex that doesn't actually exclude anything,
-
     * but as there is no parallelism either, no worries. */
-
     struct MutexType
-
     {
-
-    void Lock() {}
-
-    void Unlock() {}
-
+        void Lock() {}
+        void Unlock() {}
     };
-
     #endif
-
     /* An exception-safe scoped lock-keeper. */
-
     struct ScopedLock
-
     {
-
-    explicit ScopedLock(MutexType& m) : mut(m), locked(true) { mut.Lock(); }
-
-    ~ScopedLock() { Unlock(); }
-
-    void Unlock() { if(!locked) return; locked=false; mut.Unlock(); }
-
-    void LockAgain() { if(locked) return; mut.Lock(); locked=true; }
-
-    private:
-
-    MutexType& mut;
-
-    bool locked;
-
-    private: // prevent copying the scoped lock.
-
-    void operator=(const ScopedLock&);
-
-    ScopedLock(const ScopedLock&);
-
+        explicit ScopedLock(MutexType& m) : mut(m), locked(true) { mut.Lock(); }
+        ~ScopedLock() { Unlock(); }
+        void Unlock() { if(!locked) return; locked=false; mut.Unlock(); }
+        void LockAgain() { if(locked) return; mut.Lock(); locked=true; }
+        private:
+        MutexType& mut;
+        bool locked;
+        private: // prevent copying the scoped lock.
+        void operator=(const ScopedLock&);
+        ScopedLock(const ScopedLock&);
     };
 
-    This way, the example above becomes a lot simpler, and also exception-safe:
+This way, the example above becomes a lot simpler, and also exception-safe:
 
     #include <set>
-
     class data
-
     {
-
-    private:
-
-    std::set<int> flags;
-
-    MutexType lock;
-
-    public:
-
-    bool set_get(int c)
-
-    {
-
-    ScopedLock lck(lock); // locks the mutex
-
-    if(flags.find(c) != flags.end()) return true; // was found
-
-    flags.insert(c);
-
-    return false; // was not found
-
-    } // automatically releases the lock when lck goes out of scope.
-
+        private:
+            std::set<int> flags;
+            MutexType lock;
+            public:
+            bool set_get(int c)
+            {
+                ScopedLock lck(lock); // locks the mutex
+                if(flags.find(c) != flags.end()) return true; // was found
+                flags.insert(c);
+                return false; // was not found
+            } // automatically releases the lock when lck goes out of scope.
     };
 
 There is also a lock type that supports nesting, omp_nest_lock_t. I will not cover it here.
@@ -1303,19 +964,12 @@ Even when variables used by threads are supposed to be shared, the compiler may 
 This example comes from the OpenMP specification.
 
     /* presumption: int a = 0, b = 0; */
-
     /* First thread */ /* Second thread */
-
     b = 1; a = 1;
-
     #pragma omp flush(a,b) #pragma omp flush(a,b)
-
     if(a == 0) if(b == 0)
-
     { {
-
-    /* Critical section */ /* Critical section */
-
+        /* Critical section */ /* Critical section */
     } }
 
 In this example, it is enforced that at the time either of a or b is accessed, the other is also up-to-date, practically ensuring that not both of the two threads enter the critical section. (Note: It is still possible that neither of them can enter it.)
@@ -1336,17 +990,11 @@ In the parallel section, it is possible to specify which variables are shared be
 === The private, firstprivate and shared clauses
 
     int a, b=0;
-
     #pragma omp parallel for private(a) shared(b)
-
     for(a=0; a<50; ++a)
-
     {
-
-    #pragma omp atomic
-
-    b += a;
-
+        #pragma omp atomic
+        b += a;
     }
 
 This example explicitly specifies that a is private (each thread has their own copy of it) and that b is shared (each thread accesses the same variable).
@@ -1358,29 +1006,17 @@ Note that a private copy is an uninitialized variable by the same name and same 
 Example:
 
     #include <string>
-
     #include <iostream>
-
     int main()
-
     {
-
-    std::string a = "x", b = "y";
-
-    int c = 3;
-
+        std::string a = "x", b = "y";
+        int c = 3;
     #pragma omp parallel private(a,c) shared(b) num_threads(2)
-
     {
-
-    a += "k";
-
-    c += 7;
-
-    std::cout << "A becomes (" << a << "), b is (" << b << ")\n";
-
+        a += "k";
+        c += 7;
+        std::cout << "A becomes (" << a << "), b is (" << b << ")\n";
     }
-
     }
 
 This will output the string "k", not "xk". At the entrance of the block, a becomes a new instance of std::string, that is initialized with the default constructor; it is not initialized with the copy constructor.
@@ -1388,31 +1024,18 @@ This will output the string "k", not "xk". At the entrance of the block, a becom
 Internally, the program becomes like this:
 
     int main()
-
     {
-
-    std::string a = "x", b = "y";
-
-    int c = 3;
-
-    OpenMP_thread_fork(2);
-
-    { // Start new scope
-
-    std::string a; // Note: It is a new local variable.
-
-    int c; // This too.
-
-    a += "k";
-
-    c += 7;
-
-    std::cout << "A becomes (" << a << "), b is (" << b << ")\n";
-
-    } // End of scope for the local variables
-
-    OpenMP_join();
-
+        std::string a = "x", b = "y";
+        int c = 3;
+        OpenMP_thread_fork(2);
+        { // Start new scope
+            std::string a; // Note: It is a new local variable.
+            int c; // This too.
+            a += "k";
+            c += 7;
+            std::cout << "A becomes (" << a << "), b is (" << b << ")\n";
+        } // End of scope for the local variables
+        OpenMP_join();
     }
 
 In the case of primitive (POD) datatypes (int, float, char* etc.), the private variable is uninitialized, just like any declared but not initialized local variable. It does not contain the value of the variable from the surrounding context. Therefore, the increment of c is moot here; the value of the variable is still undefined. (If you are using GCC version earlier than 4.4, you do not even get a warning about the use of uninitialized value in situations like this.)
@@ -1420,29 +1043,17 @@ In the case of primitive (POD) datatypes (int, float, char* etc.), the private v
 If you actually need a _copy_ of the original value, use the firstprivate clause instead.
 
     #include <string>
-
     #include <iostream>
-
     int main()
-
     {
-
-    std::string a = "x", b = "y";
-
-    int c = 3;
-
-    #pragma omp parallel firstprivate(a,c) shared(b) num_threads(2)
-
-    {
-
-    a += "k";
-
-    c += 7;
-
-    std::cout << "A becomes (" << a << "), b is (" << b << ")\n";
-
-    }
-
+        std::string a = "x", b = "y";
+        int c = 3;
+            #pragma omp parallel firstprivate(a,c) shared(b) num_threads(2)
+            {
+            a += "k";
+            c += 7;
+            std::cout << "A becomes (" << a << "), b is (" << b << ")\n";
+            }
     }
 
 Now the output becomes "A becomes (xk), b is (y)".
@@ -1457,77 +1068,43 @@ The lastprivate clause defines a variable private as in firstprivate or private,
 Example:
 
     #include <stdio.h>
-
     int main()
-
     {
-
-    int done = 4, done2 = 5;
-
-    #pragma omp parallel for lastprivate(done, done2) num_threads(2) schedule(static)
-
-    for(int a=0; a<8; ++a)
-
-    {
-
-    if(a==2) done=done2=0;
-
-    if(a==3) done=done2=1;
-
-    }
-
-    printf("%d,%d\n", done,done2);
-
+        int done = 4, done2 = 5;
+        #pragma omp parallel for lastprivate(done, done2) num_threads(2) schedule(static)
+        for(int a=0; a<8; ++a)
+        {
+            if(a==2) done=done2=0;
+            if(a==3) done=done2=1;
+        }
+        printf("%d,%d\n", done,done2);
     }
 
 This program outputs "4196224,-348582208", because internally, this program became like this:
 
     #include <stdio.h>
-
     int main()
-
     {
-
     int done = 4, done2 = 5;
-
     OpenMP_thread_fork(2);
-
-    {
-
-    int this_thread = omp_get_thread_num(), num_threads = 2;
-
-    int my_start = (this_thread ) * 8 / num_threads;
-
-    int my_end = (this_thread+1) * 8 / num_threads;
-
-    int priv_done, priv_done2; // not initialized, because firstprivate was not used
-
-    for(int a=my_start; a<my_end; ++a)
-
-    {
-
-    if(a==2) priv_done=priv_done2=0;
-
-    if(a==3) priv_done=priv_done2=1;
-
-    }
-
-    if(my_end == 8)
-
-    {
-
-    // assign the values back, because this was the last iteration
-
-    done = priv_done;
-
-    done2 = priv_done2;
-
-    }
-
-    }
-
+        {
+            int this_thread = omp_get_thread_num(), num_threads = 2;
+            int my_start = (this_thread ) * 8 / num_threads;
+            int my_end = (this_thread+1) * 8 / num_threads;
+            int priv_done, priv_done2; // not initialized, because firstprivate was not used
+            for(int a=my_start; a<my_end; ++a)
+            {
+                if(a==2) priv_done=priv_done2=0;
+                if(a==3) priv_done=priv_done2=1;
+            }
+            if(my_end == 8)
+            {
+                // assign the values back, because this was the last iteration
+                done = priv_done;
+                done2 = priv_done2;
+            }
+        }
     OpenMP_join();
-
     }
 
 As one can observe, the values of priv_done and priv_done2 are not assigned even once during the course of the loop that iterates through 4...7. As such, the values that are assigned back are completely bogus.
@@ -1537,33 +1114,22 @@ Therefore, lastprivate cannot be used to e.g. fetch the value of a flag assigned
 Where this behavior _can_ be utilized though, is in situations like this (from OpenMP manual):
 
     void loop()
-
     {
-
-    int i;
-
-    #pragma omp for lastprivate(i)
-
-    for(i=0; i<get_loop_count(); ++i) // note: get_loop_count() must be a pure function.
-
-    { ... }
-
-    printf("%d\n", i); // this shows the number of loop iterations done.
-
-    }
+        int i;
+        #pragma omp for lastprivate(i)
+        for(i=0; i<get_loop_count(); ++i) // note: get_loop_count() must be a pure function.
+        { ... }
+        printf("%d\n", i); // this shows the number of loop iterations done.
+        }
 
 === The default clause
 
 The most useful purpose on the default clause is to check whether you have remembered to consider all variables for the private/shared question, using the default(none) setting.
 
     int a, b=0;
-
     #pragma omp parallel default(none) shared(b)
-
     {
-
-    b += a;
-
+        b += a;
     }
 
 The default clause can also be used to set that all variables are shared by default (default(shared)).
@@ -1578,19 +1144,12 @@ It allows to accumulate a shared variable without the atomic clause, but the typ
 This example calculates using threads:
 
     int factorial(int number)
-
     {
-
-    int fac = 1;
-
-    #pragma omp parallel for reduction(*:fac)
-
-    for(int n=2; n<=number; ++n)
-
-    fac *= n;
-
-    return fac;
-
+        int fac = 1;
+        #pragma omp parallel for reduction(*:fac)
+        for(int n=2; n<=number; ++n)
+        fac *= n;
+        return fac;
     }
 
 * At the beginning of the parallel block, a private copy is made of the variable and preinitialized to a certain value .
@@ -1617,25 +1176,15 @@ where _list_ is the list of variables where the operator will be applied to, and
 To write the factorial function (shown above) without reduction, it probably would look like this:
 
     int factorial(int number)
-
     {
-
-    int fac = 1;
-
-    #pragma omp parallel for
-
-    for(int n=2; n<=number; ++n)
-
-    {
-
-    #pragma omp atomic
-
-    fac *= n;
-
-    }
-
-    return fac;
-
+        int fac = 1;
+        #pragma omp parallel for
+        for(int n=2; n<=number; ++n)
+        {
+            #pragma omp atomic
+            fac *= n;
+        }
+        return fac;
     }
 
 However, this code would be less optimal than the one with reduction: it misses the opportunity to use a local (possible register) variable for the cumulation, and needlessly places load/synchronization demands on the shared memory variable. In fact, due to the bottleneck of that atomic variable (only one thread may access it simultaneously), it would completely nullify any gains of parallelism in that loop.
@@ -1643,31 +1192,18 @@ However, this code would be less optimal than the one with reduction: it misses 
 The version with reduction is equivalent to this code (illustration only):
 
     int factorial(int number)
-
     {
-
-    int fac = 1;
-
-    #pragma omp parallel
-
-    {
-
-    int omp_priv = 1; /* This value comes from the table shown above */
-
-    #pragma omp for nowait
-
-    for(int n=2; n<=number; ++n)
-
-    omp_priv *= n;
-
-    #pragma omp atomic
-
-    fac *= omp_priv;
-
-    }
-
+        int fac = 1;
+        #pragma omp parallel
+        {
+            int omp_priv = 1; /* This value comes from the table shown above */
+            #pragma omp for nowait
+            for(int n=2; n<=number; ++n)
+            omp_priv *= n;
+            #pragma omp atomic
+            fac *= omp_priv;
+        }
     return fac;
-
     }
 
 Note how it moves the atomic operation out from the loop.
@@ -1677,15 +1213,10 @@ The restrictions in reduction and atomic are very similar: both can only be done
 As an example of how the reduction clause can be used to produce semantically different code when OpenMP is enabled and when it is disabled, this example prints the number of threads that executed the parallel block:
 
     int a = 0;
-
     #pragma omp parallel reduction (+:a)
-
     {
-
-    a = 1; // Assigns a value to the private copy.
-
-    // Each thread increments the value by 1.
-
+        a = 1; // Assigns a value to the private copy.
+        // Each thread increments the value by 1.
     }
 
 printf("%d\n", a);
@@ -1710,47 +1241,26 @@ The syntax of the declaration is one of these two:
 An example use case is when you are running a data compressor with different parameters, and you want to find the set of parameters that results in best compression. Below is an example of such code:
 
     #include <cstdio>
-
     int compress(int param1, int param2)
-
     {
-
     return (param1+13)^param2; // Placeholder for a compression algorithm
-
     }
-
     int main(int argc, char** argv)
-
     {
-
-    struct BestInfo { unsigned size, param1, param2; };
-
-    #pragma omp declare reduction(isbetter:BestInfo: \
-
-    omp_in.size<omp_out.size ? omp_out=omp_in : omp_out \
-
-    ) initializer(omp_priv = BestInfo{~0u,~0u,~0u})
-
-    BestInfo result{~0u,~0u,~0u};
-
-    #pragma omp parallel for collapse(2) reduction(isbetter:result)
-
-    for(unsigned p1=0; p1<10; ++p1)
-
-    for(unsigned p2=0; p2<10; ++p2)
-
-    {
-
-    unsigned size = compress(p1,p2);
-
-    if(size < result.size) result = BestInfo{size,p1,p2};
-
-    }
-
-    std::printf("Best compression (%u bytes) with params %u,%u\n",
-
-    result.size, result.param1, result.param2);
-
+        struct BestInfo { unsigned size, param1, param2; };
+        #pragma omp declare reduction(isbetter:BestInfo: \
+        omp_in.size<omp_out.size ? omp_out=omp_in : omp_out \
+        ) initializer(omp_priv = BestInfo{~0u,~0u,~0u})
+        BestInfo result{~0u,~0u,~0u};
+        #pragma omp parallel for collapse(2) reduction(isbetter:result)
+        for(unsigned p1=0; p1<10; ++p1)
+            for(unsigned p2=0; p2<10; ++p2)
+            {
+            unsigned size = compress(p1,p2);
+            if(size < result.size) result = BestInfo{size,p1,p2};
+            }
+        std::printf("Best compression (%u bytes) with params %u,%u\n",
+        result.size, result.param1, result.param2);
     }
 
 == Thread affinity (proc_bind)
@@ -1770,23 +1280,14 @@ For more information, read the OpenMP specification.
 The barrier directive causes threads encountering the barrier to wait until all the other threads in the same team have encountered the barrier.
 
     #pragma omp parallel
-
     {
-
-    /* All threads execute this. */
-
-    SomeCode();
-
-    #pragma omp barrier
-
-    /* All threads execute this, but not before
-
-    * all threads have finished executing SomeCode().
-
-    */
-
-    SomeMoreCode();
-
+        /* All threads execute this. */
+        SomeCode();
+        #pragma omp barrier
+        /* All threads execute this, but not before
+        * all threads have finished executing SomeCode().
+        */
+        SomeMoreCode();
     }
 
 Note: There is an implicit barrier at the end of each parallel block, and at the end of each sections, for and single statement, unless the nowait directive is used.
@@ -1794,43 +1295,24 @@ Note: There is an implicit barrier at the end of each parallel block, and at the
 Example:
 
     #pragma omp parallel
-
     {
-
-    #pragma omp for
-
-    for(int n=0; n<10; ++n) Work();
-
-    // This line is not reached before the for-loop is completely finished
-
-    SomeMoreCode();
-
+        #pragma omp for
+        for(int n=0; n<10; ++n) Work();
+        // This line is not reached before the for-loop is completely finished
+        SomeMoreCode();
     }
-
     // This line is reached only after all threads from
-
     // the previous parallel block are finished.
-
     CodeContinues();
-
     #pragma omp parallel
-
     {
-
-    #pragma omp for nowait
-
-    for(int n=0; n<10; ++n) Work();
-
-    // This line may be reached while some threads are still executing the for-loop.
-
-    SomeMoreCode();
-
+        #pragma omp for nowait
+        for(int n=0; n<10; ++n) Work();
+        // This line may be reached while some threads are still executing the for-loop.
+        SomeMoreCode();
     }
-
     // This line is reached only after all threads from
-
     // the previous parallel block are finished.
-
     CodeContinues();
 
 The nowait directive can only be attached to sections, for and single. It cannot be attached to the within-loop ordered clause, for example.
@@ -1840,21 +1322,13 @@ The nowait directive can only be attached to sections, for and single. It cannot
 The single construct specifies that the given statement/block is executed by only one thread. It is unspecified which thread. Other threads skip the statement/block and wait at an implicit barrier at the end of the construct.
 
     #pragma omp parallel
-
     {
-
-    Work1();
-
-    #pragma omp single
-
-    {
-
-    Work2();
-
-    }
-
-    Work3();
-
+        Work1();
+        #pragma omp single
+        {
+            Work2();
+        }
+        Work3();
     }
 
 In a 2-cpu system, this will run Work1() twice, Work2() once and Work3() twice. There is an implied barrier at the end of the single construct, but not at the beginning of it.
@@ -1864,33 +1338,20 @@ Note: Do not assume that the single block is executed by whichever thread gets t
 The master construct is similar, except that the statement/block is run by the _master_ thread, and there is no implied barrier; other threads skip the construct without waiting.
 
     #pragma omp parallel
-
     {
+        Work1();
+        // This...
+        #pragma omp master
+        {
+            Work2();
+        }
 
-    Work1();
-
-    // This...
-
-    #pragma omp master
-
-    {
-
-    Work2();
-
-    }
-
-    // ...is practically identical to this:
-
-    if(omp_get_thread_num() == 0)
-
-    {
-
-    Work2();
-
-    }
-
-    Work3();
-
+        // ...is practically identical to this:
+        if(omp_get_thread_num() == 0)
+        {
+            Work2();
+        }
+        Work3();
     }
 
 Unless you use the threadprivate clause, the only important difference between single nowait and master is that if you have multiple master blocks in a parallel section, you are guaranteed that they are executed by the same thread every time, and hence, the values of private (thread-local) variables are the same.
@@ -1900,33 +1361,20 @@ Unless you use the threadprivate clause, the only important difference between s
 Suppose that we want to optimize this function with parallel processing:
 
     /* Returns any position from the haystack where the needle can
-
     * be found, or NULL if no such position exists. It is not guaranteed
-
     * to find the first matching position; it only guarantees to find
-
     * _a_ matching position if one exists.
-
     */
 
     const char* FindAnyNeedle(const char* haystack, size_t size, char needle)
-
     {
-
-    for(size_t p = 0; p < size; ++p)
-
-    if(haystack[p] == needle)
-
-    {
-
-    /* This breaks out of the loop. */
-
-    return haystack+p;
-
-    }
-
-    return NULL;
-
+        for(size_t p = 0; p < size; ++p)
+            if(haystack[p] == needle)
+            {
+                /* This breaks out of the loop. */
+                return haystack+p;
+            }
+        return NULL;
     }
 
 Our first attempt might be to simply tack a #pragma parallel for before the for loop, but that doesn't work: OpenMP requires that a loop construct processes each iteration. Breaking out of the loop (using return, goto, break, throw or other means) is not allowed.
@@ -1945,83 +1393,46 @@ Because there is a performance overhead in checking for cancellations, it is onl
 In this example program, once a thread finds the "needle", it signals cancellation for all threads of the current team processing the innermost for loop. Threads check the cancellation only at every loop iteration. It also checks whether OMP_CANCELLATION is set, and if not, sets it and reruns the program.
 
     #include <stdio.h> // For printf
-
     #include <string.h> // For strlen
-
     #include <stdlib.h> // For putenv
-
     #include <unistd.h> // For execv
-
     #include <omp.h> // For omp_get_cancellation, omp_get_thread_num()
 
     static const char* FindAnyNeedle(const char* haystack, size_t size, char needle)
-
     {
-
-    const char* result = haystack+size;
-
-    #pragma omp parallel
-
-    {
-
-    unsigned num_iterations=0;
-
-    #pragma omp for
-
-    for(size_t p = 0; p < size; ++p)
-
-    {
-
-    ++num_iterations;
-
-    if(haystack[p] == needle)
-
-    {
-
-    #pragma omp atomic write
-
-    result = haystack+p;
-
-    // Signal cancellation.
-
-    #pragma omp cancel for
-
-    }
-
-    // Check for cancellations signalled by other threads:
-
-    #pragma omp cancellation point for
-
-    }
-
-    // All threads reach here eventually; sooner if the cancellation was signalled.
-
-    printf("Thread %u: %u iterations completed\n", omp_get_thread_num(), num_iterations);
-
-    }
-
-    return result;
-
+        const char* result = haystack+size;
+        #pragma omp parallel
+        {
+            unsigned num_iterations=0;
+            #pragma omp for
+            for(size_t p = 0; p < size; ++p)
+            {
+                ++num_iterations;
+                if(haystack[p] == needle)
+                {
+                    #pragma omp atomic write
+                    result = haystack+p;
+                    // Signal cancellation.
+                    #pragma omp cancel for
+                }
+                // Check for cancellations signalled by other threads:
+                #pragma omp cancellation point for
+            }
+            // All threads reach here eventually; sooner if the cancellation was signalled.
+            printf("Thread %u: %u iterations completed\n", omp_get_thread_num(), num_iterations);
+        }
+        return result;
     }
 
     int main(int argc, char** argv)
-
     {
-
-    if(!omp_get_cancellation())
-
-    {
-
-    printf("Cancellations were not enabled, enabling cancellation and rerunning program\n");
-
-    putenv("OMP_CANCELLATION=true");
-
-    execv(argv[0], argv);
-
-    }
-
-    printf("%s\n%*s\n", argv[1], FindAnyNeedle(argv[1],strlen(argv[1]),argv[2][0])-argv[1]+1, "^");
-
+        if(!omp_get_cancellation())
+        {
+            printf("Cancellations were not enabled, enabling cancellation and rerunning program\n");
+            putenv("OMP_CANCELLATION=true");
+            execv(argv[0], argv);
+        }
+        printf("%s\n%*s\n", argv[1], FindAnyNeedle(argv[1],strlen(argv[1]),argv[2][0])-argv[1]+1, "^");
     }
 
 Example output:
@@ -2030,21 +1441,14 @@ Example output:
 
 Cancellations were not enabled, enabling cancellation and rerunning program
 
-Thread 0: 10 iterations completed
-
-Thread 1: 3 iterations completed
-
-Thread 7: 10 iterations completed
-
-Thread 3: 10 iterations completed
-
-Thread 4: 10 iterations completed
-
-Thread 2: 8 iterations completed
-
-Thread 5: 5 iterations completed
-
-Thread 6: 6 iterations completed
+    Thread 0: 10 iterations completed
+    Thread 1: 3 iterations completed
+    Thread 7: 10 iterations completed
+    Thread 3: 10 iterations completed
+    Thread 4: 10 iterations completed
+    Thread 2: 8 iterations completed
+    Thread 5: 5 iterations completed
+    Thread 6: 6 iterations completed
 
 OpenMP cancellations can only be performed synchronously at cancellation points.
 
@@ -2060,21 +1464,13 @@ The keyword in the end of the #pragma omp cancellation point construct is the na
 A beginner at OpenMP will quickly find out that this code will not do the expected thing:
 
     #pragma omp parallel for
-
     for(int y=0; y<25; ++y)
-
     {
-
-    #pragma omp parallel for
-
-    for(int x=0; x<80; ++x)
-
-    {
-
-    tick(x,y);
-
-    }
-
+        #pragma omp parallel for
+        for(int x=0; x<80; ++x)
+        {
+            tick(x,y);
+        }
     }
 
 The beginner expects there to be N tick() calls active at the same time (where N = number of processors). Although that is true, the inner loop is not actually parallelised. Only the outer loop is. The inner loop runs in a pure sequence, as if the whole inner #pragma was omitted.
@@ -2084,21 +1480,13 @@ At the entrance of the inner parallel construct, the OpenMP runtime library (lib
 Rewriting the code like this won't work:
 
     #pragma omp parallel for
-
     for(int y=0; y<25; ++y)
-
-    {
-
-    #pragma omp for // ERROR, nesting like this is not allowed.
-
-    for(int x=0; x<80; ++x)
-
-    {
-
-    tick(x,y);
-
-    }
-
+        {
+        #pragma omp for // ERROR, nesting like this is not allowed.
+        for(int x=0; x<80; ++x)
+        {
+            tick(x,y);
+        }
     }
 
 This code is erroneous and will cause the program to malfunction. See the restrictions chapter below for details.
@@ -2110,16 +1498,11 @@ In OpenMP 3.0, the loop nesting problem can be solved by using the collapse clau
 Example:
 
     #pragma omp parallel for collapse(2)
-
     for(int y=0; y<25; ++y)
-
-    for(int x=0; x<80; ++x)
-
-    {
-
-    tick(x,y);
-
-    }
+        for(int x=0; x<80; ++x)
+        {
+            tick(x,y);
+        }
 
 The number specified in the collapse clauses is the number of nested loops that are subject to the work-sharing semantics of the OpenMP for construct.
 
@@ -2144,63 +1527,35 @@ If your program intends to become a background process using daemonize() or othe
 This is an example of an erroneous program:
 
     #include <stdio.h>
-
     #include <sys/wait.h>
-
     #include <unistd.h>
-
     void a()
-
     {
-
-    #pragma omp parallel num_threads(2)
-
-    {
-
-    puts("para_a"); // output twice
-
+        #pragma omp parallel num_threads(2)
+        {
+            puts("para_a"); // output twice
+        }
+        puts("a ended"); // output once
     }
-
-    puts("a ended"); // output once
-
-    }
-
     void b()
-
     {
-
-    #pragma omp parallel num_threads(2)
-
-    {
-
-    puts("para_b");
-
-    }
-
-    puts("b ended");
-
+        #pragma omp parallel num_threads(2)
+        {
+        puts("para_b");
+        }
+        puts("b ended");
     }
 
     int main() {
-
-    a(); // Invokes OpenMP features (parent process)
-
-    int p = fork();
-
-    if(!p)
-
-    {
-
-    b(); // ERROR: Uses OpenMP again, but in child process
-
-    _exit(0);
-
-    }
-
-    wait(NULL);
-
-    return 0;
-
+        a(); // Invokes OpenMP features (parent process)
+        int p = fork();
+        if(!p)
+        {
+            b(); // ERROR: Uses OpenMP again, but in child process
+            _exit(0);
+        }
+        wait(NULL);
+        return 0;
     }
 
 When run, this program hangs, never reaching the line that outputs "b ended".

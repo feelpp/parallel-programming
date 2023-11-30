@@ -5,6 +5,25 @@
 *** For example, to compile MyProg.c you would use a command like
 *** mpicc - O2 -o MyProg MyProg.c
 
+
+
+
+.Test compile {cpp}
+[%dynamic,cpp,filename="Hello.hpp",compile=true,run=true] 
+----
+#include <iostream>
+
+int main()
+{
+        std::cout << "Hello, world!" << std::endl;
+        return 0;
+}
+----
+
+
+
+
+
 == List of programms
 
 //* xref:MPI_Allgather.c[MPI_Allgather]

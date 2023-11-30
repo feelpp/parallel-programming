@@ -12,6 +12,8 @@
 
 * xref:PPChapter2_MPI.adoc[MPI (Message Passing Interface)]
 
+* xref:PPChapter2_MPI_Boost.adoc[MPI Boost]s
+
 * xref:PPChapter2_OpenMP.adoc[OpenMP (Open Multi-Processing)]
 
 * xref:PPChapter2_OpenMP2.adoc[OpenMP more information]

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>CPU :: Parallel Programming</title>
+    <title>CPU (Central Proccessing Unit) :: Parallel Programming</title>
     <link rel="canonical" href="https://feelpp.github.io/parallel-programming/parallel-programming/PPChapter1_CPU.html">
     <meta name="generator" content="Antora 3.1.3">
     <link rel="stylesheet" href="../_/css/site.css">
@@ -229,14 +229,23 @@ MathJax.Hub.Config({
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">CPU</h1>
+<h1 class="page">CPU (Central Proccessing Unit)</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<a class="image" href="#fragment01"><img src="_images/CPU.jpg" alt="CPU" width="322" height="220"></a>
+</div>
+</div>
+</div>
+</div>
 <div class="sect1">
 <h2 id="_definition"><a class="anchor" href="#_definition"></a>1. Definition</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The CPU basically consists of three parts:</p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>The control unit which searches for instructions in memory, decodes them and coordinates the rest of the processor to execute them. A basic control unit basically consists of an instruction register and a "decoder/sequencer" unit</p>
@@ -254,7 +263,7 @@ MathJax.Hub.Config({
 <a class="image" href="#fragment1"><img src="_images/image1.png" alt="image1" width="322" height="220"></a>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The register structure varies from processor to processor. This is why
 each type of CPU has its own instruction set. Their basic functions are nevertheless similar and all processors have roughly the same categories of registers:</p>
 </div>
@@ -264,9 +273,17 @@ each type of CPU has its own instruction set. Their basic functions are neverthe
 <p>The <strong>accumulator</strong> is primarily intended to hold the data that needs to
 be processed by the ALU.</p>
 </li>
+</ul>
+</div>
+<div class="ulist text-justify">
+<ul>
 <li>
 <p>General registers* are used to store temporary data and intermediate</p>
 </li>
+</ul>
+</div>
+<div class="ulist text-justify">
+<ul>
 <li>
 <p>Address registers* are used to construct particular data addresses.
 These are, for example, the base and index registers which allow, among
@@ -283,22 +300,22 @@ other things, to organize the data in memory like indexed tables.</p>
 contains indicators called <em>flags</em> whose values (0 or 1) vary according
 to the results of the arithmetic and logical operations. These states
 are used by conditional jump instructions.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The <strong>stack pointer</strong> or <em>stack pointer</em> manages certain data in memory by
 organizing them in the form of stacks.</p>
+</div>
+</li>
+</ul>
 </div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_cpu_working_principle"><a class="anchor" href="#_cpu_working_principle"></a>2. CPU working principle</h2>
 <div class="sectionbody">
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The content of the program counter is deposited on the addressing bus in order to search there for a machine code instruction. The control bus produces a read signal and the memory, which is selected by the address, sends the instruction code back to the processor via the data bus. Once the instruction lands in the instruction register, the processor&#8217;s control unit decodes it and produces the appropriate sequence of internal and external signals that coordinate its execution. An instruction comprises a series of elementary tasks. They are clocked by clock cycles.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>All the tasks that constitute an instruction are executed one after the
 other. The execution of an instruction therefore lasts several cycles.
 As it is not always possible to increase the frequency, the only way to

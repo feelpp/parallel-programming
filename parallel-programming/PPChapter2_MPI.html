@@ -233,7 +233,7 @@ MathJax.Hub.Config({
 <div class="sect1">
 <h2 id="_general_notions"><a class="anchor" href="#_general_notions"></a>1. General notions</h2>
 <div class="sectionbody">
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The transmitter and the receiver are identified by their rank in the communicator. The entity passed between two processes is called a message. A message is characterized by its envelope.</p>
 </div>
 <div class="paragraph">
@@ -253,10 +253,7 @@ MathJax.Hub.Config({
 <li>
 <p>The communicator who defines the process group and the communication
 context.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The data exchanged is typed (integers, reals, etc. or personal derived types) In each case, there are several transfer modes , using different
 protocols.</p>
 </div>
@@ -269,6 +266,9 @@ protocols.</p>
 <div class="content">
 <pre>int MPI_Recv ( *void* *message, *int* length, MPI_Datatype type_message *int* rank_source, *int* label, MPI_Comm comm, MPI_Status *status)</pre>
 </div>
+</div>
+</li>
+</ul>
 </div>
 <div class="paragraph">
 <p>And simultaneous send and receive operation:</p>
@@ -288,13 +288,13 @@ protocols.</p>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_general_notions_2"><a class="anchor" href="#_general_notions_2"></a>2.1. General notions</h3>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Collective communications allow a series of point-to-point communications to be made in a single operation. A collective communication always concerns all the processes of the indicated communicator. For each of the processes, the call ends when the latter&#8217;s participation in the collective operation is completed, in the sense of point-to-point communications (thus when the memory zone concerned can be modified). The management of labels in these communications is transparent and at the expense of the system. They are therefore never explicitly defined during the call to these subroutines. One of the advantages of this is that collective communications never interfere with point-to-point communications.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_types_of_collective_communications"><a class="anchor" href="#_types_of_collective_communications"></a>2.2. Types of collective communications</h3>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>There are three types of subroutines:
 * The one that ensures global synchronizations: MPI_Barrier().</p>
 </div>
@@ -437,19 +437,16 @@ MPI_Reduce() followed by an MPI_Bcast()): MPI_Allreduce().</p>
 <p><em>Buffered</em> send MPI_Bsend() MPI_Ibsend()</p>
 </li>
 <li>
-<p>Receive MPI_Recv() MPI_Irecv()</p>
+<p>Receive MPI_Recv() MPI_Irecv()
+A call is blocking if the memory space used for communication can be reused immediately after the call exits. The data sent can be modified after the blocking call. The received data can be read after the blocking call.</p>
 </li>
 </ul>
-</div>
-<div class="paragraph">
-<p>A call is blocking if the memory space used for communication can be reused immediately after the call exits. The data sent can be modified after the blocking call. The received data can be read after the blocking call.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_synchronous_sends"><a class="anchor" href="#_synchronous_sends"></a>4.2. Synchronous sends</h3>
-<div class="paragraph">
-<p>A synchronous send involves synchronization between the processes
-involved. A shipment can only begin when its receipt is posted. There
+<div class="paragraph text-justify">
+<p>A synchronous send involves synchronization between the processes involved. A shipment can only begin when its receipt is posted. There
 can only be communication if both processes are willing to communicate.</p>
 </div>
 <div class="paragraph">
@@ -483,10 +480,10 @@ message_type, <strong>int</strong> dest, <strong>int</strong> label, MPI_Comm co
 </div>
 <div class="sect2">
 <h3 id="_buffered_sends"><a class="anchor" href="#_buffered_sends"></a>4.3. Buffered sends</h3>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>A buffered send involves the copying of data into an intermediate memory space. There is then no coupling between the two communication processes. The output of this type of sending therefore does not mean that the reception has taken place.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Buffers must be managed manually (with calls to MPI_Buffer_attach( <em>)</em>
 and MPI_Buffer_detach()). They must be allocated taking into account the
 memory overhead of the messages (by adding the MPI_BSEND_OVERHEAD
@@ -551,7 +548,7 @@ on the sender and/or receiver side (and consuming memory resources)</p>
 <div class="sect1">
 <h2 id="_non_blocking_calls"><a class="anchor" href="#_non_blocking_calls"></a>5. Non-blocking calls</h2>
 <div class="sectionbody">
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p><strong>Non-blocking</strong> call returns control very quickly, but does not allow the
 immediate reuse of the memory space used in the call. It is necessary to
 ensure that the communication is indeed terminated (with MPI_Wait() for
@@ -585,7 +582,7 @@ int* source, int label, MPI_Comm comm, MPI_Request *req)</pre>
 <ul>
 <li>
 <p>Benefits of non-blocking calls</p>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>Ability to hide all or part of the communication costs (if the architecture allows it). No risk of <em>deadlock</em>.</p>
@@ -595,7 +592,7 @@ int* source, int label, MPI_Comm comm, MPI_Request *req)</pre>
 </li>
 <li>
 <p>Disadvantages of non-blocking calls</p>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>Higher additional costs (several calls for a single send or receive, request management).</p>
@@ -619,12 +616,12 @@ int* source, int label, MPI_Comm comm, MPI_Request *req)</pre>
 <div class="sect1">
 <h2 id="_memory_to_memory_communications"><a class="anchor" href="#_memory_to_memory_communications"></a>6. Memory to memory communications</h2>
 <div class="sectionbody">
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Memory-to-memory communications (or RMA for <em>Remote Memory Access</em> or <em>one-sided communications</em> ) consist of accessing the memory of a remote process in write or read mode without the latter having to manage this access explicitly. The target process therefore does not intervene during the transfer.</p>
 </div>
 <div class="sect2">
 <h3 id="_rma_general_approach"><a class="anchor" href="#_rma_general_approach"></a>6.1. RMA - General Approach</h3>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Creation of a memory window with MPI_Win_create() to authorize RMA transfers in this area.</p>
 </div>
 <div class="paragraph">
@@ -636,7 +633,7 @@ int* source, int label, MPI_Comm comm, MPI_Request *req)</pre>
 </div>
 <div class="sect2">
 <h3 id="_rma_synchronization_methods"><a class="anchor" href="#_rma_synchronization_methods"></a>6.2. RMA - Synchronization Methods</h3>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>To ensure correct operation, it is mandatory to carry out certain synchronizations. 3 methods are available:</p>
 </div>
 <div class="paragraph">
@@ -655,7 +652,7 @@ and MPI_Win_unlock()).</p>
 <ul>
 <li>
 <p>Benefits of RMAs</p>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>Allows you to implement certain algorithms more efficiently.</p>
@@ -671,7 +668,7 @@ and MPI_Win_unlock()).</p>
 </li>
 <li>
 <p>Disadvantages of RMAs</p>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>Synchronization management is tricky.</p>
@@ -698,7 +695,7 @@ pointers not supported by some compilers).</p>
 <div class="sect1">
 <h2 id="_interfaces"><a class="anchor" href="#_interfaces"></a>7. Interfaces</h2>
 <div class="sectionbody">
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>MPI_Wait() waits for the end of a communication. MPI_Test() is the
 non-blocking version.</p>
 </div>
@@ -708,7 +705,7 @@ non-blocking version.</p>
 int MPI_Test( MPI_Request *req, int *flag, MPI_Status *status)</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>MPI_Waitall() waits for all communications to end. MPI_Testall() is the
 non-blocking version.</p>
 </div>
@@ -718,7 +715,7 @@ non-blocking version.</p>
 int* MPI_Testall ( int size, MPI_Request reqs[], int *flag, MPI_Status statuses[])</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>MPI_Waitany waits for the end of one communication among several.</p>
 </div>
 <div class="literalblock">
@@ -1003,7 +1000,7 @@ topology</p>
 <div class="sect1">
 <h2 id="_derived_data_types"><a class="anchor" href="#_derived_data_types"></a>9. Derived data types</h2>
 <div class="sectionbody">
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>In the communications, the data exchanged are typed: MPI_INTEGER,
 MPI_REAL, MPI_COMPLEX, etc .</p>
 </div>
@@ -1012,7 +1009,7 @@ MPI_REAL, MPI_COMPLEX, etc .</p>
 MPI_Type_contiguous(), MPI_Type_vector(), MPI_Type_Indexed() , or
 MPI_Type_create_struct()</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The derived types notably allow the exchange of non-contiguous or
 non-homogeneous data in memory and to limit the number of calls to the
 communications subroutines.</p>
@@ -1022,14 +1019,14 @@ communications subroutines.</p>
 <div class="sect1">
 <h2 id="_mpi_threading"><a class="anchor" href="#_mpi_threading"></a>10. MPI + threading</h2>
 <div class="sectionbody">
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The MPI standard has been updated to accommodate the use of threads within processes. Using these capabilities is optional, and presents numerous advantages and disadvantages</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
 <p>Advantages of MPI + threading</p>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>Possiblity for better scaling of communication costs</p>
@@ -1048,7 +1045,7 @@ communications subroutines.</p>
 </li>
 <li>
 <p>Disadvantages of MPI + threading</p>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>Implicitly shared data can be harder to reason about correctly (eg. race conditions)</p>
@@ -1084,7 +1081,7 @@ communications subroutines.</p>
 <div class="sect1">
 <h2 id="_mpi_support_for_threading"><a class="anchor" href="#_mpi_support_for_threading"></a>11. MPI support for threading</h2>
 <div class="sectionbody">
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Since version 2.0, MPI can be initialized in up to four different ways. The former approach using MPI_Init still works, but applications that wish to use threading should use MPI_Init_thread.</p>
 </div>
 <div class="literalblock">
@@ -1092,10 +1089,10 @@ communications subroutines.</p>
 <pre>int MPI_Init_thread(int *argc, char ***argv, int required, int *provided)</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The following threading levels are generally supported:</p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>MPI_THREAD_SINGLE - rank is not allowed to use threads, which is basically equivalent to calling MPI_Init.</p>
@@ -1110,18 +1107,18 @@ communications subroutines.</p>
 <pre>With MPI_THREAD_SINGLE, the rank may use MPI freely and will not use threads.</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>*MPI_THREAD_FUNNELED - rank can be multi-threaded but only the main thread may call MPI functions. Ideal for fork-join parallelism such as used in #pragma omp parallel, where all MPI calls are outside the OpenMP regions.</p>
 </div>
 <div class="paragraph">
 <p><span class="image"><a class="image" href="#fragment1114"><img src="_images/MPI_THREAD_FUNNELED.svg" alt="MPI THREAD FUNNELED" width="600" height="300"></a></span></p>
 </div>
-<div class="literalblock">
+<div class="literalblock text-justify">
 <div class="content">
 <pre>With MPI_THREAD_FUNNELED, the rank can use MPI from only the main thread.</pre>
 </div>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>MPI_THREAD_SERIALIZED - rank can be multi-threaded but only one thread at a time may call MPI functions. The rank must ensure that MPI is used in a thread-safe way. One approach is to ensure that MPI usage is mutually excluded by all the threads, eg. with a mutex.</p>
@@ -1131,12 +1128,12 @@ communications subroutines.</p>
 <div class="paragraph">
 <p><span class="image"><a class="image" href="#fragment1115"><img src="_images/MPI_THREAD_SERIALIZED.svg" alt="MPI THREAD SERIALIZED" width="600" height="300"></a></span></p>
 </div>
-<div class="literalblock">
+<div class="literalblock text-justify">
 <div class="content">
 <pre>With MPI_THREAD_SERIALIZED, the rank can use MPI from any thread so long as it ensures the threads synchronize such that no thread calls MPI while another thread is doing so.</pre>
 </div>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>MPI_THREAD_MULTIPLE - rank can be multi-threaded and any thread may call MPI functions. The MPI library ensures that this access is safe across threads. Note that this makes all MPI operations less efficient, even if only one thread makes MPI calls, so should be used only where necessary.</p>
@@ -1146,13 +1143,13 @@ communications subroutines.</p>
 <div class="paragraph">
 <p><span class="image"><a class="image" href="#fragment1116"><img src="_images/MPI_THREAD_MULTIPLE.svg" alt="MPI THREAD MULTIPLE" width="600" height="300"></a></span></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>With MPI_THREAD_MULTIPLE, the rank can use MPI from any thread. The MPI library ensures the necessary synchronization</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Note that different MPI ranks may make different requirements for MPI threading. This can be efficient for applications using manager-worker paradigms where the workers have simpler communication patterns.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>For applications where it is possible to implement using MPI_THREAD_SERIALIZED approach, it will generally outperform the same application naively implemented and using MPI_THREAD_MULTIPLE, because the latter will need to use more synchronization.</p>
 </div>
 </div>

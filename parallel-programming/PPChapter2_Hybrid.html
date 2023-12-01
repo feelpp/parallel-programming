@@ -233,18 +233,16 @@ MathJax.Hub.Config({
 <div class="sect1">
 <h2 id="_mpi_openmp_two_complementary_parallelization_models"><a class="anchor" href="#_mpi_openmp_two_complementary_parallelization_models"></a>1. MPI, OpenMP two complementary parallelization models.</h2>
 <div class="sectionbody">
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>MPI is a multi-process model whose mode of communication between the processes is <strong>explicit</strong> (communication management is the responsibility of the user). MPI is generally used on multiprocessor machines with distributed memory. MPI is a library for passing messages between processes without sharing.</p>
 </li>
 <li>
-<p>OpenMP is a multitasking model whose mode of communication between tasks is <strong>implicit</strong> (the management of communications is the responsibility of the compiler). OpenMP is used on shared-memory multiprocessor machines. It focuses on shared memory paradigms. It is a language extension for expressing data-parallel operations (usually parallelized arrays over loops).</p>
+<p>OpenMP is a multitasking model whose mode of communication between tasks is <strong>implicit</strong> (the management of communications is the responsibility of the compiler). OpenMP is used on shared-memory multiprocessor machines. It focuses on shared memory paradigms. It is a language extension for expressing data-parallel operations (usually parallelized arrays over loops).
+Note: on a cluster of independent shared-memory multiprocessor machines (nodes), the implementation of a two-level parallelization (MPI, OpenMP) in the same program can be a major advantage for the parallel performance of the code.</p>
 </li>
 </ul>
-</div>
-<div class="paragraph">
-<p>Note: on a cluster of independent shared-memory multiprocessor machines (nodes), the implementation of a two-level parallelization (MPI, OpenMP) in the same program can be a major advantage for the parallel performance of the code.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -319,13 +317,13 @@ MathJax.Hub.Config({
 </tr>
 </tbody>
 </table>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Hybrid application programs using MPI + OpenMP are now commonplace on large HPC systems. There are basically two main motivations for this combination of programming models:</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>1. Reduced memory footprint, both in the application and in the MPI library (eg communication buffers).</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>2. Improved performance, especially at high core counts where pure MPI scalability runs out.</p>
 </div>
 </div>
@@ -338,7 +336,7 @@ MathJax.Hub.Config({
 <a class="image" href="#fragment9"><img src="_images/image9.png" alt="image9" width="307" height="155"></a>
 </div>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>From dequential code, alongside MPI first, then try adding OpenMP</p>

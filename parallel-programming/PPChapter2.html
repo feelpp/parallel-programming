@@ -230,14 +230,14 @@ MathJax.Hub.Config({
 <div class="paragraph">
 <p><strong>MPI, OpenMP two complementary parallelization models.</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>– MPI is a multi-process model whose mode of communication between the
 processes is <strong>explicit</strong> (communication management is the responsibility
 of the user). MPI is generally used on multiprocessor machines with
 distributed memory. MPI is a library for passing messages between
 processes without sharing.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>– OpenMP is a multitasking model whose mode of communication between
 tasks is <strong>implicit</strong> (the management of communications is the
 responsibility of the compiler). OpenMP is used on shared-memory
@@ -245,7 +245,7 @@ multiprocessor machines. It focuses on shared memory paradigms. It is a
 language extension for expressing data-parallel operations (usually
 parallelized arrays over loops).</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Note: on a cluster of independent shared-memory multiprocessor machines
 (nodes), the implementation of a two-level parallelization (MPI, OpenMP)
 in the same program can be a major advantage for the parallel
@@ -328,13 +328,13 @@ performance of the code.</p>
 <div class="paragraph">
 <p><strong>General notions</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The transmitter and the receiver are identified by their rank in the
 communicator. The entity passed between two processes is called a
 message .<br>
 A message is characterized by its envelope . This consists of:</p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>the rank of the sending process;<br></p>
@@ -348,14 +348,11 @@ A message is characterized by its envelope . This consists of:</p>
 <li>
 <p>the communicator who defines the process group and the communication
 context.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The data exchanged is typed (integers, reals, etc. or personal derived
 types).</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>In each case, there are several transfer modes , using different
 protocols.</p>
 </div>
@@ -371,6 +368,9 @@ type_message, *int* rank_dest, *int* label, MPI_Comm comm)</pre>
 type_message, *int* rank_source, *int* label, MPI_Comm comm, MPI_Status
 *status)</pre>
 </div>
+</div>
+</li>
+</ul>
 </div>
 <div class="paragraph">
 <p>Note this operation is blocking.</p>
@@ -405,30 +405,15 @@ int label_message_recu, MPI_Comm comm, MPI_Status *status)</pre>
 <div class="paragraph">
 <p><strong>General notions</strong></p>
 </div>
-<div class="paragraph">
-<p>Collective communications allow a series of point-to-point
-communications to be made in a single operation.</p>
-</div>
-<div class="paragraph">
-<p>A collective communication always concerns all the processes of the
-indicated communicator .</p>
-</div>
-<div class="paragraph">
-<p>For each of the processes, the call ends when the latter&#8217;s participation
-in the collective operation is completed, in the sense of point-to-point
-communications (thus when the memory zone concerned can be modified).</p>
-</div>
-<div class="paragraph">
-<p>The management of labels in these communications is transparent and at
-the expense of the system. They are therefore never explicitly defined
-during the call to these subroutines. One of the advantages of this is
-that collective communications never interfere with point-to-point
-communications.</p>
+<div class="paragraph text-justify">
+<p>Collective communications allow a series of point-to-point communications to be made in a single operation. A collective communication always concerns all the processes of the indicated communicator. For each of the processes, the call ends when the latter&#8217;s participation in the collective operation is completed, in the sense of point-to-point
+communications (thus when the memory zone concerned can be modified). The management of labels in these communications is transparent and at the expense of the system. They are therefore never explicitly defined
+during the call to these subroutines. One of the advantages of this is that collective communications never interfere with point-to-point communications.</p>
 </div>
 <div class="paragraph">
 <p><strong>Types of collective communications</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>There are three types of subroutines:<br>
 <strong>1.</strong> the one that ensures global synchronizations: MPI_Barrier() .</p>
 </div>
@@ -612,7 +597,7 @@ reused immediately after the call exits.</p>
 <div class="paragraph">
 <p><strong>Synchronous sends</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>A synchronous send involves synchronization between the processes
 involved. A shipment can only begin when its receipt is posted. There
 can only be communication if both processes are willing to communicate.</p>
@@ -673,21 +658,8 @@ saturation)</p>
 <p>Send buffers must be managed manually (often difficult to choose an
 appropriate size <em>)</em></p>
 </div>
-<div class="paragraph">
-<p>A bit slower than synchronous sends if the receiver is ready</p>
-</div>
-<div class="paragraph">
-<p>No knowledge of the reception (send-receive decoupling)</p>
-</div>
-<div class="paragraph">
-<p>Risk of wasting memory space if the <em>buffers</em> are too oversized</p>
-</div>
-<div class="paragraph">
-<p>The application crashes if the <em>buffers</em> are too small</p>
-</div>
-<div class="paragraph">
-<p>There are also often hidden <em>buffers</em> managed by the MPI implementation
-on the sender and/or receiver side (and consuming memory resources)</p>
+<div class="paragraph text-justify">
+<p>A bit slower than synchronous sends if the receiver is ready. No knowledge of the reception (send-receive decoupling). Risk of wasting memory space if the <em>buffers</em> are too oversized. The application crashes if the <em>buffers</em> are too small. There are also often hidden <em>buffers</em> managed by the MPI implementation on the sender and/or receiver side (and consuming memory resources)</p>
 </div>
 <div class="paragraph">
 <p><strong>Standard shipments</strong></p>
@@ -723,7 +695,7 @@ problem</p>
 <div class="paragraph">
 <p><strong>Non-blocking calls</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>non-blocking call returns control very quickly, but does not allow the
 immediate reuse of the memory space used in the call. It is necessary to
 ensure that the communication is indeed terminated (with MPI_Wait() for
@@ -756,7 +728,7 @@ int* source, int label, MPI_Comm comm, MPI_Request *req)</pre>
 <div class="paragraph">
 <p><strong>Benefits of non-blocking calls</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Ability to hide all or part of the communication costs (if the
 architecture allows it)</p>
 </div>
@@ -766,7 +738,7 @@ architecture allows it)</p>
 <div class="paragraph">
 <p><strong>Disadvantages of non-blocking calls</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Higher additional costs (several calls for a single send or receive,
 request management)</p>
 </div>
@@ -841,7 +813,7 @@ int* MPI_Testall ( int size, MPI_Request reqs[], int *flag, MPI_Status statuses[
 <div class="paragraph">
 <p><strong>Memory-to-memory communications (RMA)</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Memory-to-memory communications (or RMA for <em>Remote Memory Access</em> or
 <em>one-sided communications</em> ) consist of accessing the memory of a remote
 process in write or read mode without the latter having to manage this
@@ -851,7 +823,7 @@ during the transfer.</p>
 <div class="paragraph">
 <p><strong>RMA - General Approach</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Creation of a memory window with MPI_Win_create() to authorize RMA
 transfers in this area.</p>
 </div>
@@ -865,7 +837,7 @@ MPI_Accumulate(), , MPI_Get_accumulate() and MPI_Compare_and_swap()</p>
 <div class="paragraph">
 <p><strong>RMA - Synchronization Methods</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>To ensure correct operation, it is mandatory to carry out certain
 synchronizations. 3 methods are available:</p>
 </div>
@@ -885,7 +857,7 @@ and MPI_Win_unlock()).</p>
 <div class="paragraph">
 <p><strong>Benefits of RMAs</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Allows you to implement certain algorithms more efficiently.</p>
 </div>
 <div class="paragraph">
@@ -899,7 +871,7 @@ memory, etc.).</p>
 <div class="paragraph">
 <p><strong>Disadvantages of RMAs</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Synchronization management is tricky.</p>
 </div>
 <div class="paragraph">
@@ -916,7 +888,7 @@ pointers not supported by some compilers).</p>
 <div class="paragraph">
 <p><strong>Derived data types</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>In the communications, the data exchanged are typed: MPI_INTEGER,
 MPI_REAL, MPI_COMPLEX, etc .</p>
 </div>
@@ -1220,7 +1192,7 @@ computing on shared memory architecture.</p>
 <div class="paragraph">
 <p>An OpenMP program is executed by a single process.</p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>This process activates lightweight processes (threads) at the entrance
@@ -1235,14 +1207,14 @@ in memory.</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>– It can be defined in the stack (local memory space) of a lightweight
 process; we then speak of a private variable</p>
 </div>
 <div class="paragraph">
 <p>– It can be defined in a shared memory space</p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>An OpenMP program is an alternation of sequential regions and parallel
@@ -1263,13 +1235,13 @@ whose rank is 0.<br></p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>– execute a loop by distributing the iterations between the tasks;<br>
 – execute several sections of code but only one per task;<br>
 – execute several occurrences of the same procedure by different tasks
 (orphaning)</p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>It is sometimes necessary to introduce a synchronization between the
@@ -1282,7 +1254,7 @@ Different cases can occur:</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>– at best, at each instant, there is one task per processor with as many
 tasks as there are dedicated processors for the duration of the work;<br>
 – at worst, all tasks are processed sequentially by one and only one
@@ -1290,7 +1262,7 @@ processor;<br>
 – in reality, for reasons essentially of operation on a machine whose
 processors are not dedicated, the situation is generally intermediate.</p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>To overcome these problems, it is possible to build the OpenMP runtime
@@ -1301,7 +1273,7 @@ on a library of mixed threads and thus control the scheduling of tasks.</p>
 <div class="paragraph">
 <p><strong>Construction of a parallel region</strong></p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>In a parallel region, by default, the status of variables is shared.</p>
@@ -1338,7 +1310,7 @@ before entering the parallel region.</p>
 <div class="paragraph">
 <p><strong>Extent of a parallel region</strong></p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>The scope of an OpenMP construct represents the scope of its influence
@@ -1363,7 +1335,7 @@ scope (static) of the region.</p>
 <div class="paragraph">
 <p><strong>Case of static variables</strong></p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>A variable is static if its location in memory is defined at
@@ -1383,7 +1355,7 @@ static instances is passed to all tasks.</p>
 <div class="paragraph">
 <p><strong>Case of dynamic allocation</strong></p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>The dynamic memory allocation/deallocation operation can be performed
@@ -1402,7 +1374,7 @@ that only one task (e.g. the master task) takes care of this operation</p>
 <div class="paragraph">
 <p><strong>Complements</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The construction of a parallel region admits two other clauses:</p>
 </div>
 <div class="paragraph">
@@ -1412,7 +1384,7 @@ between tasks;<br>
 entrance of a parallel region in the same way as the OMP_SET_NUM_THREADS
 subroutine would do.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>From one parallel region to another, the number of concurrent tasks can
 be varied if desired. To do this, simply use the OMP_SET_DYNAMIC
 subroutine or set the OMP_DYNAMIC environment variable to true. It is
@@ -1477,7 +1449,7 @@ My rank in region 2: 1</pre>
 <div class="paragraph">
 <p><strong>Work sharing</strong></p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>In principle, building a parallel region and using a few OpenMP
@@ -1502,7 +1474,7 @@ parallel region.</p>
 <div class="paragraph">
 <p><strong>Parallel loop</strong></p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>It is a parallelism by distribution of the iterations of a loop.</p>
@@ -1515,27 +1487,23 @@ directive.</p>
 <p>"Infinite" and do while loops are not parallelizable with OpenMP.</p>
 </li>
 <li>
-<p>The mode of distribution of iterations can be specified in the
-SCHEDULE clause.</p>
+<p>The mode of distribution of iterations can be specified in the SCHEDULE clause.</p>
 </li>
 <li>
-<p>Choosing the distribution mode provides more control over balancing
-the workload between tasks.</p>
+<p>Choosing the distribution mode provides more control over balancing the workload between tasks.</p>
 </li>
 <li>
 <p>Loop indices are private integer variables.</p>
 </li>
 <li>
-<p>By default, a global synchronization is performed at the end of the
-END DO construction unless the<br>
-NOWAIT clause has been specified.</p>
+<p>By default, a global synchronization is performed at the end of the END DO construction unless the + NOWAIT clause has been specified.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
 <p><strong>SCHEDULE clause</strong></p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>STATIC dispatching consists of dividing the iterations into packets of
@@ -1565,7 +1533,7 @@ it.</p>
 <div class="paragraph">
 <p><strong>Case of an ordered execution</strong></p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>It is sometimes useful (debugging cases) to execute a loop in an
@@ -1595,7 +1563,7 @@ They then sync to update the final result.</p>
 <div class="paragraph">
 <p><strong>Parallel sections</strong></p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>A section is a portion of code executed by one and only one task.</p>
@@ -1632,7 +1600,7 @@ SECTIONS directives with the union of their respective clauses.</p>
 <div class="paragraph">
 <p><strong>Exclusive execution</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Sometimes you want to exclude all tasks except one to execute certain
 portions of code included in a parallel region.</p>
 </div>
@@ -1646,7 +1614,7 @@ constructions remains quite different.</p>
 <div class="paragraph">
 <p>Parallel sections</p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>A section is a portion of code executed by one and only one task.</p>
@@ -1668,7 +1636,7 @@ to remove the implicit synchronization barrier.</p>
 <div class="paragraph">
 <p><strong>Exclusive execution</strong></p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>Sometimes you want to exclude all tasks except one to execute certain
@@ -1686,7 +1654,7 @@ constructions remains quite different.</p>
 <div class="paragraph">
 <p><strong>SINGLE construction</strong></p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>The SINGLE construction allows a portion of code to be executed by one
@@ -1706,7 +1674,7 @@ it, unless they have specified the NOWAIT clause.</p>
 <div class="paragraph">
 <p><strong>MASTER building</strong></p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>The MASTER construction allows a portion of code to be executed by the
@@ -1724,36 +1692,36 @@ or at the end of construction (END MASTER).</p>
 <div class="paragraph">
 <p><strong>Synchronizations</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Synchronization becomes necessary in the following situations:</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>1. to ensure that all concurrent tasks have reached the same
 level of instruction in the program (global barrier);</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>2. to order the execution of all the concurrent tasks when these
 must execute the same portion of code affecting one or more shared
 variables whose consistency (in reading or in writing) in memory must be
 guaranteed (mutual exclusion).</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>3. to synchronize at least two concurrent tasks among the set
 (lock mechanism).</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>As we have already indicated, the absence of a NOWAIT clause means that
 a global synchronization barrier is implicitly applied at the end of the
 \openmp construction. But it is possible to explicitly impose a global
 synchronization barrier thanks to the BARRIER directive.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The mutual exclusion mechanism (one task at a time) is found, for
 example, in reduction operations (REDUCTION clause) or in the ordered
 execution of a loop (DO ORDERED directive). For the same purpose, this
 mechanism is also implemented in the ATOMIC and CRITICAL directives.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Finer synchronizations can be achieved either by setting up lock
 mechanisms (this requires calling subroutines from the OpenMP library),
 or by using the FLUSH directive.</p>
@@ -1761,7 +1729,7 @@ or by using the FLUSH directive.</p>
 <div class="paragraph">
 <p><strong>Barrier</strong></p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>The BARRIER directive synchronizes all concurrent tasks in a parallel
@@ -1787,7 +1755,7 @@ directive.</p>
 <div class="paragraph">
 <p><strong>Critical regions</strong></p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>A critical region can be seen as a generalization of the ATOMIC
@@ -1813,7 +1781,7 @@ instruction by a critical region.</p>
 <div class="paragraph">
 <p><strong>FLUSH directive</strong></p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>It is useful in a parallel region to refresh the value of a shared
@@ -1832,7 +1800,7 @@ tasks.</p>
 <div class="paragraph">
 <p><strong>Rules of good performance</strong></p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>Minimize the number of parallel regions in the code.</p>

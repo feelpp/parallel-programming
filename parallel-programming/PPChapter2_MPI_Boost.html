@@ -233,10 +233,10 @@ MathJax.Hub.Config({
 <div class="sect1">
 <h2 id="_introduction"><a class="anchor" href="#_introduction"></a>1. Introduction</h2>
 <div class="sectionbody">
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Boost.MPI is a library for message passing in high-performance parallel applications. A Boost.MPI program is one or more processes that can communicate either via sending and receiving individual messages (point-to-point communication) or by coordinating as a group (collective communication). Unlike communication in threaded environments or using a shared-memory library, Boost.MPI processes can be spread across many different machines, possibly with different operating systems and underlying architectures.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Boost.MPI is not a completely new parallel programming library. Rather, it is a C friendly interface to the standard Message Passing Interface (MPI), the most popular library interface for high-performance, distributed computing. MPI defines a library interface, available from C, Fortran, and C, for which there are many MPI implementations. Although there exist C bindings for MPI, they offer little functionality over the C bindings. The Boost.MPI library provides an alternative C interface to MPI that better supports modern C development styles, including complete support for user-defined data types and C Standard Library types, arbitrary function objects for collective algorithms, and the use of modern C++ library techniques to maintain maximal efficiency.</p>
 </div>
 </div>
@@ -246,7 +246,7 @@ MathJax.Hub.Config({
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_mpi_implementation"><a class="anchor" href="#_mpi_implementation"></a>2.1. MPI Implementation</h3>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>To get started with Boost.MPI, you will first need a working MPI implementation. There are many conforming MPI implementations available. Boost.MPI should work with any of the implementations, although it has only been tested extensively with:
 You can test your implementation using the following simple program, which passes a message from one processor to another. Each processor prints a message to standard output.</p>
 </div>
@@ -277,7 +277,7 @@ int main(int argc, char argv[])
 }</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>You should compile and run this program on two processors. To do this, consult the documentation for your MPI implementation. With OpenMPI, for instance, you compile with the mpiCC or mpic++ compiler, boot the LAM/MPI daemon, and run your program via mpirun. For instance, if your program is called mpi-test.cpp, use the following commands:</p>
 </div>
 <div class="literalblock">
@@ -288,7 +288,7 @@ mpirun -np 2 ./mpi-test
 lamhalt</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>When you run this program, you will see both Rank 0 OK! and Rank 1 OK! printed to the screen. However, they may be printed in any order and may even overlap each other. The following output is perfectly legitimate for this MPI program:</p>
 </div>
 <div class="literalblock">
@@ -297,7 +297,7 @@ lamhalt</pre>
 0 OK!</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>If your output looks something like the above, your MPI implementation appears to be working with a C++ compiler and we&#8217;re ready to move on.</p>
 </div>
 </div>
@@ -306,7 +306,7 @@ lamhalt</pre>
 <div class="sect1">
 <h2 id="_configure_and_build"><a class="anchor" href="#_configure_and_build"></a>3. Configure and Build</h2>
 <div class="sectionbody">
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>As the rest of Boost, Boost.MPI uses version 2 of the Boost.Build system for configuring and building the library binary. Please refer to the general Boost installation instructions for Unix Variant (including Unix, Linux and MacOS) or Windows. The simplified build instructions should apply on most platforms with a few specific modifications described below.</p>
 </div>
 </div>
@@ -314,7 +314,7 @@ lamhalt</pre>
 <div class="sect1">
 <h2 id="_bootstrap"><a class="anchor" href="#_bootstrap"></a>4. Bootstrap</h2>
 <div class="sectionbody">
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>As explained in the boost installation instructions, running the bootstrap (./bootstrap.sh for unix variants or bootstrap.bat for Windows) from the boost root directory will produce a 'project-config.jam` file. You need to edit that file and add the following line:</p>
 </div>
 <div class="literalblock">
@@ -327,16 +327,16 @@ lamhalt</pre>
 </div>
 <div class="sect2">
 <h3 id="_setting_up_your_mpi_implementation"><a class="anchor" href="#_setting_up_your_mpi_implementation"></a>4.1. Setting up your MPI Implementation</h3>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>First, you need to scan the include/boost/mpi/config.hpp file and check if some settings need to be modified for your MPI implementation or preferences.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>In particular, the BOOST_MPI_HOMOGENEOUS macro, that you will need to comment out if you plan to run on a heterogeneous set of machines. See the optimization notes below.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Most MPI implementations require specific compilation and link options. In order to mask theses details to the user, most MPI implementations provide wrappers which silently pass those options to the compiler.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Depending on your MPI implementation, some work might be needed to tell Boost which specific MPI option to use. This is done through the using mpi ; directive in the project-config.jam file those general form is (do not forget to leave spaces around : and before ;):</p>
 </div>
 <div class="literalblock">
@@ -347,7 +347,7 @@ lamhalt</pre>
 [&lt;mpi runner&gt;] ;</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Depending on your installation and MPI distribution, the build system might be able to find all the required informations and you just need to specify:</p>
 </div>
 <div class="literalblock">
@@ -358,51 +358,33 @@ lamhalt</pre>
 <div class="ulist">
 <ul>
 <li>
-<p>Trouble shooting</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Most of the time, specially with production HPC clusters, some work will need to be done.</p>
-</div>
-<div class="paragraph">
+<p>Trouble shooting
+Most of the time, specially with production HPC clusters, some work will need to be done.</p>
+<div class="paragraph text-justify">
 <p>Here is a list of the most common issues and suggestions on how to fix those.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Your wrapper is not in your path or does ot have a standard name</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>You will need to tell the build system how to call it using the first parameter:</p>
-</div>
+<p>Your wrapper is not in your path or does ot have a standard name
+You will need to tell the build system how to call it using the first parameter:</p>
 <div class="literalblock">
 <div class="content">
 <pre>using mpi : /opt/mpi/bullxmpi/1.2.8.3/bin/mpicc ;</pre>
 </div>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>Warning</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>Boost.MPI only uses the C interface, so specifying the C wrapper should be enough. But some implementations will insist on importing the C++ bindings.</p>
-</div>
+</li>
+<li>
+<p>Warning
+Boost.MPI only uses the C interface, so specifying the C wrapper should be enough. But some implementations will insist on importing the C++ bindings.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Your wrapper is really eccentric or does not exist</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>With some implementations, or with some specific integration<sup>[9]</sup> you will need to provide the compilation and link options through de second parameter using 'jam' directives. The following type configuration used to be required for some specific Intel MPI implementation (in such a case, the name of the wrapper can be left blank):</p>
-</div>
+<p>Your wrapper is really eccentric or does not exist
+With some implementations, or with some specific integration<sup>[9]</sup> you will need to provide the compilation and link options through de second parameter using 'jam' directives. The following type configuration used to be required for some specific Intel MPI implementation (in such a case, the name of the wrapper can be left blank):</p>
 <div class="literalblock">
 <div class="content">
 <pre>using mpi : mpiicc :
@@ -416,7 +398,7 @@ lamhalt</pre>
     &lt;find-shared-library&gt;rt ;</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>As a convenience, MPI wrappers usually have an option that provides the required informations, which usually starts with --show. You can use those to find out the requested jam directive:</p>
 </div>
 <div class="literalblock">
@@ -439,8 +421,14 @@ $ mpicc --showme:link</pre>
 <pre>-pthread -L/opt/.../lib -lmpi -ldl -lm -lnuma -Wl,--export-dynamic -lrt -lnsl -lutil -lm -ld $</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>To see the results of MPI auto-detection, pass --debug-configuration on the bjam command line.</p>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
 </div>
 <div class="paragraph">
 <p>The launch syntax cannot be detected</p>
@@ -451,7 +439,7 @@ $ mpicc --showme:link</pre>
 <div class="paragraph">
 <p>This is only used when running the tests.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>If you need to use a special command to launch an MPI program, you will need to specify it through the third parameter of the using mpi directive.</p>
 </div>
 <div class="paragraph">
@@ -535,7 +523,7 @@ $./b2 install</pre>
 <div class="sect1">
 <h2 id="_using_boost_mpi"><a class="anchor" href="#_using_boost_mpi"></a>5. Using Boost.MPI</h2>
 <div class="sectionbody">
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>To build applications based on Boost.MPI, compile and link them as you normally would for MPI programs, but remember to link against the boost_mpi and boost_serialization libraries, e.g.,</p>
 </div>
 <div class="literalblock">
@@ -552,16 +540,16 @@ $./b2 install</pre>
 <div class="sect1">
 <h2 id="_tutorial"><a class="anchor" href="#_tutorial"></a>6. Tutorial</h2>
 <div class="sectionbody">
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>A Boost.MPI program consists of many cooperating processes (possibly running on different computers) that communicate among themselves by passing messages. Boost.MPI is a library (as is the lower-level MPI), not a language, so the first step in a Boost.MPI is to create an mpi::environment object that initializes the MPI environment and enables communication among the processes. The mpi::environment object is initialized with the program arguments (which it may modify) in your main program. The creation of this object initializes MPI, and its destruction will finalize MPI. In the vast majority of Boost.MPI programs, an instance of mpi::environment will be declared in main at the very beginning of the program.</p>
 </div>
 <div class="paragraph">
 <p>Warning</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Declaring an mpi::environment at global scope is undefined behavior.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Communication with MPI always occurs over a communicator, which can be created by simply default-constructing an object of type mpi::communicator. This communicator can then be queried to determine how many processes are running (the "size" of the communicator) and to give a unique number to each process, from zero to the size of the communicator (i.e., the "rank" of the process):</p>
 </div>
 <div class="literalblock">
@@ -579,7 +567,7 @@ int main()
 }</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>If you run this program with 7 processes, for instance, you will receive output such as:</p>
 </div>
 <div class="literalblock">
@@ -593,13 +581,13 @@ I am process 4 of 7.
 I am process 3 of 7.</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Of course, the processes can execute in a different order each time, so the ranks might not be strictly increasing. More interestingly, the text could come out completely garbled, because one process can start writing "I am a</p>
 </div>
 <div class="paragraph">
 <p>process" before another process has finished writing "of 7.".</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>If you should still have an MPI library supporting only MPI 1.1 you will need to pass the command line arguments to the environment constructor as shown in this example:</p>
 </div>
 <div class="literalblock">
@@ -621,10 +609,10 @@ int main(int argc, char* argv[])
 <h3 id="_point_to_point_communication"><a class="anchor" href="#_point_to_point_communication"></a>6.1. Point-to-Point communication</h3>
 <div class="sect3">
 <h4 id="_blocking_communication"><a class="anchor" href="#_blocking_communication"></a>6.1.1. Blocking communication</h4>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>As a message passing library, MPI&#8217;s primary purpose is to routine messages from one process to another, i.e., point-to-point. MPI contains routines that can send messages, receive messages, and query whether messages are available. Each message has a source process, a target process, a tag, and a payload containing arbitrary data. The source and target processes are the ranks of the sender and receiver of the message, respectively. Tags are integers that allow the receiver to distinguish between different messages coming from the same sender.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The following program uses two MPI processes to write "Hello, world!" to the screen (hello_world.cpp):</p>
 </div>
 <div class="literalblock">
@@ -654,16 +642,16 @@ int main()
 }</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The first processor (rank 0) passes the message "Hello" to the second processor (rank 1) using tag 0. The</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>second processor prints the string it receives, along with a comma, then passes the message "world" back to processor 0 with a different tag. The first processor then writes this message with the "!" and exits. All sends are accomplished with the communicator::send method and all receives use a corresponding communicator::recv call.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_non_blocking_communication"><a class="anchor" href="#_non_blocking_communication"></a>6.1.2. Non-blocking communication</h4>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The default MPI communication operations&#8212;&#8203;send and recv&#8212;&#8203;may have to wait until the entire transmission is completed before they can return. Sometimes this blocking behavior has a negative impact on performance, because the sender could be performing useful computation while it is waiting for the transmission to occur. More important, however, are the cases where several communication operations must occur simultaneously, e.g., a process will both send and receive at the same time.</p>
 </div>
 <div class="paragraph">
@@ -685,7 +673,7 @@ else
 }</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The first process passes a message to the second process, then prepares to receive a message. The second process does the send and receive in the opposite order. However, this sequence of events is just that&#8212;&#8203;a sequence&#8212;&#8203;meaning that there is essentially no parallelism. We can use non-blocking communication to ensure that the two messages are transmitted simultaneously (hello_world_nonblocking.cpp):</p>
 </div>
 <div class="literalblock">
@@ -719,29 +707,27 @@ int main()
 }</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>We have replaced calls to the communicator::send and communicator::recv members with similar calls to</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>their non-blocking counterparts, communicator::isend and communicator::irecv. The prefix i indicates that the operations return immediately with a mpi::request object, which allows one to query the status of a communication request (see the test method) or wait until it has completed (see the wait method). Multiple requests can be completed at the same time with the wait_all operation.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Important</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Regarding communication completion/progress: The MPI standard requires users to keep the request handle for a non-blocking communication, and to call the "wait" operation (or successfully test for completion) to complete the send or receive. Unlike most C MPI implementations, which allow the user to discard the request for a non-blocking send, Boost.MPI requires the user to call "wait" or "test", since the request object might contain temporary buffers that have to be kept until the send is completed. Moreover, the MPI standard does not guarantee that the receive makes any progress before a call to "wait" or "test", although most implementations of the C MPI do allow receives to progress before the call to "wait" or "test". Boost.MPI, on the other hand, generally requires "test" or "wait" calls to make progress. More specifically, Boost.MPI guarantee that calling "test" multiple time will eventually complete the communication (this is due to the fact that serialized communication are potentially a multi step operation.).</p>
-</div>
-<div class="paragraph">
+<p>Important
+Regarding communication completion/progress: The MPI standard requires users to keep the request handle for a non-blocking communication, and to call the "wait" operation (or successfully test for completion) to complete the send or receive. Unlike most C MPI implementations, which allow the user to discard the request for a non-blocking send, Boost.MPI requires the user to call "wait" or "test", since the request object might contain temporary buffers that have to be kept until the send is completed. Moreover, the MPI standard does not guarantee that the receive makes any progress before a call to "wait" or "test", although most implementations of the C MPI do allow receives to progress before the call to "wait" or "test". Boost.MPI, on the other hand, generally requires "test" or "wait" calls to make progress. More specifically, Boost.MPI guarantee that calling "test" multiple time will eventually complete the communication (this is due to the fact that serialized communication are potentially a multi step operation.).</p>
+<div class="paragraph text-justify">
 <p>If you run this program multiple times, you may see some strange results: namely, some runs will produce:</p>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>Hello, world!</pre>
 </div>
+</div>
+</li>
+</ul>
 </div>
 <div class="paragraph">
 <p>while others will produce:</p>
@@ -752,19 +738,19 @@ int main()
 Hello,</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>or even some garbled version of the letters in "Hello" and "world". This indicates that there is some parallelism in the program, because after both messages are (simultaneously) transmitted, both processes will concurrent execute their print statements. For both performance and correctness, non-blocking communication operations are critical to many parallel applications using MPI.</p>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_collective_operations"><a class="anchor" href="#_collective_operations"></a>6.2. Collective operations</h3>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Point-to-point operations are the core message passing primitives in Boost.MPI. However, many message-passing applications also require higher-level communication algorithms that combine or summarize the data stored on many different processes. These algorithms support many common tasks such as "broadcast this value to all processes", "compute the sum of the values on all processors" or "find the global minimum."</p>
 </div>
 <div class="sect3">
 <h4 id="_broadcast"><a class="anchor" href="#_broadcast"></a>6.2.1. Broadcast</h4>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The broadcast algorithm is by far the simplest collective operation. It broadcasts a value from a single process to all other processes within a communicator. For instance, the following program broadcasts "Hello, World!" from process 0 to every other process. (hello_world_broadcast.cpp)</p>
 </div>
 <div class="literalblock">
@@ -789,7 +775,7 @@ int main()
 }</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Running this program with seven processes will produce a result such as:</p>
 </div>
 <div class="literalblock">
@@ -806,7 +792,7 @@ Process #6 says Hello, World!</pre>
 </div>
 <div class="sect3">
 <h4 id="_gather"><a class="anchor" href="#_gather"></a>6.2.2. Gather</h4>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The gather collective gathers the values produced by every process in a communicator into a vector of values on the "root" process (specified by an argument to gather). The /i/th element in the vector will correspond to the value gathered from the /i/th process. For instance, in the following program each process computes its own random number. All of these random numbers are gathered at process 0 (the "root" in this case), which prints out the values that correspond to each processor. (random_gather.cpp)</p>
 </div>
 <div class="literalblock">
@@ -838,7 +824,7 @@ int main()
 }</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Executing this program with seven processes will result in output such as the following. Although the random values will change from one run to the next, the order of the processes in the output will remain the same because only process 0 writes to std::cout.</p>
 </div>
 <div class="literalblock">
@@ -852,13 +838,13 @@ Process #5 thought of 949458815
 Process #6 thought of 650073868</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The gather operation collects values from every process into a vector at one process. If instead the values from every process need to be collected into identical vectors on every process, use the all_gather algorithm, which is semantically equivalent to calling gather followed by a broadcast of the resulting vector.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_scatter"><a class="anchor" href="#_scatter"></a>6.2.3. Scatter</h4>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The scatter collective scatters the values from a vector in the "root" process in a communicator into values in all the processes of the communicator. The /i/th element in the vector will correspond to the value received by the /i/th process. For instance, in the following program, the root process produces a vector of random nomber and send one value to each process that will print it. (random_scatter.cpp)</p>
 </div>
 <div class="literalblock">
@@ -894,7 +880,7 @@ int main(int argc, char* argv[])
 }</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Executing this program with seven processes will result in output such as the following. Although the random values will change from one run to the next, the order of the processes in the output will remain the same because of the barrier.</p>
 </div>
 <div class="literalblock">
@@ -911,10 +897,10 @@ Rank 6 got 2117359639</pre>
 </div>
 <div class="sect3">
 <h4 id="_reduce"><a class="anchor" href="#_reduce"></a>6.2.4. Reduce</h4>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The reduce collective summarizes the values from each process into a single value at the user-specified "root" process. The Boost.MPI reduce operation is similar in spirit to the STL accumulate operation, because it takes</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>a sequence of values (one per process) and combines them via a function object. For instance, we can randomly generate values in each process and the compute the minimum value over all processes via a call to reduce (random_min.cpp):</p>
 </div>
 <div class="literalblock">
@@ -942,7 +928,7 @@ int main()
 }</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The use of mpi::minimum&lt;int&gt; indicates that the minimum value should be computed. mpi::minimum&lt;int&gt; is a binary function object that compares its two parameters via &lt; and returns the smaller value. Any associative binary function or function object will work provided it&#8217;s stateless. For instance, to concatenate strings with reduce one could use the function object std::plus&lt;std::string&gt; (string_cat.cpp):</p>
 </div>
 <div class="literalblock">
@@ -969,7 +955,7 @@ int main()
 }</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>In this example, we compute a string for each process and then perform a reduction that concatenates all of the strings together into one, long string. Executing this program with seven processors yields the following output:</p>
 </div>
 <div class="paragraph">
@@ -978,13 +964,8 @@ int main()
 <div class="ulist">
 <ul>
 <li>
-<p>Binary operations for reduce</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Any kind of binary function objects can be used with reduce. For instance, and there are many such function objects in the C++ standard &lt;functional&gt; header and the Boost.MPI header &lt;boost/mpi/operations.hpp&gt;. Or, you can create your own function object. Function objects used with reduce must be associative, i.e. f(x, f(y, z)) must be equivalent to f(f(x, y), z). If they are also commutative (i..e, f(x, y) == f(y, x)), Boost.MPI can use a more efficient implementation of reduce. To state that a function object is commutative, you will need to specialize the class is_commutative. For instance, we could modify the previous example by telling Boost.MPI that string concatenation is commutative:</p>
-</div>
+<p>Binary operations for reduce
+Any kind of binary function objects can be used with reduce. For instance, and there are many such function objects in the C++ standard &lt;functional&gt; header and the Boost.MPI header &lt;boost/mpi/operations.hpp&gt;. Or, you can create your own function object. Function objects used with reduce must be associative, i.e. f(x, f(y, z)) must be equivalent to f(f(x, y), z). If they are also commutative (i..e, f(x, y) == f(y, x)), Boost.MPI can use a more efficient implementation of reduce. To state that a function object is commutative, you will need to specialize the class is_commutative. For instance, we could modify the previous example by telling Boost.MPI that string concatenation is commutative:</p>
 <div class="literalblock">
 <div class="content">
 <pre>namespace boost {
@@ -997,28 +978,31 @@ int main()
 } // end namespace boost::mpi</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>By adding this code prior to main(), Boost.MPI will assume that string concatenation is commutative and employ a different parallel algorithm for the reduce operation. Using this algorithm, the program outputs the following when run with seven processes:</p>
+</div>
+</li>
+</ul>
 </div>
 <div class="paragraph">
 <p>The result is zero one four five six two three</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Note how the numbers in the resulting string are in a different order: this is a direct result of Boost.MPI reordering operations. The result in this case differed from the non-commutative result because string concatenation is not commutative: f("x", "y") is not the same as f("y", "x"), because argument order matters. For truly commutative operations (e.g., integer addition), the more efficient commutative algorithm will produce the same result as the non-commutative algorithm. Boost.MPI also performs direct mappings from function objects in &lt;functional&gt; to MPI_Op values predefined by MPI (e.g., MPI_SUM, MPI_MAX); if you have your own function objects that can take advantage of this mapping, see the class template is_mpi_op.</p>
 </div>
 <div class="paragraph">
 <p>Warning</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Due to the underlying MPI limitations, it is important to note that the operation must be stateless.</p>
 </div>
 <div class="paragraph">
 <p>All process variant</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Like gather, reduce has an "all" variant called all_reduce that performs the reduction operation and broadcasts the result to all processes. This variant is useful, for instance, in establishing global minimum or maximum values.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The following code (global_min.cpp) shows a broadcasting version of the random_min.cpp example:</p>
 </div>
 <div class="literalblock">
@@ -1043,7 +1027,7 @@ int main(int argc, char* argv[])
 }</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>In that example we provide both input and output values, requiring twice as much space, which can be a problem depending on the size of the transmitted data. If there is no need to preserve the input value, the output value can be omitted. In that case the input value will be overridden with the output value and Boost.MPI is able, in some situation, to implement the operation with a more space efficient solution (using the MPI_IN_PLACE flag of the MPI C mapping), as in the following example (in_place_global_min.cpp):</p>
 </div>
 <div class="literalblock">
@@ -1071,13 +1055,13 @@ int main(int argc, char* argv[])
 </div>
 <div class="sect2">
 <h3 id="_user_defined_data_types"><a class="anchor" href="#_user_defined_data_types"></a>6.3. User-defined data types</h3>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The inclusion of boost/serialization/string.hpp in the previous examples is very important: it makes values of type std::string serializable, so that they can be be transmitted using Boost.MPI. In general, built-in C++ types (ints, floats, characters, etc.) can be transmitted over MPI directly, while user-defined and library-defined types will need to first be serialized (packed) into a format that is amenable to transmission. Boost.MPI relies on the Boost.Serialization library to serialize and deserialize data types.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>For types defined by the standard library (such as std::string or std::vector) and some types in Boost (such as boost::variant), the Boost.Serialization library already contains all of the required serialization code. In these cases, you need only include the appropriate header from the boost/serialization directory.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>For types that do not already have a serialization header, you will first need to implement serialization code before the types can be transmitted using Boost.MPI. Consider a simple class gps_position that contains members degrees, minutes, and seconds. This class is made serializable by making it a friend of boost::serialization::access and introducing the templated serialize() function, as follows:</p>
 </div>
 <div class="literalblock">
@@ -1104,10 +1088,10 @@ int main(int argc, char* argv[])
 };</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Complete information about making types serializable is beyond the scope of this tutorial. For more information, please see the Boost.Serialization library tutorial from which the above example was extracted. One important side benefit of making types serializable for Boost.MPI is that they become serializable for any other usage, such as storing the objects to disk and manipulated them in XML.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Some serializable types, like gps_position above, have a fixed amount of data stored at fixed offsets and are fully defined by the values of their data member (most POD with no pointers are a good example). When this is the case, Boost.MPI can optimize their serialization and transmission by avoiding extraneous copy operations. To enable this optimization, users must specialize the type trait is_mpi_datatype, e.g.:</p>
 </div>
 <div class="literalblock">
@@ -1121,7 +1105,7 @@ int main(int argc, char* argv[])
 }</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>For non-template types we have defined a macro to simplify declaring a type as an MPI datatype</p>
 </div>
 <div class="literalblock">
@@ -1129,7 +1113,7 @@ int main(int argc, char* argv[])
 <pre>BOOST_IS_MPI_DATATYPE(gps_position)</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>For composite traits, the specialization of is_mpi_datatype may depend on is_mpi_datatype itself. For instance, a boost::array object is fixed only when the type of the parameter it stores is fixed:</p>
 </div>
 <div class="literalblock">
@@ -1145,10 +1129,10 @@ int main(int argc, char* argv[])
 }</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The redundant copy elimination optimization can only be applied when the shape of the data type is completely fixed. Variable-length types (e.g., strings, linked lists) and types that store pointers cannot use the optimization, but Boost.MPI will be unable to detect this error at compile time. Attempting to perform this optimization when it is not correct will likely result in segmentation faults and other strange program behavior.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Boost.MPI can transmit any user-defined data type from one process to another. Built-in types can be transmitted without any extra effort; library-defined types require the inclusion of a serialization header; and user-defined types will require the addition of serialization code. Fixed data types can be optimized for transmission using the is_mpi_datatype type trait.</p>
 </div>
 </div>
@@ -1156,13 +1140,13 @@ int main(int argc, char* argv[])
 <h3 id="_communicators"><a class="anchor" href="#_communicators"></a>6.4. Communicators</h3>
 <div class="sect3">
 <h4 id="_managing_comminicators"><a class="anchor" href="#_managing_comminicators"></a>6.4.1. Managing comminicators</h4>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Communication with Boost.MPI always occurs over a communicator. A communicator contains a set of processes that can send messages among themselves and perform collective operations. There can be many communicators within a single program, each of which contains its own isolated communication space that acts independently of the other communicators.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>When the MPI environment is initialized, only the "world" communicator (called MPI_COMM_WORLD in the MPI C and Fortran bindings) is available. The "world" communicator, accessed by default-constructing a mpi::communicator object, contains all of the MPI processes present when the program begins execution.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Other communicators can then be constructed by duplicating or building subsets of the "world" communicator. For instance, in the following program we split the processes into two groups: one for processes generating data and the other for processes that will collect the data. (generate_collect.cpp)</p>
 </div>
 <div class="literalblock">
@@ -1186,7 +1170,7 @@ int main()
 }</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>When communicators are split in this way, their processes retain membership in both the original communicator (which is not altered by the split) and the new communicator. However, the ranks of the processes may be different from one communicator to the next, because the rank values within a communicator are always contiguous values starting at zero. In the example above, the first two thirds of the processes become "generators" and the remaining processes become "collectors". The ranks of the "collectors" in the world communicator will be 2/3 world.size() and greater, whereas the ranks of the same collector processes in the local communicator will start at zero. The following excerpt from collect_data() (in generate_collect.cpp) illustrates how to manage multiple communicators:</p>
 </div>
 <div class="literalblock">
@@ -1199,7 +1183,7 @@ int main()
 <pre>if (msg.tag() == msg_data_packet) {</pre>
 </div>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>Receive the packet of data std::vector&lt;int&gt; data; world.recv(msg.source(), msg.tag(), data);</p>
@@ -1224,16 +1208,16 @@ int main()
 </li>
 </ul>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The code in this except is executed by the "master" collector, e.g., the node with rank 2/3 world.size() in the world communicator and rank 0 in the local (collector) communicator. It receives a message from a generator via the world communicator, then broadcasts the message to each of the collectors via the local communicator.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>For more control in the creation of communicators for subgroups of processes, the Boost.MPI group provides facilities to compute the union (|), intersection (&amp;), and difference (-) of two groups, generate arbitrary subgroups, etc.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_cartesian_communicator"><a class="anchor" href="#_cartesian_communicator"></a>6.4.2. Cartesian communicator</h4>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>A communicator can be organised as a cartesian grid, here a basic example:</p>
 </div>
 <div class="literalblock">
@@ -1270,10 +1254,10 @@ int test_main(int argc, char* argv[])
 </div>
 <div class="sect2">
 <h3 id="_threads"><a class="anchor" href="#_threads"></a>6.5. Threads</h3>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>There are an increasing number of hybrid parallel applications that mix distributed and shared memory parallelism. To know how to support that model, one need to know what level of threading support is guaranteed by the MPI implementation. There are 4 ordered level of possible threading support described by mpi::threading::level. At the lowest level, you should not use threads at all, at the highest level, any thread can perform MPI call.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>If you want to use multi-threading in your MPI application, you should indicate in the environment constructor your preferred threading support. Then probe the one the library did provide, and decide what you can do with it (it could be nothing, then aborting is a valid option):</p>
 </div>
 <div class="literalblock">
@@ -1300,19 +1284,19 @@ int main()
 </div>
 <div class="sect2">
 <h3 id="_separating_structure_from_content"><a class="anchor" href="#_separating_structure_from_content"></a>6.6. Separating structure from content</h3>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>When communicating data types over MPI that are not fundamental to MPI (such as strings, lists, and user-defined data types), Boost.MPI must first serialize these data types into a buffer and then communicate them; the receiver then copies the results into a buffer before deserializing into an object on the other end. For some data types, this overhead can be eliminated by using is_mpi_datatype. However, variable-length data types such as</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>strings and lists cannot be MPI data types.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Boost.MPI supports a second technique for improving performance by separating the structure of these variable-length data structures from the content stored in the data structures. This feature is only beneficial when the shape of the data structure remains the same but the content of the data structure will need to be communicated several times. For instance, in a finite element analysis the structure of the mesh may be fixed at the beginning of computation but the various variables on the cells of the mesh (temperature, stress, etc.) will be communicated many times within the iterative analysis process. In this case, Boost.MPI allows one to first send the "skeleton" of the mesh once, then transmit the "content" multiple times. Since the content need not contain any information about the structure of the data type, it can be transmitted without creating separate communication buffers.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>To illustrate the use of skeletons and content, we will take a somewhat more limited example wherein a master process generates random number sequences into a list and transmits them to several slave processes. The length of the list will be fixed at program startup, so the content of the list (i.e., the current sequence of numbers) can be transmitted efficiently. The complete example is available in example/random_content.cpp. We being with the master process (rank 0), which builds a list, communicates its structure via a skeleton, then repeatedly generates random number sequences to be broadcast to the slave processes via content:</p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>Generate the list and broadcast its structure std::list&lt;int&gt; l(list_len); broadcast(world, mpi::skeleton(l), 0);</p>
@@ -1329,14 +1313,10 @@ std::generate(l.begin(), l.end(), &amp;random);
 broadcast(world, c, 0);</pre>
 </div>
 </div>
-</li>
-</ul>
-</div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The slave processes have a very similar structure to the master. They receive (via the broadcast() call) the skeleton of the data structure, then use it to build their own lists of integers. In each iteration, they receive via another broadcast() the new content in the data structure and compute some property of the data:</p>
 </div>
-<div class="ulist">
-<ul>
+</li>
 <li>
 <p>Receive the content and build up our own</p>
 <div class="literalblock">
@@ -1356,21 +1336,21 @@ do {
 } while (true);</pre>
 </div>
 </div>
+<div class="paragraph text-justify">
+<p>The skeletons and content of any Serializable data type can be transmitted either via the send and recv members of the communicator class (for point-to-point communicators) or broadcast via the broadcast() collective. When separating a data structure into a skeleton and content, be careful not to modify the data structure (either on the sender side or the receiver side) without transmitting the skeleton again. Boost.MPI can not detect these accidental modifications to the data structure, which will likely result in incorrect data being transmitted or unstable programs.</p>
+</div>
 </li>
 </ul>
-</div>
-<div class="paragraph">
-<p>The skeletons and content of any Serializable data type can be transmitted either via the send and recv members of the communicator class (for point-to-point communicators) or broadcast via the broadcast() collective. When separating a data structure into a skeleton and content, be careful not to modify the data structure (either on the sender side or the receiver side) without transmitting the skeleton again. Boost.MPI can not detect these accidental modifications to the data structure, which will likely result in incorrect data being transmitted or unstable programs.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_performance_optimizations"><a class="anchor" href="#_performance_optimizations"></a>6.7. Performance optimizations</h3>
 <div class="sect3">
 <h4 id="_serialization_optimizations"><a class="anchor" href="#_serialization_optimizations"></a>6.7.1. Serialization optimizations</h4>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>To obtain optimal performance for small fixed-length data types not containing any pointers it is very important to mark them using the type traits of Boost.MPI and Boost.Serialization.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>It was already discussed that fixed length types containing no pointers can be using as is_mpi_datatype, e.g.:</p>
 </div>
 <div class="literalblock">
@@ -1389,7 +1369,7 @@ do {
 <pre>BOOST_IS_MPI_DATATYPE(gps_position)</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>In addition it can give a substantial performance gain to turn off tracking and versioning for these types, if no pointers to these types are used, by using the traits classes or helper macros of Boost.Serialization:</p>
 </div>
 <div class="literalblock">
@@ -1401,10 +1381,10 @@ BOOST_CLASS_IMPLEMENTATION(gps_position,object_serializable)</pre>
 </div>
 <div class="sect3">
 <h4 id="_homogeneous_machines"><a class="anchor" href="#_homogeneous_machines"></a>6.7.2. Homogeneous Machines</h4>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>More optimizations are possible on homogeneous machines, by avoiding MPI_Pack/MPI_Unpack calls but using direct bitwise copy. This feature is enabled by default by defining the macro BOOST_MPI_HOMOGENEOUS in the include file boost/mpi/config.hpp. That definition must be consistent when building Boost.MPI and when building the application.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>In addition all classes need to be marked both as is_mpi_datatype and as is_bitwise_serializable, by using the helper macro of Boost.Serialization:</p>
 </div>
 <div class="literalblock">
@@ -1412,7 +1392,7 @@ BOOST_CLASS_IMPLEMENTATION(gps_position,object_serializable)</pre>
 <pre>BOOST_IS_BITWISE_SERIALIZABLE(gps_position)</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Usually it is safe to serialize a class for which is_mpi_datatype is true by using binary copy of the bits. The exception are classes for which some members should be skipped for serialization.</p>
 </div>
 </div>

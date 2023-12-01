@@ -230,10 +230,19 @@ MathJax.Hub.Config({
 </aside>
 <article class="doc">
 <h1 class="page">GPGPU (General-Purpose Graphics Processing Unit)</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<a class="image" href="#fragment03"><img src="_images/GPGPU.jpg" alt="GPGPU" width="322" height="220"></a>
+</div>
+</div>
+</div>
+</div>
 <div class="sect1">
 <h2 id="_definition"><a class="anchor" href="#_definition"></a>1. Definition</h2>
 <div class="sectionbody">
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>A <strong>General-Purpose Graphics Processing Unit</strong> (GPGPU) is a graphics
 processing unit (GPU) that is programmed for purposes beyond graphics
 processing, such as performing computations typically conducted by a
@@ -242,14 +251,14 @@ Central Processing Unit (CPU).</p>
 <div class="paragraph">
 <p><span class="image"><a class="image" href="#fragment4"><img src="_images/image4.png" alt="image4" width="642" height="331"></a></span></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p><em>GPGPU</em> is short for general-purpose computing on graphics processing
 units. Graphics processors or GPUs today are capable of much more than
 calculating pixels in video games. For this, Nvidia has been developing
 for four years a hardware interface and a programming language derived
 from C, CUDA ( <strong>C*ompute *Unified Device Architecture</strong> ).</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>This technology, known as <strong>GPGPU</strong> ( <strong>General</strong> - <strong>P*urpose computation on *G*raphic *P*rocessing *Units</strong> ) exploits the computing power of GPUs for the processing of massively parallel tasks. Unlike the CPU, a GPU is not suited for fast processing of tasks that run sequentially. On the other hand, it is very suitable for processing parallelizable algorithms.</p>
 </div>
 <div class="ulist">
@@ -368,14 +377,14 @@ from the Santa-Clara firm, codenamed “Fermi” has 512 cores.</p>
 <div class="paragraph">
 <p><span class="image"><a class="image" href="#fragment5"><img src="_images/image5.png" alt="image5" width="530" height="241"></a></span></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Traditional microprocessors (CPUs) are essentially "low latency
 oriented". The goal is to minimize the execution time of a single
 sequence of a program by reducing latency as much as possible. This
 design takes the traditional assumption that parallelism in the
 operations that the processor must perform is very rare.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Throughput-oriented processors assume that their workload requires
 significant parallelism. The idea is not to execute the operations as
 quickly as possible sequentially, but to execute billions of operations
@@ -386,26 +395,26 @@ this, an image, with all the pixels, must be displayed every 30
 milliseconds (approximately). It doesn&#8217;t matter how long a single pixel
 is displayed.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>This type of processor has small independent calculation units which
 execute the instructions in the order in which they appear in the
 program, there is ultimately little dynamic control over the execution.
 Thea term <strong>SIMD</strong> is used for these processors (<strong>S</strong>ingle <strong>I</strong>nstruction <strong>M</strong>ultiple <strong>Da</strong>ta).</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Each PU (Processing Unit) does not necessarily correspond to a processor, they are calculation units. In this mode, the same instruction is applied simultaneously to several data.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Less control logic means more space on the chip dedicated to the
 calculation. However, this also comes at a cost. A SIMD execution gets a performance peak when parallel tasks follow the same branch of execution, which deteriorates when the tasks branch off. Indeed, the
 calculation units assigned to a branch will have to wait for the execution of the calculation units of the previous branch. This results in hardware underutilization and increased execution time. The efficiency of the SIMD architecture depends on the uniformity of the
 workload.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>However, due to the large number of computational units, it may not be
 very important to have some threads blocked if others can continue their execution. Long-latency operations performed on one thread are "hidden" by others ready to execute another set of instructions.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>For a quad or octo-core CPU, the creation of threads and their
 scheduling has a cost. For a GPU, the relative latency "covers" these 2
 steps, making them negligible. However, memory transfers have greater
@@ -416,6 +425,47 @@ between CPU memory and GPU memory.</p>
 <p>(See:
 <a href="https://blog.octo.com/la-technologie-gpgpu-1ere-partie-le-cote-obscur-de-la-geforce/" class="bare">blog.octo.com/la-technologie-gpgpu-1ere-partie-le-cote-obscur-de-la-geforce/</a>
 )</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_gpu_versus_gpgpu"><a class="anchor" href="#_gpu_versus_gpgpu"></a>3. GPU versus GPGPU</h2>
+<div class="sectionbody">
+<div class="paragraph text-justify">
+<p>Essentially all modern GPUs are GPGPUs. A GPU is a programmable processor on which thousands of processing cores run simultaneously in massive parallelism, where each core is focused on making efficient calculations, facilitating real-time processing and analysis of enormous datasets. While GPUs were originally designed primarily for the purpose of rendering images, GPGPUs can now be programmed to direct that processing power toward addressing scientific computing needs as well.</p>
+</div>
+<div class="paragraph text-justify">
+<p>If a graphics card is compatible with any particular framework that provides access to general purpose computation, it is a GPGPU. The primary difference is that where GPU computing is a hardware component, GPGPU is fundamentally a software concept in which specialized programming and equipment designs facilitate massive parallel processing of non-specialized calculations.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_is_gpgpu_acceleration"><a class="anchor" href="#_what_is_gpgpu_acceleration"></a>4. What is GPGPU Acceleration ?</h2>
+<div class="sectionbody">
+<div class="paragraph text-justify">
+<p>GPGPU acceleration refers to a method of accelerated computing in which compute-intensive portions of an application are assigned to the GPU and general-purpose computing is relegated to the CPU, providing a supercomputing level of parallelism. While highly complex calculations are computed in the GPU, sequential calculations can be performed in parallel in the CPU.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_how_to_use_gpgpu"><a class="anchor" href="#_how_to_use_gpgpu"></a>5. How to Use GPGPU ?</h2>
+<div class="sectionbody">
+<div class="paragraph text-justify">
+<p>Writing GPU enabled applications requires a parallel computing platform and application programming interface (API) that allows software developers and software engineers to build algorithms to modify their application and map compute-intensive kernels to the GPU. GPGPU supports several types of memory in a memory hierarchy for designers to optimize their programs. GPGPU memory is used for transferring data between device and host&#8201;&#8212;&#8201;shared memory is an efﬁcient way for threads in the same block to share their runtime and data. A GPU Database uses GPU computation power to analyze massive amounts of information and return results in milliseconds.</p>
+</div>
+<div class="paragraph text-justify">
+<p>GPGPU-Sim, developed at the University of British Columbia, provides a detailed simulation model of a contemporary GPU running CUDA and/or OpenCL workloads. Some open-source GPGPU benchmarks containing CUDA codes include: Rodinia benchmarks, SHOC, Tensor module in Eigen 3.0 open-source C++ template library for linear algebra, and SAXPY benchmark. Metal GPGPU, an Apple Inc. API, is a low-level graphics programming API for iOS and macOS but it can also be used for general-purpose compute on these devices.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_gpgpu_in_cuda"><a class="anchor" href="#_gpgpu_in_cuda"></a>6. GPGPU in CUDA</h2>
+<div class="sectionbody">
+<div class="paragraph text-justify">
+<p>The CUDA platform is a software layer that gives direct access to the GPU&#8217;s virtual instruction set and parallel computational elements for the execution of compute kernels. Designed to work with programming languages such as C, C++, and Fortran, CUDA is an accessible platform, requiring no advanced skills in graphics programming, and available to software developers through CUDA-accelerated libraries and compiler directives. CUDA-capable devices are typically connected with a host CPU and the host CPUs are used for data transmission and kernel invocation for CUDA devices.</p>
+</div>
+<div class="paragraph text-justify">
+<p>The CUDA model for GPGPU accelerates a wide variety of applications, including GPGPU AI, computational science, image processing, numerical analytics, and deep learning. The CUDA Toolkit includes GPU-accelerated libraries, a compiler, programming guides, API references, and the CUDA runtime.</p>
 </div>
 </div>
 </div>

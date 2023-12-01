@@ -232,8 +232,8 @@ MathJax.Hub.Config({
 <h1 class="page">Specx</h1>
 <div id="preamble">
 <div class="sectionbody">
-<div class="paragraph">
-<p><strong>SPECX</strong> is a task-based execution system. It shares many similarities
+<div class="paragraph text-justify">
+<p>SPECX is a task-based execution system. It shares many similarities
 with StarPU but is written in modern C++. It also supports speculative
 execution, which is the ability to run tasks ahead of time if others are
 unsure about changing the data.</p>
@@ -248,7 +248,7 @@ unsure about changing the data.</p>
 <div class="sect1">
 <h2 id="_workflow"><a class="anchor" href="#_workflow"></a>1. Workflow</h2>
 <div class="sectionbody">
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p><strong>Execution interface:</strong> Provides functionality for creating tasks, task
@@ -268,59 +268,51 @@ the task object.</p>
 </div>
 <div class="sect2">
 <h3 id="_runtime_interface"><a class="anchor" href="#_runtime_interface"></a>1.1. Runtime interface</h3>
-<div class="paragraph">
-<p>Runtime functionality is exposed through a class called SpRuntime . This
-class provides functionality for creating tasks, task graphs, and
-generating traces.</p>
+<div class="paragraph text-justify">
+<p>Runtime functionality is exposed through a class called SpRuntime . This class provides functionality for creating tasks, task graphs, and generating traces.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The SpRuntime class is modeled on a non-type parameter which can be used
 to specify the speculation model you want to use. This parameter can
 take one of three values (we currently support three different
 speculation models) defined in <span class="underline">SpSpeculativeModel.hpp</span> . By
-default, the runtime uses the first speculation model.</p>
+default, the runtime uses the first speculation model.
+    <strong>Main SpRuntime methods:</strong> SpRuntime(const inNumThreads)</p>
 </div>
-<div class="paragraph">
-<p><strong>Main SpRuntime methods:</strong> SpRuntime(const inNumThreads)</p>
+<div class="paragraph text-justify">
+<p>Currently, each instance of SpRuntime has its own thread pool to distribute its work on. <strong>In the future, we plan to separate thread management from execution.</strong> The runtime constructor takes as a parameter the number of threads it must spawn. By default , the parameter is initialized to the number indicated by the OMP_NUM_THREADS environment variable. If the environment variable is not set, the setting defaults to the number of concurrent threads supported by the hardware. The constructor spawns the new threads. <strong>At this time, we do not allow manual binding of threads to cores.</strong></p>
 </div>
-<div class="paragraph">
-<p>Currently, each instance of SpRuntime has its own thread pool to
-distribute its work on. <strong>In the future, we plan to separate thread
-management from execution.</strong> The runtime constructor takes as a parameter
-the number of threads it must spawn. By default , the parameter is
-initialized to the number indicated by the OMP_NUM_THREADS environment
-variable. If the environment variable is not set, the setting defaults
-to the number of concurrent threads supported by the hardware. The
-constructor spawns the new threads. <strong>At this time, we do not allow
-manual binding of threads to cores.</strong></p>
-</div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>For now, the runtime will bind threads to cores by thread index if the
 OMP_PROC_BIND environment variable is set to TRUE (or true or 1 ) or if
 inNumThreads is less than or equal to the number of concurrent threads
 supported by the material.</p>
 </div>
-<div class="paragraph">
-<p>autotask([optional] SpPriority inPriority, [optional] SpProbability
-inProbability, [optional] &lt;DataDependencyTy&gt; ddo&#8230;&#8203;, &lt;CallableTy&gt; c) (1)</p>
+<div class="literalblock">
+<div class="content">
+<pre>autotask([optional] SpPriority inPriority, [optional] SpProbability
+inProbability, [optional] &lt;DataDependencyTy&gt; ddo..., &lt;CallableTy&gt; c) (1)</pre>
 </div>
-<div class="paragraph">
-<p>autotask([optional] SpPriority inPriority, [optional] SpProbability
-inProbability, [optional] &lt;DataDependencyTy&gt; ddo&#8230;&#8203;,
-SpCpuCode(&lt;CallableTy&gt; c1), [optional] SpGpuCode(&lt;CallableTy&gt; c2)) (2)</p>
 </div>
-<div class="paragraph">
+<div class="literalblock">
+<div class="content">
+<pre>autotask([optional] SpPriority inPriority, [optional] SpProbability
+inProbability, [optional] &lt;DataDependencyTy&gt; ddo...,
+SpCpuCode(&lt;CallableTy&gt; c1), [optional] SpGpuCode(&lt;CallableTy&gt; c2)) (2)</pre>
+</div>
+</div>
+<div class="paragraph text-justify">
 <p>This method creates a new task and injects it into the runtime. It
 returns an object representing the newly created task.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p><strong>inPriority</strong> parameter specifies a priority for the task.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p><strong>inProbability</strong> parameter is an object used to specify the probability
 with which the task can write to its writeable data dependencies.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>After the inProbability parameter is a list of data dependency objects.
 This list declares the task&#8217;s data dependencies. <strong>At this time we only
 allow one type of data dependency to be declared for a given data item
@@ -328,14 +320,14 @@ and a data dependency declaration of a certain type for a particular
 data item should only appear once times, except for atomic read and
 write dependencies.</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>For example, you cannot have a read and write dependency for the same
 data item (in this case, you should only declare the strongest type of
 dependency which is write). The validity of dependencies is checked at
 runtime. If you declared two data dependencies on different expressions
 but evaluated on the same data item, the program will exit.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The last or two last arguments (depending on which overload the call
 resolves to) specifies (a) callable(s) embedding the code the task
 should execute. Callables can be lambda expressions or functors. The
@@ -349,20 +341,18 @@ they appear in the data dependency list.</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>Example:</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>Type1 v1;
+<pre>Example:
+Type1 v1;
 Type2 v2;
 runtime. task ( SpRead(v1), SpWrite(v2),
-[] (const Type1 &amp;paramV1, Type2 &amp;paramV2) {
-if(paramV1.test()) { paramV2.set(1); } else { paramV2.set(2);} }
+    [] (const Type1 &amp;paramV1, Type2 &amp;paramV2)
+    {
+        if(paramV1.test()) { paramV2.set(1); } else { paramV2.set(2);}
+    }
 );</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Parameters corresponding to an SpRead data dependency object must be
 declared const (paramV1 in the example given above). The code inside the
 callable should refer to the parameter names rather than the original
@@ -382,7 +372,7 @@ that since Specx is a speculative task-based runtime system, there will
 also be times when the callable is called with copies of the data items
 (sampled at different times) rather than the original data items.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Callables for normal tasks can return any value. Callables for potential
 tasks must all return a boolean, however. This boolean is used to inform
 the runtime whether the task has written to its data dependencies may
@@ -390,45 +380,24 @@ write or not. The callable&#8217;s code should correctly return true or false
 depending on the situation. It should return true if the task has
 written to its data dependencies maybe write and false otherwise.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>In overload (1), the callable is passed as is to the task call. It will
-be implicitly interpreted by the runtime as CPU code. In overload (2),
-the callable c1 is explicitly labeled as CPU code by being wrapped in an
-SpCpuCode object (see the subsection on callable wrapper objects in the
-Data Dependency Interface section below). Overload (2) further allows
-the user to provide a GPU version of the code (in this case the callable
-must be wrapped in an SpGpuCode object). When the CPU and GPU versions
-of the code are provided, the Specx runtime will decide at runtime which
-of the two to run.</p>
+be implicitly interpreted by the runtime as CPU code. In overload (2), the callable c1 is explicitly labeled as CPU code by being wrapped in an SpCpuCode object (see the subsection on callable wrapper objects in the
+Data Dependency Interface section below). Overload (2) further allows the user to provide a GPU version of the code (in this case the callable must be wrapped in an SpGpuCode object). When the CPU and GPU versions of the code are provided, the Specx runtime will decide at runtime which of the two to run.</p>
 </div>
 <div class="paragraph">
 <p>void setSpeculationTest(std::function&lt;bool(int,const SpProbability&amp;)&gt;
 inFormula)</p>
 </div>
-<div class="paragraph">
-<p>This method defines a predicate function that will be called by the
-runtime whenever a speculative task is ready to be placed in the task
-ready queue (i.e. all its data dependencies are ready ). The predicate
-is used to decide, based on runtime information, whether the speculative
-task as well as any of its dependent speculative tasks should be allowed
-to run. The predicate returns a boolean. A return value of true means
-that the speculative task and all of its dependent speculative tasks are
-allowed to run. Conversely, a return value of false means that the
-speculative task and all of its dependent speculative tasks should be
+<div class="paragraph text-justify">
+<p>This method defines a predicate function that will be called by the runtime whenever a speculative task is ready to be placed in the task ready queue (i.e. all its data dependencies are ready ). The predicate is used to decide, based on runtime information, whether the speculative task as well as any of its dependent speculative tasks should be allowed to run. The predicate returns a boolean. A return value of true means that the speculative task and all of its dependent speculative tasks are allowed to run. Conversely, a return value of false means that the speculative task and all of its dependent speculative tasks should be
 disabled.</p>
 </div>
-<div class="paragraph">
-<p>Note that although a speculative task may be allowed to run, this does
-not necessarily mean that it will actually run. For a speculative task
-to actually execute all of the parent speculations it speculates on,
-they must not have failed. It may be that between the time the
-speculative task has been marked as allowed to run and the time it is
-actually picked up by a thread for execution, some of the parent
-speculations have failed and therefore it will not be executed even
-though it was allowed to run depending on the result of the predicate
-evaluation in the past.</p>
+<div class="paragraph text-justify">
+<p>Note that although a speculative task may be allowed to run, this does not necessarily mean that it will actually run. For a speculative task to actually execute all of the parent speculations it speculates on, they must not have failed. It may be that between the time the speculative task has been marked as allowed to run and the time it is actually picked up by a thread for execution, some of the parent speculations have failed and therefore it will not be executed even
+though it was allowed to run depending on the result of the predicate evaluation in the past.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The two predicate arguments are provided by the runtime. The first
 parameter is the number of tasks that were in the ready queue when the
 predicate was called. The second parameter is a probability whose value
@@ -443,7 +412,7 @@ speculating if the chances of failure are high). <strong>The prototype of the
 predicate might change in the future as we might want to consider
 additional or different data to make the decision.</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>If no speculation test is defined in the runtime, the default behavior
 is that a speculative task and all its dependent speculative tasks will
 only be activated if, at the time the predicate is called, no other task
@@ -452,21 +421,21 @@ is ready to run.</p>
 <div class="paragraph">
 <p>void waitAllTasks()</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>This method is a blocking call that waits for all tasks that have been
 pushed to run up to this point to complete.</p>
 </div>
 <div class="paragraph">
 <p>void waitRemain(const long int windowSize)</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>This method is a blocking call that waits for the number of unprocessed
 tasks to become less than or equal to windowSize.</p>
 </div>
 <div class="paragraph">
 <p>void stopAllThreads()</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>This method is a blocking call that causes execution threads to close.
 The method expects all tasks to have already completed, so you should
 always call waitAllTasks() before calling this method.</p>
@@ -474,14 +443,14 @@ always call waitAllTasks() before calling this method.</p>
 <div class="paragraph">
 <p>int getNbThreads()</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>This method returns the size of the execution thread pool (in number of
 threads).</p>
 </div>
 <div class="paragraph">
 <p>void generateDot(const std::string&amp; outputFilename, bool printAccesses)</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>This method will generate the task graph corresponding to the execution
 in point format. It will write its output to the outputFilename path.
 The boolean printAccesses can be set to true if you want to print the
@@ -489,7 +458,7 @@ tasks memory accesses (only the memory accesses specified in their data
 dependency list will be printed) in the tasks node body. By default,
 printAccesses is set to false.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The names of the tasks will be printed in the nodes of the graph. The
 default name will be displayed for each task unless another name has
 been manually defined by the user (see Task Viewer Interface section
@@ -500,23 +469,21 @@ following command:</p>
 <div class="paragraph">
 <p>dot -Tpdf -o &lt;pdf_output_filename&gt; &lt;path_to_dot_output_file&gt;</p>
 </div>
-<div class="paragraph">
-<p>The generateDot method should be called after calling waitAllTasks() and
-stopAllThreads().</p>
+<div class="paragraph text-justify">
+<p>The generateDot method should be called after calling waitAllTasks() and stopAllThreads().</p>
 </div>
-<div class="paragraph">
-<p>void generateTrace(const std::string&amp; outputFilename, const bool
-showDependencies)</p>
+<div class="literalblock">
+<div class="content">
+<pre>void generateTrace(const std::string&amp; outputFilename, const bool showDependencies)</pre>
 </div>
-<div class="paragraph">
-<p>This method will generate a trace of the execution (with timings and
-dependencies) in svg format. The generateTrace method should only be
-called after calling waitAllTasks() and stopAllThreads().</p>
+</div>
+<div class="paragraph text-justify">
+<p>This method will generate a trace of the execution (with timings and dependencies) in svg format. The generateTrace method should only be called after calling waitAllTasks() and stopAllThreads().</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_data_dependency_interface"><a class="anchor" href="#_data_dependency_interface"></a>1.2. Data dependency interface</h3>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The data dependency interface forms a collection of objects that can be
 used to express data dependencies. It also provides wrapper objects that
 can be used to specify whether a given callable should be considered CPU
@@ -526,15 +493,15 @@ or GPU code. The class definition for these objects is in
 <div class="paragraph">
 <p><strong>Data dependency objects</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Specifying data dependencies amounts to constructing the relevant data
 dependency objects from the data lvalues.</p>
 </div>
 <div class="paragraph">
 <p><strong>Scalar data</strong></p>
 </div>
-<div class="paragraph">
-<p>S pRead(x) // Specifies a read dependency on x. Read requests are always
+<div class="paragraph text-justify">
+<p><strong>SpRead(x)</strong>: Specifies a read dependency on x. Read requests are always
 satisfied by default, i.e. a read request rr2 on data x immediately
 following another read request rr1 on data x need not wait until rr1 be
 satisfied to be served. Several successive read accesses will be
@@ -543,8 +510,8 @@ runtime with respect to writes, maybe writes, commutative writes, and
 atomic writes. The order is the order in which data accesses were
 requested at runtime.</p>
 </div>
-<div class="paragraph">
-<p>SpWrite(x) // Specifies a write dependency on x indicating that data x
+<div class="paragraph text-justify">
+<p><strong>SpWrite(x)</strong>: Specifies a write dependency on x indicating that data x
 will be written with 100% certainty. Several successive write requests
 on given data x will be satisfied one after the other in the order in
 which they were issued during execution. Writes are categorized by the
@@ -552,8 +519,8 @@ runtime into reads, writes, maybe writes, commutative writes, and atomic
 writes. The order is the order in which data accesses were requested at
 runtime.</p>
 </div>
-<div class="paragraph">
-<p>SpMaybeWrite(x) // Specifies a possibly writeable dependency indicating
+<div class="paragraph text-justify">
+<p>*SpMaybeWrite(x): Specifies a possibly writeable dependency indicating
 that data x can be written, i.e. it will not always be the case (writes
 can occur with some probability). Several possibly successive write
 requests on given data x will be satisfied one after the other in the
@@ -562,8 +529,8 @@ by the runtime into reads, writes, maybe writes, commutative writes, and
 atomic writes. The order is the order in which data accesses were
 requested at runtime.</p>
 </div>
-<div class="paragraph">
-<p>SpCommutativeWrite(x) // Specifies a commutative write dependency on x,
+<div class="paragraph text-justify">
+<p><strong>SpCommutativeWrite(x)</strong>: Specifies a commutative write dependency on x,
 ie writes that can be performed in any order. Several successive
 commutative write requests will be satisfied one after the other in any
 order: while a commutative write request cw1 on data x is currently
@@ -581,8 +548,8 @@ commutative write dependency on x. Commutative writes are classified by
 the runtime into reads, writes, maybe writes, and atomic writes. The
 order is the order in which data accesses were requested at runtime.</p>
 </div>
-<div class="paragraph">
-<p>SpAtomicWrite(x) // Specifies an atomic write dependency on x. Atomic
+<div class="paragraph text-justify">
+<p><strong>SpAtomicWrite(x)</strong>:Specifies an atomic write dependency on x. Atomic
 write requests are always satisfied by default, i.e. an awr2 atomic
 write request on data x immediately following another awr1 atomic write
 request on data x does not have need to wait for awr1 to be satisfied to
@@ -601,7 +568,7 @@ argument.</p>
 <div class="paragraph">
 <p><strong>Non-scalar data</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>We also provide analogous constructors for aggregating data values from
 arrays:</p>
 </div>
@@ -633,7 +600,7 @@ arrays:</p>
 <div class="paragraph">
 <p>x must be a pointer to a contiguous buffer (the array).</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>view must be an object representing the collection of specific indices
 of array elements that are affected by the dependency. It must be
 iterable (in the "stl iterable" sense). An example implementation of
@@ -643,7 +610,7 @@ such a view class can be found in
 <div class="paragraph">
 <p><strong>Wrapper objects for callables</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>We provide two wrapper objects for callables whose purpose is to mark up
 a callable to inform the runtime system whether to interpret the given
 callable as CPU or GPU code:</p>
@@ -661,14 +628,14 @@ callable as CPU or GPU code:</p>
 <pre>SpGpuCode(&lt;CallableTy&gt; c)</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Specifies that the callable c represents GPU code.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>In both cases, the callable c can be a lambda or an lvalue or rvalue
 functor.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>A callable that appears as an argument to a call to the task method of
 an SpRuntime object without being wrapped in one of the above two
 objects will be interpreted by the runtime as CPU code by default.</p>
@@ -676,7 +643,7 @@ objects will be interpreted by the runtime as CPU code by default.</p>
 </div>
 <div class="sect2">
 <h3 id="_task_visualization_interface"><a class="anchor" href="#_task_visualization_interface"></a>1.3. Task visualization interface</h3>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The Task Viewer interface specifies ways to interact with the task object returned by SpRuntime&#8217;s task method. The exact type returned by SpRuntime&#8217;s task method doesn&#8217;t matter and in practice it should be inferred from the (auto) type in your programs. You can, however, find the definition of the returned type in
 <span class="underline">Src/Tasks/SpAbstractTask.hpp</span> .</p>
 </div>
@@ -717,7 +684,7 @@ tasks will have an apostrophe appended to their name.</strong></p>
 <div class="paragraph">
 <p><strong>GPU/CUDA (work in progress)</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The CMake variable SPECX_COMPILE_WITH_CUDA must be set to ON, for
 example with the command cmake .. -DSPECX_COMPILE_WITH_CUDA=ON . If
 CMake is unable to find nvcc, set the CUDACXX environment variable or
@@ -733,11 +700,12 @@ define CMAKE_CUDA_ARCHITECTURES to select the CUDA sm to compile.</p>
 SpCuda([](SpDeviceDataView&lt;std::vector&lt;int&gt;&gt; paramA) { // Each
 parameter is converted into a SpDeviceDataView
 // The kernel call is called using the dedicated stream
-inc_var&lt;&lt;&lt;1,1,0,SpCudaUtils::GetCurrentStream()&gt;&gt;&gt;(paramA.array(),paramA.nbElements());
+inc_var&lt;&lt;&lt;1,1,0,SpCudaUtils::GetCurrentStream()&gt;&gt;&gt;
+(paramA.array(),paramA.nbElements());
 }));</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Currently, the call to a CUDA kernel must be done in a .cu file. There
 are three types of SpDeviceDataView that provide different methods: one
 for is_trivially_copyable objects, one for std::vectors of
@@ -776,13 +744,13 @@ std::size_t size){...}</pre>
 <pre>self getDeviceDataDescription() const{...}</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The type returned by getDeviceDataDescription must be copyable and have an empty constructor. It should be used to help retrieve raw pointer data when calling a device kernel.</p>
 </div>
 <div class="paragraph">
 <p><strong>GPU/HIP (work in progress)</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The CMake variable SPECX_COMPILE_WITH_HIP must be set to ON, for example with the command cmake .. -DSPECX_COMPILE_WITH_HIP=ON . The C++ compiler must also be defined with for example CXX=hipcc , so a working command line must be CXX=hipcc cmake .. -DSPECX_COMPILE_WITH_HIP=ON . You can set GPU_TARGETS to select the HIP sm to compile.</p>
 </div>
 <div class="paragraph">
@@ -800,7 +768,7 @@ paramA.nbElements());
 );</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Currently, the call to a HIP kernel must be done in a .cu file. There are three types of SpDeviceDataView that provide different methods: one for is_trivially_copyable objects, one for std::vectors of is_trivially_copyable objects, and one user-customized. At the latest, it is requested to provide the following methods:</p>
 </div>
 <div class="literalblock">
@@ -845,26 +813,26 @@ std::size_t size){...}</pre>
 <pre>}</pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The type returned by getDeviceDataDescription must be copyable and have an empty constructor. It should be used to help retrieve raw pointer data when calling a device kernel.</p>
 </div>
 <div class="paragraph">
 <p><strong>MPI</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The CMake variable SPECX_COMPILE_WITH_MPI must be set to ON, for example with the command cmake .. -DSPECX_COMPILE_WITH_MPI=ON .</p>
 </div>
 <div class="paragraph">
 <p><strong>Data serialization and deserialization</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Data can be sent to target MPI processes using the mpiSend and mpiRecv methods of the SpTaskGraph object.</p>
 </div>
 <div class="paragraph">
 <p>To be moved between compute nodes, objects must be one of the following
 types:</p>
 </div>
-<div class="olist arabic">
+<div class="olist arabic text-justify">
 <ol class="arabic">
 <li>
 <p>Be an instance of a class that inherits from SpAbstractSerializable</p>
@@ -876,12 +844,10 @@ types:</p>
 <p>Be a POD type (well, having is_standard_layout_v and is_trivial_v returning true, which means having a pointer in a structure won&#8217;t be detected and could be a problem).</p>
 </li>
 <li>
-<p>Let be a vector of the types defined in 1, 2 or 3.</p>
+<p>Let be a vector of the types defined in 1, 2 or 3.
+It is the SpGetSerializationType function that performs the detection and assigns the corresponding SpSerializationType value to each object. Detection is carried out in the order written above.</p>
 </li>
 </ol>
-</div>
-<div class="paragraph">
-<p>It is the SpGetSerializationType function that performs the detection and assigns the corresponding SpSerializationType value to each object. Detection is carried out in the order written above.</p>
 </div>
 <div class="paragraph">
 <p>For examples, see the unit tests under UTests/MPI.</p>
@@ -889,7 +855,7 @@ types:</p>
 <div class="paragraph">
 <p><strong>Type 3 - PODs</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>For built-in and POD types, these methods work automatically:</p>
 </div>
 <div class="literalblock">
@@ -905,10 +871,10 @@ tg.mpiRecv(b, 1, 1);</pre>
 <div class="paragraph">
 <p><strong>Type 1 - SpAbstractSerializable</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>However, user-defined types must allow support for MPI serialization and deserialization. To do this, they must implement these steps.</p>
 </div>
-<div class="olist arabic">
+<div class="olist arabic text-justify">
 <ol class="arabic">
 <li>
 <p>Include "MPI/SpSerializer.hpp"</p>

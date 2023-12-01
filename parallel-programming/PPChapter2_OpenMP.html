@@ -233,7 +233,7 @@ MathJax.Hub.Config({
 <div class="sect1">
 <h2 id="_definition"><a class="anchor" href="#_definition"></a>1. Definition</h2>
 <div class="sectionbody">
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>OpenMP ( Open Multi-Processing ) is a programming interface for parallel
 computing on shared memory architecture.</p>
 </div>
@@ -261,10 +261,10 @@ computing on shared memory architecture.</p>
 <div class="sect1">
 <h2 id="_general_concepts"><a class="anchor" href="#_general_concepts"></a>2. General concepts</h2>
 <div class="sectionbody">
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>An OpenMP program is executed by a single process.</p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>This process activates lightweight processes (threads) at the entrance
@@ -276,7 +276,10 @@ to a parallel region.<br></p>
 <li>
 <p>During the execution of a task, a variable can be read and/or modified
 in memory.</p>
-<div class="ulist">
+</li>
+</ul>
+</div>
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>It can be defined in the stack (local memory space) of a lightweight process; we then speak of a private variable</p>
@@ -286,7 +289,8 @@ in memory.</p>
 </li>
 </ul>
 </div>
-</li>
+<div class="ulist text-justify">
+<ul>
 <li>
 <p>An OpenMP program is an alternation of sequential regions and parallel
 regions.<br></p>
@@ -303,7 +307,10 @@ whose rank is 0.<br></p>
 </li>
 <li>
 <p>Work sharing essentially consists of:</p>
-<div class="ulist">
+</li>
+</ul>
+</div>
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>execute a loop by distributing the iterations between the tasks;<br></p>
@@ -316,7 +323,8 @@ whose rank is 0.<br></p>
 </li>
 </ul>
 </div>
-</li>
+<div class="ulist text-justify">
+<ul>
 <li>
 <p>It is sometimes necessary to introduce a synchronization between the
 concurrent tasks to avoid, for example, that these modify in any order
@@ -325,7 +333,10 @@ the value of the same shared variable (case of reduction operations).</p>
 <li>
 <p>Generally, tasks are assigned to processors by the operating system.
 Different cases can occur:</p>
-<div class="ulist">
+</li>
+</ul>
+</div>
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>at best, at each instant, there is one task per processor with as many
@@ -338,13 +349,14 @@ processor;<br></p>
 <li>
 <p>in reality, for reasons essentially of operation on a machine whose
 processors are not dedicated, the situation is generally intermediate.</p>
-</li>
-</ul>
-</div>
-</li>
+<div class="ulist">
+<ul>
 <li>
 <p>To overcome these problems, it is possible to build the OpenMP runtime
 on a library of mixed threads and thus control the scheduling of tasks.</p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
@@ -353,7 +365,7 @@ on a library of mixed threads and thus control the scheduling of tasks.</p>
 <div class="sect1">
 <h2 id="_construction_of_a_parallel_region"><a class="anchor" href="#_construction_of_a_parallel_region"></a>3. Construction of a parallel region</h2>
 <div class="sectionbody">
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>In a parallel region, by default, the status of variables is shared.</p>
@@ -392,7 +404,7 @@ before entering the parallel region.</p>
 <div class="sect1">
 <h2 id="_extent_of_a_parallel_region"><a class="anchor" href="#_extent_of_a_parallel_region"></a>4. Extent of a parallel region</h2>
 <div class="sectionbody">
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>The scope of an OpenMP construct represents the scope of its influence
@@ -419,7 +431,7 @@ scope (static) of the region.</p>
 <div class="sect1">
 <h2 id="_case_of_static_variables"><a class="anchor" href="#_case_of_static_variables"></a>5. Case of static variables</h2>
 <div class="sectionbody">
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>A variable is static if its location in memory is defined at
@@ -441,7 +453,7 @@ static instances is passed to all tasks.</p>
 <div class="sect1">
 <h2 id="_case_of_dynamic_allocation"><a class="anchor" href="#_case_of_dynamic_allocation"></a>6. Case of dynamic allocation</h2>
 <div class="sectionbody">
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>The dynamic memory allocation/deallocation operation can be performed
@@ -462,7 +474,7 @@ that only one task (e.g. the master task) takes care of this operation</p>
 <div class="sect1">
 <h2 id="_complements"><a class="anchor" href="#_complements"></a>7. Complements</h2>
 <div class="sectionbody">
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The construction of a parallel region admits two other clauses:</p>
 </div>
 <div class="paragraph">
@@ -472,7 +484,7 @@ between tasks;<br>
 entrance of a parallel region in the same way as the OMP_SET_NUM_THREADS
 subroutine would do.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>From one parallel region to another, the number of concurrent tasks can be varied if desired. To do this, simply use the OMP_SET_DYNAMIC
 subroutine or set the OMP_DYNAMIC environment variable to true. It is
 possible to nest (nesting) parallel regions, but this only has an effect if this mode has been activated by calling the OMP_SET_NESTED subroutine or by setting the OMP_NESTED environment variable.</p>
@@ -534,7 +546,7 @@ My rank in region 2: 1</pre>
 <div class="paragraph">
 <p><strong>Work sharing</strong></p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>In principle, building a parallel region and using a few OpenMP
@@ -559,7 +571,7 @@ parallel region.</p>
 <div class="paragraph">
 <p><strong>Parallel loop</strong></p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>It is a parallelism by distribution of the iterations of a loop.</p>
@@ -592,7 +604,7 @@ NOWAIT clause has been specified.</p>
 <div class="paragraph">
 <p><strong>SCHEDULE clause</strong></p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>STATIC dispatching consists of dividing the iterations into packets of
@@ -622,7 +634,7 @@ it.</p>
 <div class="paragraph">
 <p><strong>Case of an ordered execution</strong></p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>It is sometimes useful (debugging cases) to execute a loop in an
@@ -652,7 +664,7 @@ They then sync to update the final result.</p>
 <div class="paragraph">
 <p><strong>Parallel sections</strong></p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>A section is a portion of code executed by one and only one task.</p>
@@ -689,7 +701,7 @@ SECTIONS directives with the union of their respective clauses.</p>
 <div class="paragraph">
 <p><strong>Exclusive execution</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Sometimes you want to exclude all tasks except one to execute certain
 portions of code included in a parallel region.</p>
 </div>
@@ -703,7 +715,7 @@ constructions remains quite different.</p>
 <div class="paragraph">
 <p>Parallel sections</p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>A section is a portion of code executed by one and only one task.</p>
@@ -723,7 +735,7 @@ independent portions of code on the different tasks.</p>
 <div class="paragraph">
 <p><strong>SINGLE construction</strong></p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>The SINGLE construction allows a portion of code to be executed by one and only one task without being able to specify which one.</p>
@@ -740,7 +752,7 @@ construction but it is not specified in the standard.</p>
 <div class="paragraph">
 <p><strong>MASTER building</strong></p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>The MASTER construction allows a portion of code to be executed by the master task alone.</p>
@@ -757,10 +769,10 @@ or at the end of construction (END MASTER).</p>
 <div class="paragraph">
 <p><strong>Synchronizations</strong></p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Synchronization becomes necessary in the following situations:</p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>to ensure that all concurrent tasks have reached the same
@@ -777,25 +789,25 @@ variables whose consistency (in reading or in writing) in memory must be guarant
 </li>
 </ul>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>As we have already indicated, the absence of a NOWAIT clause means thata global synchronization barrier is implicitly applied at the end of the
 \openmp construction. But it is possible to explicitly impose a global
 synchronization barrier thanks to the BARRIER directive.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>The mutual exclusion mechanism (one task at a time) is found, for
 example, in reduction operations (REDUCTION clause) or in the ordered
 execution of a loop (DO ORDERED directive). For the same purpose, this
 mechanism is also implemented in the ATOMIC and CRITICAL directives.</p>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Finer synchronizations can be achieved either by setting up lock
 mechanisms (this requires calling subroutines from the OpenMP library), or by using the FLUSH directive.</p>
 </div>
 <div class="paragraph">
 <p><strong>Barrier</strong></p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>The BARRIER directive synchronizes all concurrent tasks in a parallel
@@ -821,7 +833,7 @@ directive.</p>
 <div class="paragraph">
 <p><strong>Critical regions</strong></p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>A critical region can be seen as a generalization of the ATOMIC
@@ -845,7 +857,7 @@ instruction by a critical region.</p>
 <div class="paragraph">
 <p><strong>FLUSH directive</strong></p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>It is useful in a parallel region to refresh the value of a shared
@@ -862,7 +874,7 @@ variable in global memory.</p>
 <div class="paragraph">
 <p><strong>Rules of good performance</strong></p>
 </div>
-<div class="ulist">
+<div class="ulist text-justify">
 <ul>
 <li>
 <p>Minimize the number of parallel regions in the code.</p>
@@ -913,7 +925,7 @@ faults on a scalar machine), can significantly degrade performance.</p>
 </div></div></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph text-justify">
 <p>An OpenMP executable directive applies to the succeeding structured
 block or an OpenMP Construct. A “structured block” is a single statement
 or a compound statement with a single entry at the top and a single exit
@@ -950,7 +962,7 @@ private(* _list_ *) firstprivate(* _list_ *)*</pre>
 </div></div></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph text-justify">
 <p><strong>loop</strong> construction specifies that the iterations of loops will be
 distributed among and executed by the encountering team of threads.</p>
 </div>
@@ -973,7 +985,7 @@ distributed among and executed by the encountering team of threads.</p>
 </div></div></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph text-justify">
 <p><strong>sections</strong> construct contains a set of structured blocks that are to be
 distributed among and executed by the meeting team of threads.</p>
 </div>
@@ -1011,7 +1023,7 @@ lastprivate(* _list_ *) reduce(* _operator_
 </div></div></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph text-justify">
 <p><strong>single</strong> construction specifies that the associated structured block is
 executed by only one of the threads in the team (not necessarily the
 master thread), in the context of its implicit task.</p>
@@ -1034,7 +1046,7 @@ structured-block_</pre>
 </div></div></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph text-justify">
 <p>The combined parallel worksharing constructs are a shortcut for
 specifying a parallel construct containing one worksharing construct and
 no other statements. Allowed clauses are the union of the clauses
@@ -1096,7 +1108,7 @@ entry to, or exit from, the master construct.</pre>
 </div></div></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph text-justify">
 <p><strong>critical</strong> construct restricts execution of the associated structured
 block to a single thread at a time.</p>
 </div>
@@ -1127,7 +1139,7 @@ tasks generated since the beginning of the current task.</pre>
 </div></div></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph text-justify">
 <p><strong>atomic</strong> construction ensures that To specific storage lease is updated
 atomically, rather than exposing it to the possibility of multiple,
 simultaneous writing threads.</p>
@@ -1159,7 +1171,7 @@ simultaneous writing threads.</p>
 </div></div></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph text-justify">
 <p><strong>flush</strong> construction execute the OpenMP flush operation, which makes a
 thread&#8217;s temporary view of memory consist with memories, and enforces an
 order on the memory operations of the variables.</p>
@@ -1171,7 +1183,7 @@ order on the memory operations of the variables.</p>
 </div></div></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph text-justify">
 <p>The <strong>ordered</strong> construct specifies a structured block in a loop region
 that will be executed in the order of the loop iterations. This
 sequentializes and orders the code within an ordered region while
@@ -1212,9 +1224,8 @@ each thread having its own copy.</pre>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">A Simple Parallel Loop</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>The loop iteration variable is private by default, so it is not
-necessary to specify it explicitly in a private clause</p>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph text-justify">
+<p>The loop iteration variable is private by default, so it is not necessary to specify it explicitly in a private clause</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -1339,7 +1350,7 @@ y[i] = sqrt(z[i]);
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The collapse Clause</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph text-justify">
 <p>The collapse clause is used since it is implicitly private. The collapse clause associates one or more loops with the directive on which it appears for the purpose of identifying the portion of the depth of the canonical loop nest to which to apply the semantics of the directive. The argument n speciﬁes the number of loops of the associated loop nest to which to apply those semantics. On all directives on which the collapse clause may appear, the eﬀect is as if a value of one was speciﬁed for n if the collapse clause is not speciﬁed.</p>
 </div>
 <div class="literalblock">
@@ -1368,7 +1379,7 @@ bar(a,i,j,k);
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Linear Clause in Loop Constructs</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph text-justify">
 <p>The linear clause in a loop construct to allow the proper
 parallelization of a loop that contains an induction variable (<em>j</em>). At
 the end of the execution of the loop construct, the original variable
@@ -1412,7 +1423,7 @@ return 0;
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The firstprivate Clause and the sections Construct</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph text-justify">
 <p>The firstprivate clause is used to initialize the private copy of
 section_count of each thread. The problem is that the section constructs modify section_count, which breaks the independence of the section constructs. When different threads execute each section, both sections will print the value 1. When the same thread executes the two sections, one section will print the value 1 and the other will print the value 2.
 Since the order of execution of the two sections in this case is
@@ -1485,7 +1496,7 @@ printf( "section_count %d\n", section_count );
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The single Construct</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph text-justify">
 <p>Only one thread prints each of the progress messages. All other threads
 will skip the single region and stop at the barrier at the end of the
 single construct until all threads in the team have reached the barrier.

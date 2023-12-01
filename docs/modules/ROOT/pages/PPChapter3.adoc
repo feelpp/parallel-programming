@@ -1,11 +1,8 @@
 = Star PU
 
-*StarPU* is a task scheduling library for hybrid architectures. StarPU's
-goal is to design systems in which applications are distributed across
-the entire machine, powering parallel tasks to all available resources.
-It keeps track of the copies of each of the data in the various memories
-on board the accelerators, and provides mechanisms such as data
-preloading. The calculation time has been greatly reduced, as well as
+[.text-justify]
+StarPU is a task scheduling library for hybrid architectures. StarPU's goal is to design systems in which applications are distributed across the entire machine, powering parallel tasks to all available resources.
+It keeps track of the copies of each of the data in the various memories on board the accelerators, and provides mechanisms such as data preloading. The calculation time has been greatly reduced, as well as
 the high efficiency in the use of the different calculation resources,
 the different typical workloads, especially in the case of multi-core
 machines equipped with several acceleration machines.

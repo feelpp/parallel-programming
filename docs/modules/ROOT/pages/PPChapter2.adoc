@@ -1,20 +1,20 @@
 === 2. Programming interface for parallel computing
 
 *MPI, OpenMP two complementary parallelization models.*
-
+[.text-justify]
 – MPI is a multi-process model whose mode of communication between the
 processes is *explicit* (communication management is the responsibility
 of the user). MPI is generally used on multiprocessor machines with
 distributed memory. MPI is a library for passing messages between
 processes without sharing.
-
+[.text-justify]
 – OpenMP is a multitasking model whose mode of communication between
 tasks is *implicit* (the management of communications is the
 responsibility of the compiler). OpenMP is used on shared-memory
 multiprocessor machines. It focuses on shared memory paradigms. It is a
 language extension for expressing data-parallel operations (usually
 parallelized arrays over loops).
-
+[.text-justify]
 Note: on a cluster of independent shared-memory multiprocessor machines
 (nodes), the implementation of a two-level parallelization (MPI, OpenMP)
 in the same program can be a major advantage for the parallel
@@ -65,21 +65,21 @@ Data placement problem
 *Point-to-point communications*
 
 *General notions*
-
+[.text-justify]
 The transmitter and the receiver are identified by their rank in the
 communicator. The entity passed between two processes is called a
 message . +
 A message is characterized by its envelope . This consists of:
-
+[.text-justify]
 • the rank of the sending process; +
 • the rank of the receiving process; +
 • the label ( _tag_ ) of the message; +
 • the communicator who defines the process group and the communication
 context.
-
+[.text-justify]
 The data exchanged is typed (integers, reals, etc. or personal derived
 types).
-
+[.text-justify]
 In each case, there are several transfer modes , using different
 protocols.
     
@@ -111,25 +111,13 @@ Note this operation is blocking.
 *Collective communications*
 
 *General notions*
-
-Collective communications allow a series of point-to-point
-communications to be made in a single operation.
-
-A collective communication always concerns all the processes of the
-indicated communicator .
-
-For each of the processes, the call ends when the latter's participation
-in the collective operation is completed, in the sense of point-to-point
-communications (thus when the memory zone concerned can be modified).
-
-The management of labels in these communications is transparent and at
-the expense of the system. They are therefore never explicitly defined
-during the call to these subroutines. One of the advantages of this is
-that collective communications never interfere with point-to-point
-communications.
+[.text-justify]
+Collective communications allow a series of point-to-point communications to be made in a single operation. A collective communication always concerns all the processes of the indicated communicator. For each of the processes, the call ends when the latter's participation in the collective operation is completed, in the sense of point-to-point
+communications (thus when the memory zone concerned can be modified). The management of labels in these communications is transparent and at the expense of the system. They are therefore never explicitly defined
+during the call to these subroutines. One of the advantages of this is that collective communications never interfere with point-to-point communications.
 
 *Types of collective communications*
-
+[.text-justify]
 There are three types of subroutines: +
 *1.* the one that ensures global synchronizations: MPI_Barrier() .
 
@@ -240,7 +228,7 @@ The received data can be read after the blocking call.
 
 
 *Synchronous sends*
-
+[.text-justify]
 A synchronous send involves synchronization between the processes
 involved. A shipment can only begin when its receipt is posted. There
 can only be communication if both processes are willing to communicate.
@@ -288,17 +276,8 @@ saturation)
 
 Send buffers must be managed manually (often difficult to choose an
 appropriate size _)_
-
-A bit slower than synchronous sends if the receiver is ready
-
-No knowledge of the reception (send-receive decoupling)
-
-Risk of wasting memory space if the _buffers_ are too oversized
-
-The application crashes if the _buffers_ are too small
-
-There are also often hidden _buffers_ managed by the MPI implementation
-on the sender and/or receiver side (and consuming memory resources)
+[.text-justify]
+A bit slower than synchronous sends if the receiver is ready. No knowledge of the reception (send-receive decoupling). Risk of wasting memory space if the _buffers_ are too oversized. The application crashes if the _buffers_ are too small. There are also often hidden _buffers_ managed by the MPI implementation on the sender and/or receiver side (and consuming memory resources)
 
 *Standard shipments*
 
@@ -323,7 +302,7 @@ Behavior may vary depending on the architecture and the size of the
 problem
 
 *Non-blocking calls*
-
+[.text-justify]
 non-blocking call returns control very quickly, but does not allow the
 immediate reuse of the memory space used in the call. It is necessary to
 ensure that the communication is indeed terminated (with MPI_Wait() for
@@ -343,14 +322,14 @@ example) before using it again.
 
 
 *Benefits of non-blocking calls*
-
+[.text-justify]
 Ability to hide all or part of the communication costs (if the
 architecture allows it)
 
 No risk of _deadlock_
 
 *Disadvantages of non-blocking calls*
-
+[.text-justify]
 Higher additional costs (several calls for a single send or receive,
 request management)
 
@@ -395,7 +374,7 @@ MPI_Testsome is the non-blocking version.
     int MPI_Testsome( int size, MPI_Request reqs[], int *endcount,int *indexes, MPI_Status *status)
 
 *Memory-to-memory communications (RMA)*
-
+[.text-justify]
 Memory-to-memory communications (or RMA for _Remote Memory Access_ or
 _one-sided communications_ ) consist of accessing the memory of a remote
 process in write or read mode without the latter having to manage this
@@ -403,7 +382,7 @@ access explicitly. The target process therefore does not intervene
 during the transfer.
 
 *RMA - General Approach*
-
+[.text-justify]
 Creation of a memory window with MPI_Win_create() to authorize RMA
 transfers in this area.
 
@@ -413,7 +392,7 @@ MPI_Accumulate(), , MPI_Get_accumulate() and MPI_Compare_and_swap()
 Freeing the memory window with M PI_Win_free() .
 
 *RMA - Synchronization Methods*
-
+[.text-justify]
 To ensure correct operation, it is mandatory to carry out certain
 synchronizations. 3 methods are available:
 
@@ -428,7 +407,7 @@ Passive target communication without target intervention (MPI_Win_lock()
 and MPI_Win_unlock()).
 
 *Benefits of RMAs*
-
+[.text-justify]
 Allows you to implement certain algorithms more efficiently.
 
 More efficient than point-to-point communications on some machines (use
@@ -438,7 +417,7 @@ memory, etc.).
 Ability for the implementation to group multiple operations.
 
 *Disadvantages of RMAs*
-
+[.text-justify]
 Synchronization management is tricky.
 
 Complexity and high risk of error.
@@ -450,7 +429,7 @@ pointers not supported by some compilers).
 Less efficient than point-to-point communications on some machines.
 
 *Derived data types*
-
+[.text-justify]
 In the communications, the data exchanged are typed: MPI_INTEGER,
 MPI_REAL, MPI_COMPLEX, etc .
 
@@ -629,20 +608,20 @@ the status of the variables (private or shared).
 *General concepts*
 
 An OpenMP program is executed by a single process.
-
+[.text-justify]
 * This process activates lightweight processes (threads) at the entrance
 to a parallel region. +
 * Each thread performs a task consisting of a set of instructions. +
 * During the execution of a task, a variable can be read and/or modified
 in memory.
 
-
+[.text-justify]
 – It can be defined in the stack (local memory space) of a lightweight
 process; we then speak of a private variable
 
 – It can be defined in a shared memory space
 
-
+[.text-justify]
 * An OpenMP program is an alternation of sequential regions and parallel
 regions. +
 * A sequential region is always executed by the master task, the one
@@ -652,21 +631,21 @@ whose rank is 0. +
 
 * Work sharing essentially consists of:
 
-
+[.text-justify]
 – execute a loop by distributing the iterations between the tasks; +
 – execute several sections of code but only one per task; +
 – execute several occurrences of the same procedure by different tasks
 (orphaning)
 
-
+[.text-justify]
 * It is sometimes necessary to introduce a synchronization between the
 concurrent tasks to avoid, for example, that these modify in any order
 the value of the same shared variable (case of reduction operations).
-
+[.text-justify]
 * Generally, tasks are assigned to processors by the operating system.
 Different cases can occur:
 
-
+[.text-justify]
 – at best, at each instant, there is one task per processor with as many
 tasks as there are dedicated processors for the duration of the work; +
 – at worst, all tasks are processed sequentially by one and only one
@@ -674,12 +653,12 @@ processor; +
 – in reality, for reasons essentially of operation on a machine whose
 processors are not dedicated, the situation is generally intermediate.
 
-
+[.text-justify]
 * To overcome these problems, it is possible to build the OpenMP runtime
 on a library of mixed threads and thus control the scheduling of tasks.
 
 *Construction of a parallel region*
-
+[.text-justify]
 * In a parallel region, by default, the status of variables is shared.
 * Within a single parallel region, all concurrent tasks execute the same
 code.
@@ -698,7 +677,7 @@ the initialization of this private variable to the last value it had
 before entering the parallel region.
 
 *Extent of a parallel region*
-
+[.text-justify]
 * The scope of an OpenMP construct represents the scope of its influence
 in the program. +
 The influence (or scope) of a parallel region extends both to the code
@@ -713,7 +692,7 @@ parameters) by reference, inherit the status defined in the lexical
 scope (static) of the region.
 
 *Case of static variables*
-
+[.text-justify]
 * A variable is static if its location in memory is defined at
 declaration by the compiler
 * Using the THREADPRIVATE directive allows you to privatize a static
@@ -723,7 +702,7 @@ omp_get_thread_num(); )
 static instances is passed to all tasks.
 
 *Case of dynamic allocation*
-
+[.text-justify]
 * The dynamic memory allocation/deallocation operation can be performed
 inside a parallel region.
 * If the operation relates to a private variable, it will be local to
@@ -732,7 +711,7 @@ each task.
 that only one task (e.g. the master task) takes care of this operation
 
 *Complements*
-
+[.text-justify]
 The construction of a parallel region admits two other clauses:
 
 – REDUCTION: for reduction operations with implicit synchronization
@@ -740,7 +719,7 @@ between tasks; +
 – NUM_THREADS: it allows to specify the desired number of tasks at the
 entrance of a parallel region in the same way as the OMP_SET_NUM_THREADS
 subroutine would do.
-
+[.text-justify]
 From one parallel region to another, the number of concurrent tasks can
 be varied if desired. To do this, simply use the OMP_SET_DYNAMIC
 subroutine or set the OMP_DYNAMIC environment variable to true. It is
@@ -782,7 +761,7 @@ or by setting the OMP_NESTED environment variable.
     My rank in region 2: 1
 
 *Work sharing*
-
+[.text-justify]
 * In principle, building a parallel region and using a few OpenMP
 functions alone is enough to parallelize a piece of code.
 * But, in this case, it is up to the programmer to distribute the work
@@ -795,22 +774,23 @@ exclusion of all but one task to execute a piece of code located in a
 parallel region.
 
 *Parallel loop*
-
+[.text-justify]
 * It is a parallelism by distribution of the iterations of a loop.
+[.text-justify]
 * The parallelized loop is the one immediately following the DO
 directive.
+[.text-justify]
 * "Infinite" and do while loops are not parallelizable with OpenMP.
-* The mode of distribution of iterations can be specified in the
-SCHEDULE clause.
-* Choosing the distribution mode provides more control over balancing
-the workload between tasks.
+[.text-justify]
+* The mode of distribution of iterations can be specified in the SCHEDULE clause.
+[.text-justify]
+* Choosing the distribution mode provides more control over balancing the workload between tasks.
+[.text-justify]
 * Loop indices are private integer variables.
-* By default, a global synchronization is performed at the end of the
-END DO construction unless the +
-NOWAIT clause has been specified.
+* By default, a global synchronization is performed at the end of the END DO construction unless the + NOWAIT clause has been specified.
 
 *SCHEDULE clause*
-
+[.text-justify]
 * STATIC dispatching consists of dividing the iterations into packets of
 a given size (except perhaps for the last one). A set of packets is then
 assigned cyclically to each of the tasks, following the order of the
@@ -830,7 +810,7 @@ task completes its iterations, another iteration package is assigned to
 it.
 
 *Case of an ordered execution*
-
+[.text-justify]
 * It is sometimes useful (debugging cases) to execute a loop in an
 orderly fashion.
 * The order of the iterations will then be identical to that
@@ -844,7 +824,7 @@ an intrinsic function: MAX, MIN, IAND, IOR, IEOR.
 They then sync to update the final result.
 
 *Parallel sections*
-
+[.text-justify]
 * A section is a portion of code executed by one and only one task.
 * Multiple portions of code can be defined by the user using the SECTION
 directive within a SECTIONS construct.
@@ -861,7 +841,7 @@ know:
 SECTIONS directives with the union of their respective clauses.
 
 *Exclusive execution*
-
+[.text-justify]
 Sometimes you want to exclude all tasks except one to execute certain
 portions of code included in a parallel region.
 
@@ -871,7 +851,7 @@ Although the aim is the same, the behavior induced by these two
 constructions remains quite different.
 
 Parallel sections
-
+[.text-justify]
 * A section is a portion of code executed by one and only one task.
 * Multiple portions of code can be defined by the user using the SECTION
 directive within a SECTIONS construct.
@@ -881,7 +861,7 @@ independent portions of code on the different tasks.
 to remove the implicit synchronization barrier.
 
 *Exclusive execution*
-
+[.text-justify]
 * Sometimes you want to exclude all tasks except one to execute certain
 portions of code included in a parallel region.
 * To do this, OpenMP offers two directives SINGLE and MASTER.
@@ -889,7 +869,7 @@ portions of code included in a parallel region.
 constructions remains quite different.
 
 *SINGLE construction*
-
+[.text-justify]
 * The SINGLE construction allows a portion of code to be executed by one
 and only one task without being able to specify which one.
 * In general, it is the task which arrives first on the SINGLE
@@ -899,7 +879,7 @@ END SINGLE construction, for the termination of the one responsible for
 it, unless they have specified the NOWAIT clause.
 
 *MASTER building*
-
+[.text-justify]
 * The MASTER construction allows a portion of code to be executed by the
 master task alone.
 * This construction does not admit any clauses.
@@ -907,38 +887,38 @@ master task alone.
 or at the end of construction (END MASTER).
 
 *Synchronizations*
-
+[.text-justify]
 Synchronization becomes necessary in the following situations:
 
-
+[.text-justify]
 {empty}1. to ensure that all concurrent tasks have reached the same
 level of instruction in the program (global barrier);
-
+[.text-justify]
 {empty}2. to order the execution of all the concurrent tasks when these
 must execute the same portion of code affecting one or more shared
 variables whose consistency (in reading or in writing) in memory must be
 guaranteed (mutual exclusion).
-
+[.text-justify]
 {empty}3. to synchronize at least two concurrent tasks among the set
 (lock mechanism).
 
-
+[.text-justify]
 As we have already indicated, the absence of a NOWAIT clause means that
 a global synchronization barrier is implicitly applied at the end of the
 \openmp construction. But it is possible to explicitly impose a global
 synchronization barrier thanks to the BARRIER directive.
-
+[.text-justify]
 The mutual exclusion mechanism (one task at a time) is found, for
 example, in reduction operations (REDUCTION clause) or in the ordered
 execution of a loop (DO ORDERED directive). For the same purpose, this
 mechanism is also implemented in the ATOMIC and CRITICAL directives.
-
+[.text-justify]
 Finer synchronizations can be achieved either by setting up lock
 mechanisms (this requires calling subroutines from the OpenMP library),
 or by using the FLUSH directive.
 
 *Barrier*
-
+[.text-justify]
 * The BARRIER directive synchronizes all concurrent tasks in a parallel
 region.
 * Each of the tasks waits until all the others have arrived at this
@@ -950,7 +930,7 @@ modified in memory by only one task at a time.
 directive.
 
 *Critical regions*
-
+[.text-justify]
 * A critical region can be seen as a generalization of the ATOMIC
 directive although the underlying mechanisms are distinct.
 * The tasks execute this region in a non-deterministic order but one at
@@ -962,7 +942,7 @@ to a portion of code terminated by END CRITICAL.
 instruction by a critical region.
 
 *FLUSH directive*
-
+[.text-justify]
 * It is useful in a parallel region to refresh the value of a shared
 variable in global memory.
 * It is all the more useful when the memory of a machine is
@@ -971,7 +951,7 @@ hierarchical.
 tasks.
 
 *Rules of good performance*
-
+[.text-justify]
 * Minimize the number of parallel regions in the code.
 * Adapt the number of tasks requested to the size of the problem to be
 treated in order to minimize the additional costs of task management by

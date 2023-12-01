@@ -1,10 +1,10 @@
 = SIMD (Single Instruction Multiple Data)
-
+[.text-justify]
 SIMD is a computer technique that allows several data elements to be
 exploited at the same time.
 
 == What is SIMD used for?
-
+[.text-justify]
 SIMD can be used in a wide range of applications, such as 3D graphics,
 signal processing, data mining, and many other processing-intensive
 tasks. In the realm of 3D graphics, SIMD can be used to process large
@@ -13,7 +13,7 @@ smoother. In signal processing, SIMD can be used to process multiple
 signals at the same time, thereby increasing the efficiency of signal
 processing. In data mining, SIMD can be used to process large volumes of
 data in parallel, which makes data mining faster and more efficient.
-
+[.text-justify]
 SIMD is also commonly used in encryption and data compression
 algorithms. These algorithms often require the processing of large
 amounts of data, and SIMD can be used to speed up the process. SIMD can
@@ -21,20 +21,20 @@ also be used to process large amounts of data in parallel in machine
 learning algorithms such as artificial neural networks.
 
 == Benefits of using SIMD
-
+[.text-justify]
 SIMD has several advantages over other forms of parallelization. First,
 SIMD is more efficient than traditional software parallelization
 techniques, such as threading. This is because SIMD takes advantage of
 the capabilities of modern processors and is optimized for parallelism.
 This means that SIMD can process multiple pieces of data in parallel at
 the same time, which greatly improves program performance.
-
+[.text-justify]
 In addition, SIMD allows more efficient use of memory. Since the same
 instruction is applied to multiple pieces of data in parallel, the
 amount of memory required to store data is reduced. This can help
 improve performance by reducing the amount of memory required to store
 data items.
-
+[.text-justify]
 Finally, SIMD is more flexible than other forms of parallelization. This
 is because SIMD allows the same instruction to be applied to multiple
 data items in parallel, allowing the programmer to customize the code

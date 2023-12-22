@@ -155,6 +155,9 @@ MathJax.Hub.Config({
     <a class="nav-link" href="PPChapter1_SIMD.html">SIMD Architecture</a>
   </li>
   <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="PPChapter1_AMD_CUDA.html">AMD CUDA Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="PPChapter2_MPI.html">MPI (Message Passing Interface)</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -371,31 +374,22 @@ on a library of mixed threads and thus control the scheduling of tasks.</p>
 <p>In a parallel region, by default, the status of variables is shared.</p>
 </li>
 <li>
-<p>Within a single parallel region, all concurrent tasks execute the same
-code.</p>
+<p>Within a single parallel region, all concurrent tasks execute the same code.</p>
 </li>
 <li>
-<p>There is an implicit synchronization barrier at the end of the
-parallel region.</p>
+<p>There is an implicit synchronization barrier at the end of the parallel region.</p>
 </li>
 <li>
-<p>“Branching” (eg GOTO, CYCLE, etc.) into or out of a parallel region or
-any other OpenMP construct is prohibited.</p>
+<p>“Branching” (eg GOTO, CYCLE, etc.) into or out of a parallel region or any other OpenMP construct is prohibited.</p>
 </li>
 <li>
-<p>It is possible, thanks to the DEFAULT clause, to change the default
-status of variables in a parallel region.</p>
+<p>It is possible, thanks to the DEFAULT clause, to change the default status of variables in a parallel region.</p>
 </li>
 <li>
-<p>If a variable has a private status (PRIVATE), it is in the stack of
-each task. Its value is then undefined at the entry of a parallel region
-(in the example opposite, the variable a equals 0 at the entry of the
-parallel region)</p>
+<p>If a variable has a private status (PRIVATE), it is in the stack of each task. Its value is then undefined at the entry of a parallel region (in the example opposite, the variable a equals 0 at the entry of the parallel region)</p>
 </li>
 <li>
-<p>However, thanks to the FIRSTPRIVATE clause, it is possible to force
-the initialization of this private variable to the last value it had
-before entering the parallel region.</p>
+<p>However, thanks to the FIRSTPRIVATE clause, it is possible to force the initialization of this private variable to the last value it had before entering the parallel region.</p>
 </li>
 </ul>
 </div>
@@ -496,36 +490,20 @@ possible to nest (nesting) parallel regions, but this only has an effect if this
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#include &lt;omp.h&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int main()
+<pre>#include &lt;omp.h&gt;
+int main()
 {
-int row;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp parallel private(rank) num_threads(3)
-{
-rank=omp_get_thread_num();
-printf("My rank in region 1: %d \n",rank);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#pragma omp parallel private(rank) num_threads(2)
-{
-rank=omp_get_thread_num();
-printf(" My rank in region 2: %d \n",rank);
-}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}
+int row;
+    #pragma omp parallel private(rank) num_threads(3)
+    {
+    rank=omp_get_thread_num();
+    printf("My rank in region 1: %d \n",rank);
+        #pragma omp parallel private(rank) num_threads(2)
+        {
+        rank=omp_get_thread_num();
+        printf(" My rank in region 2: %d \n",rank);
+        }
+    }
 return 0;
 }</pre>
 </div>
@@ -940,23 +918,11 @@ execution.</pre>
 <div class="literalblock">
 <div class="content">
 <pre>*#pragma comp parallel* _[clause[ [_ *,* _]clause] ...] new-line
-structured-block_</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>_clause_ : *if(* _scalar- expression_ *)*</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>*num_threads(* _integer-expression_ *) default(shared*  *none)
-private(* _list_ *) firstprivate(* _list_ *)*</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>*shared(* _list_ *) copyin(* _list_ *) reduce(* _operator_ *:* _list_
+structured-block_
+_clause_ : *if(* _scalar- expression_ *)*
+*num_threads(* _integer-expression_ *) default(shared*  *none)
+private(* _list_ *) firstprivate(* _list_ *)*
+*shared(* _list_ *) copyin(* _list_ *) reduce(* _operator_ *:* _list_
 *)s*</pre>
 </div>
 </div></div></td>
@@ -968,17 +934,9 @@ distributed among and executed by the encountering team of threads.</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>*#pragma comp for* _[clause[[_ *,* _] clause] ... ] new-line for-loops_</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>_clause_ : *private(* _list_ *)*</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>*firstprivate(* _list_ *) lastprivate(* _list_ *) reduce(* _operator_
+<pre>*#pragma comp for* _[clause[[_ *,* _] clause] ... ] new-line for-loops_
+_clause_ : *private(* _list_ *)*
+*firstprivate(* _list_ *) lastprivate(* _list_ *) reduce(* _operator_
 *:* _list_ *) schedule(* _kind[, chunk_size]_ *) collapse(* _n_ *)*
 *ordered nowait*</pre>
 </div>
@@ -991,32 +949,12 @@ distributed among and executed by the meeting team of threads.</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>*#pragma comp sections* _[clause[[_ *,* _] clause] ...] new line_</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>*{*</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>_[_ *#pragma comp section* _new-line] structured-block_</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>_[_ *#pragma comp section* _new-line structured-block ]_</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>_clause_ : *private(* _list_ *)*</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>*firstprivate(* _list_ *)
+<pre>*#pragma comp sections* _[clause[[_ *,* _] clause] ...] new line_
+*{*
+_[_ *#pragma comp section* _new-line] structured-block_
+_[_ *#pragma comp section* _new-line structured-block ]_
+_clause_ : *private(* _list_ *)*
+*firstprivate(* _list_ *)
 lastprivate(* _list_ *) reduce(* _operator_
 *:* _list_ *) nowait*</pre>
 </div>
@@ -1031,17 +969,9 @@ master thread), in the context of its implicit task.</p>
 <div class="literalblock">
 <div class="content">
 <pre>*#pragma comp single* _[clause[[_ *,* _] clause] ...] new-line
-structured-block_</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>_clause_ : *private(* _list_ *)*</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>*firstprivate(* _list_ *) copyprivate(* _list_ *) nowait*</pre>
+structured-block_
+_clause_ : *private(* _list_ *)*
+*firstprivate(* _list_ *) copyprivate(* _list_ *) nowait*</pre>
 </div>
 </div></div></td>
 </tr>
@@ -1055,29 +985,13 @@ allowed for the <strong>parallel</strong> and worksharing constructs.</p>
 <div class="literalblock">
 <div class="content">
 <pre>*#pragma comp parallel for* _[clause[[_ *,* _] clause] ...] new-line
-for-loop_</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>*#pragma comp parallel sections* _[clause[ [_ *,* _]clause] ...]
-new-line_</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>*{*
-_[_ *#pragma comp section* _new-line] structured-block_</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>_[_ *#pragma comp section* _new-line structured-block ]_</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>_..._
+for-loop_
+*#pragma comp parallel sections* _[clause[ [_ *,* _]clause] ...]
+new-line_
+*{*
+_[_ *#pragma comp section* _new-line] structured-block_
+_[_ *#pragma comp section* _new-line structured-block ]_
+_..._
 *#pragma comp task* _[clause[ [_ *,* _]clause] ...] new-line
 structured-block_
 _clause_ : *if(* _scalar- expression_ *)*</pre>
@@ -1146,27 +1060,11 @@ simultaneous writing threads.</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>*#pragma comp atomic* _new-line expression-stmt_</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>_stmt-expression_ : one of the following forms:</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>_x binop_ *=* _expr x_ *++*</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>*++* _x x_ *- -*</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>*--x* ___</pre>
+<pre>*#pragma comp atomic* _new-line expression-stmt_
+_stmt-expression_ : one of the following forms:
+_x binop_ *=* _expr x_ *++*
+*++* _x x_ *- -*
+*--x* ___</pre>
 </div>
 </div></div></td>
 </tr>
@@ -1231,10 +1129,10 @@ each thread having its own copy.</pre>
 <div class="content">
 <pre>void simple(int n, float *a, float *b)
 {
-int i;
-*#pragma omp parallel for*
-for (i=1; i&lt;n; i++) /* i is private by default */
-b[i] = (a[i] + a[i-1]) / 2.0;
+    int i;
+    *#pragma omp parallel for*
+    for (i=1; i&lt;n; i++) /* i is private by default */
+    b[i] = (a[i] + a[i-1]) / 2.0;
 }</pre>
 </div>
 </div>
@@ -1253,9 +1151,9 @@ b[i] = (a[i] + a[i-1]) / 2.0;
 <div class="content">
 <pre>void subdomain(float *x, int istart, int ipoints)
 {
-int i;
-for (i = 0; i &lt; ipoints; i++)
-x[istart+i] = 123.456;
+    int i;
+    for (i = 0; i &lt; ipoints; i++)
+    x[istart+i] = 123.456;
 }</pre>
 </div>
 </div>
@@ -1264,16 +1162,16 @@ x[istart+i] = 123.456;
 <pre>void sub(float *x, int npoints)
 {
 int iam, nt, ipoints, istart;
-*#pragma omp parallel default(shared) private(iam,nt,ipoints,istart)*
-{
-iam = omp_get_thread_num();
-nt = omp_get_num_threads();
-ipoints = npoints / nt; /* size of partition */
-istart = iam * ipoints; /* starting array index */
-if (iam == nt-1) /* last thread may do more */
-ipoints = npoints - istart;
-subdomain(x, istart, ipoints);
-}
+    *#pragma omp parallel default(shared) private(iam,nt,ipoints,istart)*
+    {
+        iam = omp_get_thread_num();
+        nt = omp_get_num_threads();
+        ipoints = npoints / nt; /* size of partition */
+        istart = iam * ipoints; /* starting array index */
+        if (iam == nt-1) /* last thread may do more */
+        ipoints = npoints - istart;
+        subdomain(x, istart, ipoints);
+    }
 }</pre>
 </div>
 </div>
@@ -1281,9 +1179,9 @@ subdomain(x, istart, ipoints);
 <div class="content">
 <pre>main()
 {
-float array[10000]
-sub(array, 10000)
-return 0;
+    float array[10000]
+    sub(array, 10000)
+    return 0;
 }</pre>
 </div>
 </div></div></td>
@@ -1303,19 +1201,15 @@ implementations that support it.</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#include &lt;omp.h&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int main()
+<pre>#include &lt;omp.h&gt;
+int main()
 {
-omp_set_dynamic(0);
-*#pragma omp parallel num_threads(10)*
-{
-/* do work here */
-}
-return 0;
+    omp_set_dynamic(0);
+        *#pragma omp parallel num_threads(10)*
+        {
+        /* do work here */
+        }
+    return 0;
 }</pre>
 </div>
 </div></div></td>
@@ -1327,23 +1221,19 @@ return 0;
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#include &lt;math.h&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>void nowait_example(int n, int m, float *a, float *b, float *y, float *z)
+<pre>#include &lt;math.h&gt;
+void nowait_example(int n, int m, float *a, float *b, float *y, float *z)
 {
-int i;
-*#pragma omp parallel*
-{
-*#pragma omp for nowait*
-for (i=1; i&lt;n; i++)
-b[i] = (a[i] + a[i-1]) / 2.0;
-*#pragma omp for nowait*
-for (i=0; i&lt;m; i++)
-y[i] = sqrt(z[i]);
-}
+    int i;
+    *#pragma omp parallel*
+        {
+        *#pragma omp for nowait*
+            for (i=1; i&lt;n; i++)
+            b[i] = (a[i] + a[i-1]) / 2.0;
+        *#pragma omp for nowait*
+            for (i=0; i&lt;m; i++)
+            y[i] = sqrt(z[i]);
+        }
 }</pre>
 </div>
 </div></div></td>
@@ -1355,24 +1245,16 @@ y[i] = sqrt(z[i]);
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>void bar(float *a, int i, int j, int k);</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int kl, ku, ks, jl, ju, js, il, iu,is;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>void sub(float *a)
+<pre>void bar(float *a, int i, int j, int k);
+int kl, ku, ks, jl, ju, js, il, iu,is;
+void sub(float *a)
 {
-int i, j, k;
-*#pragma omp for collapse(2) private(i, k, j)*
-for (k=kl; k&lt;=ku; k+=ks)
-for (j=jl; j&lt;=ju; j+=js)
-for (i=il; i&lt;=iu; i+=is)
-bar(a,i,j,k);
+    int i, j, k;
+    *#pragma omp for collapse(2) private(i, k, j)*
+        for (k=kl; k&lt;=ku; k+=ks)
+        for (j=jl; j&lt;=ju; j+=js)
+        for (i=il; i&lt;=iu; i+=is)
+        bar(a,i,j,k);
 }</pre>
 </div>
 </div></div></td>
@@ -1387,34 +1269,22 @@ the end of the execution of the loop construct, the original variable
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#include &lt;stdio.h&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#define N 100</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int main(void)
+<pre>#include &lt;stdio.h&gt;
+#define N 100
+int main(void)
 {
-float a[N], b[N/2];
-int i, j;
-for(i = 0;i&lt;N;i++)
-a[i] = i+1;
-j=0
-*#pragma omp parallel*
-*#pragma omp for linear(j:1)*
-for(i=0;i&lt;N;i+=2){
-b[j]= a[i] * 2.0f;
-j++;
-}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>printf"%d %f %f\n", j, b[0], b[j-1] );
+    float a[N], b[N/2];
+    int i, j;
+    for(i = 0;i&lt;N;i++)
+        a[i] = i+1;
+    j=0
+    *#pragma omp parallel*
+    *#pragma omp for linear(j:1)*
+    for(i=0;i&lt;N;i+=2){
+        b[j]= a[i] * 2.0f;
+        j++;
+}
+printf"%d %f %f\n", j, b[0], b[j-1] );
 /* print out: 50 2.0 198.0 */
 return 0;
 }</pre>
@@ -1431,65 +1301,29 @@ unspecified, it is unspecified which section prints which value.</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#include &lt;stdio.h&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#define NT 4</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int main( ) {</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>int section_count = 0;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>*omp_set_dynamic(0);*
-*omp_set_num_threads(NT);*
-*#pragma omp parallel*
-*#pragma omp sections firstprivate( section_count )*
-{</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>*#pragma omp section*
-{
-section_count++;
-/* may print the number one or two */
-printf( "section_count %d\n", section_count );</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>*#pragma omp section*
-{
-section_count++;
-/* may print the number one or two */
-printf( "section_count %d\n", section_count );
-}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>return 0;
+<pre>#include &lt;stdio.h&gt;
+#define NT 4
+int main( ) {
+    int section_count = 0;
+    *omp_set_dynamic(0);*
+    *omp_set_num_threads(NT);*
+    *#pragma omp parallel*
+    *#pragma omp sections firstprivate( section_count )*
+    {
+        *#pragma omp section*
+            {
+            section_count++;
+            /* may print the number one or two */
+            printf( "section_count %d\n", section_count );
+            }
+        *#pragma omp section*
+            {
+            section_count++;
+            /* may print the number one or two */
+            printf( "section_count %d\n", section_count );
+            }
+    }
+    return 0;
 }</pre>
 </div>
 </div></div></td>
@@ -1507,37 +1341,20 @@ assumptions as to which thread will execute a single region.</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#include &lt;stdio.h&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>void work1() {}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>void work2() {}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>void single_example()</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>*#pragma omp parallel*
+<pre>#include &lt;stdio.h&gt;
+void work1() {}
+void work2() {}
+void single_example()
+*#pragma omp parallel*
 {
-*#pragma omp single*
-printf("Beginning work1.\n");
-work1();
-*#pragma omp single*
-printf("Finishing work1.\n");
-*#pragma omp single nowait*
-printf("Finished work1 and beginning work2.\n");
-work2();
-}
+    *#pragma omp single*
+    printf("Beginning work1.\n");
+    work1();
+    *#pragma omp single*
+    printf("Finishing work1.\n");
+    *#pragma omp single nowait*
+    printf("Finished work1 and beginning work2.\n");
+    work2();
 }</pre>
 </div>
 </div></div></td>
@@ -1546,57 +1363,37 @@ work2();
 <td class="tableblock halign-left valign-top"><p class="tableblock">The master Construct</p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="literalblock">
 <div class="content">
-<pre>#include &lt;stdio.h&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>extern float average(float,float,float);
+<pre>#include &lt;stdio.h&gt;
+extern float average(float,float,float);
 void master_example( float* x, float* xold, int n, float tol )
 {
 int c, i, toobig;
 float error, y;
-c = 0;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#*pragma omp parallel*
+c = 0;
+#*pragma omp parallel*
 {
 do {
-*#pragma omp for private(i)*
-for( i = 1; i &lt; n-1; ++i ){
-xold[i] = x[i];
-}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>*#pragma omp single*
-{
-toobig = 0;
-}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>*#pragma omp for private(i,y,error) reduction(+:toobig)*
-for(i=1; i&lt;n-1;++i){
-y = x[i];
-x[i] = average( xold[i-1], x[i], xold[i+1] );
-error = y - x[i];
-if( error &gt; tol or error &lt; -tol ) ++toobig;
-}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>*#pragma omp master*
-{
-++c;
-printf( "iteration %d, toobig=%d\n", c, toobig );
-}
-} while( toobig &gt; 0 );
+    *#pragma omp for private(i)*
+    for( i = 1; i &lt; n-1; ++i ){
+        xold[i] = x[i];
+    }
+    *#pragma omp single*
+        {
+            toobig = 0;
+        }
+    *#pragma omp for private(i,y,error) reduction(+:toobig)*
+        for(i=1; i&lt;n-1;++i){
+            y = x[i];
+            x[i] = average( xold[i-1], x[i], xold[i+1] );
+            error = y - x[i];
+            if( error &gt; tol or error &lt; -tol ) ++toobig;
+        }
+    *#pragma omp master*
+        {
+        ++c;
+        printf( "iteration %d, toobig=%d\n", c, toobig );
+        }
+    } while( toobig &gt; 0 );
 }
 }</pre>
 </div>
@@ -1606,32 +1403,16 @@ printf( "iteration %d, toobig=%d\n", c, toobig );
 <td class="tableblock halign-left valign-top"><p class="tableblock">Parrallel Random Access Iterator Loop</p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="literalblock">
 <div class="content">
-<pre>#include &lt;vector&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>void iterator_example()</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{
-std::vector&lt;int&gt; vec(23);
-std::vector&lt;int&gt;::iterator it;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>*#pragma omp parallel for default(none) shared(vec)*
-for (it = vec.begin(); it &lt; vec.end(); it++)</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{
-// do work with *it //
-}
+<pre>#include &lt;vector&gt;
+void iterator_example()
+{
+    std::vector&lt;int&gt; vec(23);
+    std::vector&lt;int&gt;::iterator it;
+    *#pragma omp parallel for default(none) shared(vec)*
+        for (it = vec.begin(); it &lt; vec.end(); it++)
+        {
+        // do work with *it //
+        }
 }</pre>
 </div>
 </div></div></td>
@@ -1647,33 +1428,21 @@ explicitly to ensure portability.</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>#include &lt;omp.h&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>#include &lt;stdlib.h&gt;</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>void do_by_16(float *x, int iam, int ipoints) {}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>void dynthreads(float *x, int npoints)
+<pre>#include &lt;omp.h&gt;
+#include &lt;stdlib.h&gt;
+void do_by_16(float *x, int iam, int ipoints) {}
+void dynthreads(float *x, int npoints)
 {
-int iam, ipoints;
-*omp_set_dynamic(0);*
-*omp_set_num_threads(16);*
-*#pragma omp parallel shared(x, npoints) private(iam, ipoints)*
-{
-if (omp_get_num_threads() != 16) abort();
-iam = omp_get_thread_num();
-ipoints = npoints/16;
-do_by_16(x, iam, ipoints);
-}
+    int iam, ipoints;
+    *omp_set_dynamic(0);*
+    *omp_set_num_threads(16);*
+    *#pragma omp parallel shared(x, npoints) private(iam, ipoints)*
+        {
+        if (omp_get_num_threads() != 16) abort();
+        iam = omp_get_thread_num();
+        ipoints = npoints/16;
+        do_by_16(x, iam, ipoints);
+        }
 }</pre>
 </div>
 </div></div></td>

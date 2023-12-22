@@ -254,7 +254,7 @@ New containers are continually being added to the hub.
 
 == AMD Fusion System Architecture
 
-=== Moves to Unify CPUs and GPUs
+Moves to Unify CPUs and GPUs
 
 image:image6.png[xref=#fragment6,width=511,height=287]
 

@@ -9,11 +9,8 @@ computing on shared memory architecture.
 It allows you to manage:
 
 * the creation of light processes,
-
 * the sharing of work between these lightweight processes,
-
 * synchronizations (explicit or implicit) between all light processes,
-
 * the status of the variables (private or shared).
 
 == General concepts
@@ -69,21 +66,12 @@ on a library of mixed threads and thus control the scheduling of tasks.
 == Construction of a parallel region
 [.text-justify]
 * In a parallel region, by default, the status of variables is shared.
-* Within a single parallel region, all concurrent tasks execute the same
-code.
-* There is an implicit synchronization barrier at the end of the
-parallel region.
-* “Branching” (eg GOTO, CYCLE, etc.) into or out of a parallel region or
-any other OpenMP construct is prohibited.
-* It is possible, thanks to the DEFAULT clause, to change the default
-status of variables in a parallel region.
-* If a variable has a private status (PRIVATE), it is in the stack of
-each task. Its value is then undefined at the entry of a parallel region
-(in the example opposite, the variable a equals 0 at the entry of the
-parallel region)
-* However, thanks to the FIRSTPRIVATE clause, it is possible to force
-the initialization of this private variable to the last value it had
-before entering the parallel region.
+* Within a single parallel region, all concurrent tasks execute the same code.
+* There is an implicit synchronization barrier at the end of the parallel region.
+* “Branching” (eg GOTO, CYCLE, etc.) into or out of a parallel region or any other OpenMP construct is prohibited.
+* It is possible, thanks to the DEFAULT clause, to change the default status of variables in a parallel region.
+* If a variable has a private status (PRIVATE), it is in the stack of each task. Its value is then undefined at the entry of a parallel region (in the example opposite, the variable a equals 0 at the entry of the parallel region)
+* However, thanks to the FIRSTPRIVATE clause, it is possible to force the initialization of this private variable to the last value it had before entering the parallel region.
 
 == Extent of a parallel region
 [.text-justify]
@@ -136,23 +124,19 @@ possible to nest (nesting) parallel regions, but this only has an effect if this
     *Examples*
     
     #include <omp.h>
-    
     int main() 
     { 
     int row;
-    
-    #pragma omp parallel private(rank) num_threads(3) 
-    { 
-    rank=omp_get_thread_num(); 
-    printf("My rank in region 1: %d \n",rank);
-    
-    #pragma omp parallel private(rank) num_threads(2) 
-    { 
-    rank=omp_get_thread_num(); 
-    printf(" My rank in region 2: %d \n",rank); 
-    }
-    
-    }
+        #pragma omp parallel private(rank) num_threads(3) 
+        { 
+        rank=omp_get_thread_num(); 
+        printf("My rank in region 1: %d \n",rank);
+            #pragma omp parallel private(rank) num_threads(2) 
+            { 
+            rank=omp_get_thread_num(); 
+            printf(" My rank in region 2: %d \n",rank); 
+            }
+        }
     return 0; 
     }
     
@@ -372,12 +356,9 @@ at the bottom.
     
     *#pragma comp parallel* _[clause[ [_ *,* _]clause] ...] new-line
     structured-block_
-    
     _clause_ : *if(* _scalar- expression_ *)*
-    
     *num_threads(* _integer-expression_ *) default(shared*  *none)
     private(* _list_ *) firstprivate(* _list_ *)*
-    
     *shared(* _list_ *) copyin(* _list_ *) reduce(* _operator_ *:* _list_
     *)s*
 
@@ -389,13 +370,10 @@ distributed among and executed by the encountering team of threads.
 
 
     *#pragma comp for* _[clause[[_ *,* _] clause] ... ] new-line for-loops_
-    
     _clause_ : *private(* _list_ *)*
-    
     *firstprivate(* _list_ *) lastprivate(* _list_ *) reduce(* _operator_
     *:* _list_ *) schedule(* _kind[, chunk_size]_ *) collapse(* _n_ *)*
     *ordered nowait*
-
 
 
 
@@ -406,15 +384,10 @@ distributed among and executed by the meeting team of threads.
 
 
     *#pragma comp sections* _[clause[[_ *,* _] clause] ...] new line_
-    
     *{*
-    
     _[_ *#pragma comp section* _new-line] structured-block_
-    
     _[_ *#pragma comp section* _new-line structured-block ]_
-    
     _clause_ : *private(* _list_ *)*
-    
     *firstprivate(* _list_ *) 
     lastprivate(* _list_ *) reduce(* _operator_
     *:* _list_ *) nowait*
@@ -428,9 +401,7 @@ master thread), in the context of its implicit task.
     
     *#pragma comp single* _[clause[[_ *,* _] clause] ...] new-line
     structured-block_
-    
     _clause_ : *private(* _list_ *)*
-    
     *firstprivate(* _list_ *) copyprivate(* _list_ *) nowait*
 
 a|
@@ -443,15 +414,11 @@ allowed for the *parallel* and worksharing constructs.
 
     *#pragma comp parallel for* _[clause[[_ *,* _] clause] ...] new-line
     for-loop_
-    
     *#pragma comp parallel sections* _[clause[ [_ *,* _]clause] ...]
     new-line_
-    
     *{*
     _[_ *#pragma comp section* _new-line] structured-block_
-    
     _[_ *#pragma comp section* _new-line structured-block ]_
-    
     _..._
     *#pragma comp task* _[clause[ [_ *,* _]clause] ...] new-line
     structured-block_
@@ -496,13 +463,9 @@ simultaneous writing threads.
 
 
     *#pragma comp atomic* _new-line expression-stmt_
-    
     _stmt-expression_ : one of the following forms:
-    
     _x binop_ *=* _expr x_ *++*
-    
     *++* _x x_ *- -*
-    
     *--x* ___
 
 
@@ -553,10 +516,10 @@ The loop iteration variable is private by default, so it is not necessary to spe
 
     void simple(int n, float *a, float *b)
     {
-    int i;
-    *#pragma omp parallel for*
-    for (i=1; i<n; i++) /* i is private by default */
-    b[i] = (a[i] + a[i-1]) / 2.0;
+        int i;
+        *#pragma omp parallel for*
+        for (i=1; i<n; i++) /* i is private by default */
+        b[i] = (a[i] + a[i-1]) / 2.0;
     }
     
 _    |The Parallel Construct a|
@@ -564,31 +527,31 @@ _    |The Parallel Construct a|
     
     void subdomain(float *x, int istart, int ipoints)
     {
-    int i;
-    for (i = 0; i < ipoints; i++)
-    x[istart+i] = 123.456;
+        int i;
+        for (i = 0; i < ipoints; i++)
+        x[istart+i] = 123.456;
     }
     
     void sub(float *x, int npoints)
     {
     int iam, nt, ipoints, istart;
-    *#pragma omp parallel default(shared) private(iam,nt,ipoints,istart)*
-    {
-    iam = omp_get_thread_num();
-    nt = omp_get_num_threads();
-    ipoints = npoints / nt; /* size of partition */
-    istart = iam * ipoints; /* starting array index */
-    if (iam == nt-1) /* last thread may do more */
-    ipoints = npoints - istart;
-    subdomain(x, istart, ipoints);
-    }
+        *#pragma omp parallel default(shared) private(iam,nt,ipoints,istart)*
+        {
+            iam = omp_get_thread_num();
+            nt = omp_get_num_threads();
+            ipoints = npoints / nt; /* size of partition */
+            istart = iam * ipoints; /* starting array index */
+            if (iam == nt-1) /* last thread may do more */
+            ipoints = npoints - istart;
+            subdomain(x, istart, ipoints);
+        }
     }
     
     main()
     {
-    float array[10000]
-    sub(array, 10000)
-    return 0;
+        float array[10000]
+        sub(array, 10000)
+        return 0;
     }
 
 |Controlling the Number of threads on Multiple Nesting Levels |The
@@ -601,34 +564,32 @@ disables the dynamic adjustment of the number of threads in OpenMP
 implementations that support it.
     
     #include <omp.h>
-    
     int main()
     {
-    omp_set_dynamic(0);
-    *#pragma omp parallel num_threads(10)*
-    {
-    /* do work here */
-    }
-    return 0;
+        omp_set_dynamic(0);
+            *#pragma omp parallel num_threads(10)*
+            {
+            /* do work here */
+            }
+        return 0;
     }
 
 |The nowait Clause a|
 If there are multiple independent loops within a parallel region, you can use the nowait clause to avoid the implied barrier at the end of the loop construct
     
     #include <math.h>
-    
     void nowait_example(int n, int m, float *a, float *b, float *y, float *z)
     {
-    int i;
-    *#pragma omp parallel*
-    {
-    *#pragma omp for nowait*
-    for (i=1; i<n; i++)
-    b[i] = (a[i] + a[i-1]) / 2.0;
-    *#pragma omp for nowait*
-    for (i=0; i<m; i++)
-    y[i] = sqrt(z[i]);
-    }
+        int i;
+        *#pragma omp parallel*
+            {
+            *#pragma omp for nowait*
+                for (i=1; i<n; i++)
+                b[i] = (a[i] + a[i-1]) / 2.0;
+            *#pragma omp for nowait*
+                for (i=0; i<m; i++)
+                y[i] = sqrt(z[i]);
+            }
     }
 
 |The collapse Clause a|
@@ -636,17 +597,15 @@ If there are multiple independent loops within a parallel region, you can use th
 The collapse clause is used since it is implicitly private. The collapse clause associates one or more loops with the directive on which it appears for the purpose of identifying the portion of the depth of the canonical loop nest to which to apply the semantics of the directive. The argument n speciﬁes the number of loops of the associated loop nest to which to apply those semantics. On all directives on which the collapse clause may appear, the eﬀect is as if a value of one was speciﬁed for n if the collapse clause is not speciﬁed.
 
     void bar(float *a, int i, int j, int k);
-    
     int kl, ku, ks, jl, ju, js, il, iu,is;
-    
     void sub(float *a)
     {
-    int i, j, k;
-    *#pragma omp for collapse(2) private(i, k, j)*
-    for (k=kl; k<=ku; k+=ks)
-    for (j=jl; j<=ju; j+=js)
-    for (i=il; i<=iu; i+=is)
-    bar(a,i,j,k);
+        int i, j, k;
+        *#pragma omp for collapse(2) private(i, k, j)*
+            for (k=kl; k<=ku; k+=ks)
+            for (j=jl; j<=ju; j+=js)
+            for (i=il; i<=iu; i+=is)
+            bar(a,i,j,k);
     }
 
 |Linear Clause in Loop Constructs a|
@@ -657,23 +616,20 @@ the end of the execution of the loop construct, the original variable
 _j_ is updated with the value _N/2_ from the last iteration of the loop.
 
     #include <stdio.h>
-    
     #define N 100
-    
     int main(void)
     {
-    float a[N], b[N/2];
-    int i, j;
-    for(i = 0;i<N;i++)
-    a[i] = i+1;
-    j=0
-    *#pragma omp parallel*
-    *#pragma omp for linear(j:1)*
-    for(i=0;i<N;i+=2){
-    b[j]= a[i] * 2.0f;
-    j++;
+        float a[N], b[N/2];
+        int i, j;
+        for(i = 0;i<N;i++)
+            a[i] = i+1;
+        j=0
+        *#pragma omp parallel*
+        *#pragma omp for linear(j:1)*
+        for(i=0;i<N;i+=2){
+            b[j]= a[i] * 2.0f;
+            j++;
     }
-    
     printf"%d %f %f\n", j, b[0], b[j-1] );
     /* print out: 50 2.0 198.0 */
     return 0;
@@ -687,37 +643,28 @@ Since the order of execution of the two sections in this case is
 unspecified, it is unspecified which section prints which value.
 
     #include <stdio.h>
-    
     #define NT 4
-    
     int main( ) {
-    
-    int section_count = 0;
-    
-    *omp_set_dynamic(0);*
-    *omp_set_num_threads(NT);*
-    *#pragma omp parallel*
-    *#pragma omp sections firstprivate( section_count )*
-    {
-    
-    *#pragma omp section*
-    {
-    section_count++;
-    /* may print the number one or two */
-    printf( "section_count %d\n", section_count );
-    
-    }
-    
-    *#pragma omp section*
-    {
-    section_count++;
-    /* may print the number one or two */
-    printf( "section_count %d\n", section_count );
-    }
-    
-    }
-    
-    return 0;
+        int section_count = 0;
+        *omp_set_dynamic(0);*
+        *omp_set_num_threads(NT);*
+        *#pragma omp parallel*
+        *#pragma omp sections firstprivate( section_count )*
+        {
+            *#pragma omp section*
+                {
+                section_count++;
+                /* may print the number one or two */
+                printf( "section_count %d\n", section_count );
+                }
+            *#pragma omp section*
+                {
+                section_count++;
+                /* may print the number one or two */
+                printf( "section_count %d\n", section_count );
+                }
+        }
+        return 0;
     }
 
 |The single Construct a|
@@ -731,67 +678,54 @@ third single construct in this example. The user must not make any
 assumptions as to which thread will execute a single region.
 
     #include <stdio.h>
-    
     void work1() {}
-    
     void work2() {}
-    
     void single_example()
-    
-    
     *#pragma omp parallel*
     {
-    *#pragma omp single*
-    printf("Beginning work1.\n");
-    work1();
-    *#pragma omp single*
-    printf("Finishing work1.\n");
-    *#pragma omp single nowait*
-    printf("Finished work1 and beginning work2.\n");
-    work2();
+        *#pragma omp single*
+        printf("Beginning work1.\n");
+        work1();
+        *#pragma omp single*
+        printf("Finishing work1.\n");
+        *#pragma omp single nowait*
+        printf("Finished work1 and beginning work2.\n");
+        work2();
     }
-    }
-    
-    
     
     
     |The master Construct a|
     #include <stdio.h>
-    
     extern float average(float,float,float);
     void master_example( float* x, float* xold, int n, float tol )
     {
     int c, i, toobig;
     float error, y;
     c = 0;
-    
     #*pragma omp parallel*
     {
     do {
-    *#pragma omp for private(i)*
-    for( i = 1; i < n-1; ++i ){
-    xold[i] = x[i];
-    }
-    
-    *#pragma omp single*
-    {
-    toobig = 0;
-    }
-    
-    *#pragma omp for private(i,y,error) reduction(+:toobig)*
-    for(i=1; i<n-1;++i){
-    y = x[i];
-    x[i] = average( xold[i-1], x[i], xold[i+1] );
-    error = y - x[i];
-    if( error > tol or error < -tol ) ++toobig;
-    }
-    
-    *#pragma omp master*
-    {
-    ++c;
-    printf( "iteration %d, toobig=%d\n", c, toobig );
-    }
-    } while( toobig > 0 );
+        *#pragma omp for private(i)*
+        for( i = 1; i < n-1; ++i ){
+            xold[i] = x[i];
+        }
+        *#pragma omp single*
+            {
+                toobig = 0;
+            }
+        *#pragma omp for private(i,y,error) reduction(+:toobig)*
+            for(i=1; i<n-1;++i){
+                y = x[i];
+                x[i] = average( xold[i-1], x[i], xold[i+1] );
+                error = y - x[i];
+                if( error > tol or error < -tol ) ++toobig;
+            }
+        *#pragma omp master*
+            {
+            ++c;
+            printf( "iteration %d, toobig=%d\n", c, toobig );
+            }
+        } while( toobig > 0 );
     }
     }
 
@@ -799,19 +733,15 @@ assumptions as to which thread will execute a single region.
 
 |Parrallel Random Access Iterator Loop a|
     #include <vector>
-    
     void iterator_example()
-    
     {
-    std::vector<int> vec(23);
-    std::vector<int>::iterator it;
-    
-    *#pragma omp parallel for default(none) shared(vec)*
-    for (it = vec.begin(); it < vec.end(); it++)
-    
-    {
-    // do work with *it //
-    }
+        std::vector<int> vec(23);
+        std::vector<int>::iterator it;
+        *#pragma omp parallel for default(none) shared(vec)*
+            for (it = vec.begin(); it < vec.end(); it++)
+            {
+            // do work with *it //
+            }
     }
 
 |The omp_set_dynamic and omp_set_num_threads Routines a|
@@ -822,23 +752,20 @@ turn off the dynamic threads capability and set the number of threads
 explicitly to ensure portability.
 
     #include <omp.h>
-    
     #include <stdlib.h>
-    
     void do_by_16(float *x, int iam, int ipoints) {}
-    
     void dynthreads(float *x, int npoints)
     {
-    int iam, ipoints;
-    *omp_set_dynamic(0);*
-    *omp_set_num_threads(16);*
-    *#pragma omp parallel shared(x, npoints) private(iam, ipoints)*
-    {
-    if (omp_get_num_threads() != 16) abort();
-    iam = omp_get_thread_num();
-    ipoints = npoints/16;
-    do_by_16(x, iam, ipoints);
-    }
+        int iam, ipoints;
+        *omp_set_dynamic(0);*
+        *omp_set_num_threads(16);*
+        *#pragma omp parallel shared(x, npoints) private(iam, ipoints)*
+            {
+            if (omp_get_num_threads() != 16) abort();
+            iam = omp_get_thread_num();
+            ipoints = npoints/16;
+            do_by_16(x, iam, ipoints);
+            }
     }
 
 |===

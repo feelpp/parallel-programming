@@ -200,17 +200,13 @@ xref:ROOT:attachment$Session5_ParallelProgramming_HIP.pdf[HIP],
 xref:ROOT:attachment$Session6_ParallelProgramming_Specx.pdf[SPECX],...
 
 
-
-****
-
-
-.*DOCUMENTATIONS OTHERS*
-****
-image::PowerPointLogo.png[Img1,50,50,role="left"]
 xref:ROOT:attachment$OpenMP-API-Specification-5-2.pdf[OpenMP 5.0],
 xref:ROOT:attachment$OpenMP-Technical-Report -12-Version 6-0.pdf[OpenMP 6.0],...
 
 ****
+
+
+
 
 
 .*RELEVANT VOCABULARY*

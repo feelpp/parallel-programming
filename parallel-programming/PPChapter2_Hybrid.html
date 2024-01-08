@@ -233,19 +233,21 @@ MathJax.Hub.Config({
 </aside>
 <article class="doc">
 <h1 class="page">Hybrid MPI and OpenMP</h1>
-<div class="sect1">
+<div class="sect1 text-justify">
 <h2 id="_mpi_openmp_two_complementary_parallelization_models"><a class="anchor" href="#_mpi_openmp_two_complementary_parallelization_models"></a>1. MPI, OpenMP two complementary parallelization models.</h2>
 <div class="sectionbody">
-<div class="ulist text-justify">
+<div class="ulist">
 <ul>
 <li>
 <p>MPI is a multi-process model whose mode of communication between the processes is <strong>explicit</strong> (communication management is the responsibility of the user). MPI is generally used on multiprocessor machines with distributed memory. MPI is a library for passing messages between processes without sharing.</p>
 </li>
 <li>
-<p>OpenMP is a multitasking model whose mode of communication between tasks is <strong>implicit</strong> (the management of communications is the responsibility of the compiler). OpenMP is used on shared-memory multiprocessor machines. It focuses on shared memory paradigms. It is a language extension for expressing data-parallel operations (usually parallelized arrays over loops).
-Note: on a cluster of independent shared-memory multiprocessor machines (nodes), the implementation of a two-level parallelization (MPI, OpenMP) in the same program can be a major advantage for the parallel performance of the code.</p>
+<p>OpenMP is a multitasking model whose mode of communication between tasks is <strong>implicit</strong> (the management of communications is the responsibility of the compiler). OpenMP is used on shared-memory multiprocessor machines. It focuses on shared memory paradigms. It is a language extension for expressing data-parallel operations (usually parallelized arrays over loops).</p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p>Note: on a cluster of independent shared-memory multiprocessor machines (nodes), the implementation of a two-level parallelization (MPI, OpenMP) in the same program can be a major advantage for the parallel performance of the code.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -371,7 +373,7 @@ Note: on a cluster of independent shared-memory multiprocessor machines (nodes),
                 <img src="../_/img/cemosis-logo.svg" alt="Cemosis logo" height="50">
             </a>
         </div>
-        <span style="font-size: 0.8rem; color: #9e9e9e">© 2023 <a href="https://www.cemosis.fr" style="text-decoration: underline;">Cemosis</a>, Université de Strasbourg</span>
+        <span style="font-size: 0.8rem; color: #9e9e9e">© 2024 <a href="https://www.cemosis.fr" style="text-decoration: underline;">Cemosis</a>, Université de Strasbourg</span>
     </div>
 </footer>
 <script id="site-script" src="../_/js/site.js" data-ui-root-path="../_"></script>

@@ -242,13 +242,13 @@ MathJax.Hub.Config({
 </div>
 </div>
 </div>
-<div class="sect1">
+<div class="sect1 text-justify">
 <h2 id="_definition"><a class="anchor" href="#_definition"></a>1. Definition</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The CPU basically consists of three parts:</p>
 </div>
-<div class="ulist text-justify">
+<div class="ulist">
 <ul>
 <li>
 <p>The control unit which searches for instructions in memory, decodes them and coordinates the rest of the processor to execute them. A basic control unit basically consists of an instruction register and a "decoder/sequencer" unit</p>
@@ -266,27 +266,17 @@ MathJax.Hub.Config({
 <a class="image" href="#fragment1"><img src="_images/image1.png" alt="image1" width="322" height="220"></a>
 </div>
 </div>
-<div class="paragraph text-justify">
-<p>The register structure varies from processor to processor. This is why
-each type of CPU has its own instruction set. Their basic functions are nevertheless similar and all processors have roughly the same categories of registers:</p>
+<div class="paragraph">
+<p>The register structure varies from processor to processor. This is why each type of CPU has its own instruction set. Their basic functions are nevertheless similar and all processors have roughly the same categories of registers:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>The <strong>accumulator</strong> is primarily intended to hold the data that needs to
-be processed by the ALU.</p>
+<p>The <strong>accumulator</strong> is primarily intended to hold the data that needs to be processed by the ALU.</p>
 </li>
-</ul>
-</div>
-<div class="ulist text-justify">
-<ul>
 <li>
 <p>General registers* are used to store temporary data and intermediate</p>
 </li>
-</ul>
-</div>
-<div class="ulist text-justify">
-<ul>
 <li>
 <p>Address registers* are used to construct particular data addresses.
 These are, for example, the base and index registers which allow, among
@@ -300,38 +290,31 @@ other things, to organize the data in memory like indexed tables.</p>
 </li>
 <li>
 <p>The <strong>status register,</strong> sometimes called <strong>the condition register,</strong>
-contains indicators called <em>flags</em> whose values (0 or 1) vary according
-to the results of the arithmetic and logical operations. These states
-are used by conditional jump instructions.</p>
-<div class="paragraph text-justify">
-<p>The <strong>stack pointer</strong> or <em>stack pointer</em> manages certain data in memory by
-organizing them in the form of stacks.</p>
-</div>
+contains indicators called <em>flags</em> whose values (0 or 1) vary according to the results of the arithmetic and logical operations. These states are used by conditional jump instructions.</p>
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p>The <strong>stack pointer</strong> or <em>stack pointer</em> manages certain data in memory by organizing them in the form of stacks.</p>
 </div>
 </div>
-<div class="sect1">
+</div>
+<div class="sect1 text-justify">
 <h2 id="_cpu_working_principle"><a class="anchor" href="#_cpu_working_principle"></a>2. CPU working principle</h2>
 <div class="sectionbody">
-<div class="paragraph text-justify">
+<div class="paragraph">
 <p>The content of the program counter is deposited on the addressing bus in order to search there for a machine code instruction. The control bus produces a read signal and the memory, which is selected by the address, sends the instruction code back to the processor via the data bus. Once the instruction lands in the instruction register, the processor&#8217;s control unit decodes it and produces the appropriate sequence of internal and external signals that coordinate its execution. An instruction comprises a series of elementary tasks. They are clocked by clock cycles.</p>
 </div>
-<div class="paragraph text-justify">
-<p>All the tasks that constitute an instruction are executed one after the
-other. The execution of an instruction therefore lasts several cycles.
-As it is not always possible to increase the frequency, the only way to
-increase the number of instructions processed in a given time is to seek to execute several of them simultaneously. This is achieved by splitting processor resources, data and/or processes. This is called the parallelization.</p>
+<div class="paragraph">
+<p>All the tasks that constitute an instruction are executed one after the other. The execution of an instruction therefore lasts several cycles. As it is not always possible to increase the frequency, the only way to increase the number of instructions processed in a given time is to seek to execute several of them simultaneously. This is achieved by splitting processor resources, data and/or processes. This is called the parallelization.</p>
 </div>
 </div>
 </div>
-<div class="sect1">
+<div class="sect1 text-justify">
 <h2 id="_the_different_architectures_of_the_processor"><a class="anchor" href="#_the_different_architectures_of_the_processor"></a>3. The different architectures of the processor</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>There is a classification of the <strong>different CPU architectures.</strong> Five in
-number, they are used by programmers depending on the desired results:</p>
+<p>There is a classification of the <strong>different CPU architectures.</strong> Five in number, they are used by programmers depending on the desired results:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -385,7 +368,7 @@ add so-called SIMD Supplemental Instruction Sets.</p>
                 <img src="../_/img/cemosis-logo.svg" alt="Cemosis logo" height="50">
             </a>
         </div>
-        <span style="font-size: 0.8rem; color: #9e9e9e">© 2023 <a href="https://www.cemosis.fr" style="text-decoration: underline;">Cemosis</a>, Université de Strasbourg</span>
+        <span style="font-size: 0.8rem; color: #9e9e9e">© 2024 <a href="https://www.cemosis.fr" style="text-decoration: underline;">Cemosis</a>, Université de Strasbourg</span>
     </div>
 </footer>
 <script id="site-script" src="../_/js/site.js" data-ui-root-path="../_"></script>

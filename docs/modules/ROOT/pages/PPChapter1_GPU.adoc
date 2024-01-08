@@ -2,36 +2,21 @@
 
 image::GPU.jpg[xref=#fragment02,width=322,height=220]
 
-== Definition 
 [.text-justify]
-Graphics Processing Unit is a graphics (co-)processor capable of very
-efficiently performing calculations on images (2D, 3D, videos, etc.).
-The raw computing power offered is higher due to the large number of
-processors present on these cards. This is why it is not uncommon to
-obtain large acceleration factors between CPU and GPU for the same
-application.
+== Definition 
+
+Graphics Processing Unit is a graphics (co-)processor capable of very efficiently performing calculations on images (2D, 3D, videos, etc.). The raw computing power offered is higher due to the large number of processors present on these cards. This is why it is not uncommon to obtain large acceleration factors between CPU and GPU for the same application.
 
 Explicit code targeting GPUs: CUDA, HIP, SYCL, Kokkos, RAJA,...
 
 image:image2.png[xref=#fragment2,width=488,height=342]
-[.text-justify]
-_Fig: illustrates the main hardware architecture differences between
-CPUs and GPUs. The transistor counts associated with various functions
-are represented abstractly by the relative sizes of the various shaded
-areas. In the figure, the green corresponds to the calculation; gold is
-instruction processing; purple is the L1 cache; blue is top level cache
-and orange is memory (DRAM, which really should be thousands of times
-larger than caches)._
-[.text-justify]
-GPUs were originally designed to render graphics. They work great for
-shading, texturing, and rendering the thousands of independent polygons
-that make up a 3D object. CPUs, on the other hand, are meant to control
-the logical flow of any general-purpose program, where a lot of digit
-manipulation may (or may not) be involved. Due to these very different
-roles, GPUs are characterized by having many more processing units and
-higher overall memory bandwidth, while CPUs offer more sophisticated
-instruction processing and faster clock speed.
 
+_Fig: illustrates the main hardware architecture differences between CPUs and GPUs. The transistor counts associated with various functions are represented abstractly by the relative sizes of the various shaded areas. In the figure, the green corresponds to the calculation; gold is instruction processing; purple is the L1 cache; blue is top level cache and orange is memory (DRAM, which really should be thousands of times larger than caches)._
+
+[.text-justify]
+GPUs were originally designed to render graphics. They work great for shading, texturing, and rendering the thousands of independent polygons that make up a 3D object. CPUs, on the other hand, are meant to control the logical flow of any general-purpose program, where a lot of digit manipulation may (or may not) be involved. Due to these very different roles, GPUs are characterized by having many more processing units and higher overall memory bandwidth, while CPUs offer more sophisticated instruction processing and faster clock speed.
+
+[.text-justify]
 == CPU vs GPU comparison 
 
 [width="100%",cols="23%,44%,33%",]
